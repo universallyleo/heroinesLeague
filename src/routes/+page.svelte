@@ -13,7 +13,7 @@
 </script>
 
 <svelte:head>
-	<title>Heroines League 結果まとめ</title>
+	<title>HEROINES League 結果まとめ</title>
 	<meta name="description" content="Heroines League" />
 </svelte:head>
 
