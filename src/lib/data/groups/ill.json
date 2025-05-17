@@ -1,0 +1,33 @@
+{
+	"id": "ill",
+	"displayName": "Ill",
+	"debut": "2021-09-29",
+	"sns": {
+		"twitter": "Ill_Idol",
+		"ig": "Ill_Idol",
+		"yt": "Ill_Idol"
+	},
+	"members": [
+		{
+			"name": "Aoi Kanau",
+			"display": "蒼井叶",
+			"colorCode": "#398FCB",
+			"color": "Blue",
+			"join": "Founding Member; Concurrent member of [[GILTY×GILTY]]"
+		},
+		{
+			"name": "Shirayuki Himeno",
+			"display": "白雪姫乃",
+			"colorCode": "white",
+			"color": "White|s",
+			"join": "Founding Member; Concurrent member of [[GILTY×GILTY]]"
+		},
+		{
+			"name": "Shikino Shiki",
+			"display": "紫ノ色",
+			"colorCode": "#6A5CA6",
+			"color": "Purple",
+			"join": "2024-12-17"
+		}
+	]
+}

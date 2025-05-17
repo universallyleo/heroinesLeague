@@ -1,0 +1,55 @@
+{
+	"id": "nonfic",
+	"displayName": "のんふぃく!",
+	"debut": "2021-05-05",
+	"sns": {
+		"ig": "nonfic_official",
+		"twitter": "Nonfic_official",
+		"tiktok": "nonfic_official",
+		"yt": "UCnpx8n_Zrn3lAoJvharvyKA"
+	},
+	"members": [
+		{
+			"name": "Konose Haruka",
+			"display": "恋星はるか",
+			"colorCode": "#fca6dc",
+			"color": "Pink",
+			"join": "2021-05-05"
+		},
+		{
+			"name": "Minase Piano",
+			"display": "水瀬ぴあの",
+			"colorCode": "#71ace8",
+			"color": "Blue",
+			"join": "2021-05-05"
+		},
+		{
+			"name": "Mashiro Riho",
+			"display": "真白里帆",
+			"colorCode": "white",
+			"color": "White|s",
+			"join": "2021-05-05"
+		},
+		{
+			"name": "Nagatsuki Touka",
+			"display": "永月十華",
+			"colorCode": "#f5ff38",
+			"color": "Yellow|s",
+			"join": "2021-05-05"
+		},
+		{
+			"name": "Akua Marin",
+			"display": "海まりん",
+			"colorCode": "#2EE8BB",
+			"color": "Green",
+			"join": "2022-08-09"
+		},
+		{
+			"name": "Colne",
+			"display": "こるね",
+			"colorCode": "#E5434B",
+			"color": "Red",
+			"join": "2022-11-12"
+		}
+	]
+}

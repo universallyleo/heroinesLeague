@@ -1,0 +1,76 @@
+{
+	"id": "akishibu",
+	"displayName": "アキシブproject",
+	"displayShort": "アキシブ",
+	"debut": "2012-10-05",
+	"sns": {
+		"yt": "AkishibuProject",
+		"twitter": "AkishibuProject",
+		"tiktok": "akishibup.official"
+	},
+	"members": [
+		{
+			"name": "Aoi Fuu",
+			"display": "葵ふう",
+			"colorCode": "#7BADF4",
+			"color": "Blue",
+			"join": "2022-11-20"
+		},
+		{
+			"name": "Koga Mirei",
+			"display": "古賀みれい",
+			"colorCode": "#fff",
+			"color": "White",
+			"join": "2022-11-20"
+		},
+		{
+			"name": "Kisaragi Nana",
+			"display": "如月なな",
+			"colorCode": "#FF787C",
+			"color": "Red",
+			"join": "2022-11-20"
+		},
+		{
+			"name": "Kanzaki Ran",
+			"display": "神崎らん",
+			"colorCode": "#AE94EF",
+			"color": "Purple",
+			"join": "2023-12-26"
+		},
+		{
+			"name": "Kiyomi Run",
+			"display": "清見るん",
+			"colorCode": "#F87217",
+			"color": "Orange",
+			"join": "2023-12-27"
+		},
+		{
+			"name": "Hirasawa Kae",
+			"display": "平沢かえ",
+			"colorCode": "#FFF380",
+			"color": "Yellow",
+			"join": "2023-12-28"
+		},
+		{
+			"name": "Matsui Rana",
+			"display": "茉井良菜",
+			"colorCode": "#8CD9BB",
+			"color": "Mint Green",
+			"join": "2023-12-29"
+		},
+		{
+			"name": "Mikoto Manami",
+			"display": "水琴まなみ",
+			"colorCode": "#82CAFF",
+			"color": "Light Blue",
+			"join": "2024-12-13"
+		},
+		{
+			"name": "Miyama Hina",
+			"display": "美山ひな",
+			"colorCode": "#FFB1CE",
+			"color": "Pink",
+			"join": "2024-12-16"
+		}
+	]
+}

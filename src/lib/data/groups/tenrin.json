@@ -1,0 +1,104 @@
+{
+	"id": "tenrin",
+	"displayName": "TENRIN",
+	"debut": "2020-06-28",
+	"sns": {
+		"twitter": "TENRIN_official",
+		"ig": "tenrin_official",
+		"tiktok": "tenrin_official",
+		"yt": "TENRINchannel"
+	},
+	"members": [
+		{
+			"name": "Nomore Chacha",
+			"display": "のもあちゃちゃ",
+			"color": "red",
+			"colorCode": "#F00",
+			"bday": "",
+			"join": "2020-06-28",
+			"sns": {
+				"twitter": "",
+				"ig": "",
+				"tiktok": ""
+			}
+		},
+		{
+			"name": "Shirasu Ayan",
+			"display": "白洲あやん",
+			"color": "white",
+			"colorCode": "#fff",
+			"bday": "",
+			"join": "2021-04-18",
+			"sns": {
+				"twitter": "",
+				"ig": "",
+				"tiktok": ""
+			}
+		},
+		{
+			"name": "Serena Kira",
+			"display": "月神キラ",
+			"color": "yellow",
+			"colorCode": "#eded0e",
+			"bday": "",
+			"join": "2021-04-19",
+			"sns": {
+				"twitter": "",
+				"ig": "",
+				"tiktok": ""
+			}
+		},
+		{
+			"name": "Miyabi Nagi",
+			"display": "雅なぎ",
+			"color": "green",
+			"colorCode": "#24D662",
+			"bday": "",
+			"join": "",
+			"sns": {
+				"twitter": "",
+				"ig": "",
+				"tiktok": ""
+			}
+		},
+		{
+			"name": "Nanase Niko",
+			"display": "七瀬にこ",
+			"color": "purple",
+			"colorCode": "#AD46E2",
+			"bday": "",
+			"join": "",
+			"sns": {
+				"twitter": "",
+				"ig": "",
+				"tiktok": ""
+			}
+		},
+		{
+			"name": "Kasumi Ageha",
+			"display": "霞あげは",
+			"color": "blue",
+			"colorCode": "#3D86DC",
+			"bday": "",
+			"join": "2024-08-08",
+			"sns": {
+				"twitter": "",
+				"ig": "",
+				"tiktok": ""
+			}
+		},
+		{
+			"name": "Lenge Urara",
+			"display": "蓮花うらら",
+			"color": "pink",
+			"colorCode": "#DB00AB",
+			"bday": "",
+			"join": "2024-08-07",
+			"sns": {
+				"twitter": "",
+				"ig": "",
+				"tiktok": ""
+			}
+		}
+	]
+}

@@ -1,0 +1,44 @@
+{
+	"id": "nanakoro",
+	"displayName": "ナナコロビヤオキ",
+	"displayShort": "ナナコロ",
+	"debut": "2024-07-12",
+	"members": [
+		{
+			"name": "Maisen Ekubo",
+			"display": "苺川えくぼ",
+			"colorCode": "#FB4960",
+			"color": "Red",
+			"join": "2024-07-12"
+		},
+		{
+			"name": "Utage Tenka",
+			"display": "歌花てんか",
+			"colorCode": "#197FD4",
+			"color": "Blue",
+			"join": "2024-07-12"
+		},
+		{
+			"name": "Setouchi Lemon",
+			"display": "瀬戸内れもん",
+			"colorCode": "#F8E759",
+			"color": "Yellow",
+			"join": "2024-07-12"
+		},
+		{
+			"name": "Kumanomi Nimo",
+			"display": "熊ノ実にも",
+			"colorCode": "#FC8469",
+			"color": "Orange",
+			"join": "2024-07-12"
+		},
+		{
+			"name": "Mizuta Mari (HEROINES)|Mizuta Mari",
+			"display": "水田茉莉",
+			"colorCode": "#6BD4FD",
+			"color": "Light Blue",
+			"join": "2024-07-12"
+		}
+	],
+	"sns": { "twitter": "nanakoro_info", "tiktok": "nanakoro_official" }
+}

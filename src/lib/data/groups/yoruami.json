@@ -1,0 +1,56 @@
+{
+	"id": "yoruami",
+	"displayName": "夜光性アミューズ",
+	"displayShort": "よるあみ",
+	"debut": "2021-04-17",
+	"sns": {
+		"twitter": "Yoruamiofficial",
+		"ig": "yoruami_official",
+		"tiktok": "yoruami_official",
+		"yt": "yoruami"
+	},
+	"members": [
+		{
+			"name": "Mipotapota",
+			"display": "みぽたぽた",
+			"colorCode": "#77D8EE",
+			"color": "Light Blue",
+			"join": "2021-04-17"
+		},
+		{
+			"name": "Hakuu Coai",
+			"display": "白空こあい",
+			"colorCode": "#F0F5FF",
+			"color": "White|s",
+			"join": "2021-04-17"
+		},
+		{
+			"name": "Futeko",
+			"display": "ふてこ",
+			"colorCode": "#B171E7",
+			"color": "Purple",
+			"join": "2021-04-17"
+		},
+		{
+			"name": "Kobayashi Rina|Nukutani Rina",
+			"display": "炎谷莉奈",
+			"colorCode": "#EE444D",
+			"color": "Red",
+			"join": "2021-04-17"
+		},
+		{
+			"name": "Minamo Shuru",
+			"display": "水萌しゅる",
+			"colorCode": "#ff9edb",
+			"color": "Pink",
+			"join": "2025-04-12"
+		},
+		{
+			"name": "Kotone Furiru",
+			"display": "琴音ふりる",
+			"colorCode": "#FDE777",
+			"color": "Yellow|s",
+			"join": "2025-04-13"
+		}
+	]
+}

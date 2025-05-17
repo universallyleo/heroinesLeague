@@ -1,0 +1,29 @@
+{
+	"id": "ladybaby",
+	"displayName": "LADYBABY",
+	"displayShort": "レディベ",
+	"members": [
+		{
+			"name": "Kanrei Mia",
+			"display": "神黎ミア",
+			"colorCode": "#fff",
+			"color": "White",
+			"join": "November 23, 2023"
+		},
+		{
+			"name": "Kurusaki Sena",
+			"display": "來崎せな",
+			"colorCode": "#17BD32",
+			"color": "Green",
+			"join": "November 24, 2023"
+		},
+		{
+			"name": "Tsukimachi Ei",
+			"display": "月街えい",
+			"colorCode": "purple",
+			"color": "Purple",
+			"join": "November 28, 2023"
+		}
+	],
+	"sns": { "youtube": "LADYBABY", "twitter": "LADYBABY_JP", "instagram": "ladybaby_jp" }
+}

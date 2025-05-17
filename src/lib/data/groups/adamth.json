@@ -1,0 +1,44 @@
+{
+	"id": "adamth",
+	"displayName": "AdamLilith",
+	"displayNameAlt": ["アダムリリス", "Adamth"],
+	"displayShort": "アダムズ",
+	"debut": "2022-10-25",
+
+	"sns": {
+		"twitter": "Adamth_official",
+		"ig": "adamlilith_official",
+		"yt": "adamlilith_official",
+		"tiktok": "adamth_official"
+	},
+	"members": [
+		{
+			"name": "Yayoi Yamu",
+			"display": "夜宵やむ",
+			"colorCode": "#A162FF",
+			"color": "Purple",
+			"join": "2022-10-25"
+		},
+		{
+			"name": "Miki Ray",
+			"display": "三木零",
+			"colorCode": "#1674FB",
+			"color": "Blue",
+			"join": "2022-10-25"
+		},
+		{
+			"name": "Miyako Yuna",
+			"display": "都ユナ",
+			"colorCode": "#FFFFFF",
+			"color": "White|s",
+			"join": "2022-10-25"
+		},
+		{
+			"name": "Otoha Rizu",
+			"display": "響羽凛瞳",
+			"colorCode": "#D30E19",
+			"color": "Red",
+			"join": "2022-10-25"
+		}
+	]
+}

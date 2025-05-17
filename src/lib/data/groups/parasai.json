@@ -1,0 +1,47 @@
+{
+	"id": "parasai",
+	"displayName": "パラレルサイダー",
+	"displayShort": "パラサイ",
+	"displayNameAlt": ["make mie", "メイクミー"],
+	"debut": "2022-06-02",
+	"members": [
+		{
+			"name": "Koguma Manaka",
+			"display": "小熊まな香",
+			"colorCode": "#A3E0FF",
+			"color": "Light Blue",
+			"join": "2022-06-02"
+		},
+		{
+			"name": "Yumetsuki Mayu",
+			"display": "夢月まゆ",
+			"colorCode": "#ff99cb",
+			"color": "Pink",
+			"left": "2025-05-02",
+			"leftReason": "graduate",
+			"join": "2022-06-02"
+		},
+		{
+			"name": "Kosaka Mion",
+			"display": "小坂みおん",
+			"colorCode": "#C193F4",
+			"color": "Purple",
+			"join": "August 12, 2023"
+		},
+		{
+			"name": "Hazuki Mitsuha",
+			"display": "葉月みつは",
+			"colorCode": "#8CD9BB",
+			"color": "Mint Green",
+			"join": "November 20, 2024"
+		},
+		{
+			"name": "Asuma Yuno",
+			"display": "遊眞ゆの",
+			"colorCode": "#fff",
+			"color": "White",
+			"join": "November 22, 2024"
+		}
+	],
+	"sns": { "twitter": "parasai_info", "youtube": "UC_dcyyEHfWU1Pa73piWaULQ" }
+}

@@ -1,0 +1,61 @@
+{
+	"id": "megafon",
+	"displayName": "MEGAFON",
+	"debut": "2025-04-27",
+	"sns": {
+		"twitter": "MEGAFON_idol",
+		"yt": "megafon_idol",
+		"tiktok": "megafon_idol"
+	},
+	"members": [
+		{
+			"name": "Konomi Ren",
+			"display": "好実れん",
+			"colorCode": "#FF69A8",
+			"color": "Pink",
+			"join": ""
+		},
+		{
+			"name": "Koharu Noka",
+			"display": "小晴のか",
+			"colorCode": "#FE953A",
+			"color": "Orange",
+			"join": ""
+		},
+		{
+			"name": "Hoshino Ami",
+			"display": "星野あみ",
+			"colorCode": "#fc3a3a",
+			"color": "Red",
+			"join": ""
+		},
+		{
+			"name": "Ramune Iroha",
+			"display": "明音いろは",
+			"colorCode": "#2A53EA",
+			"color": "Blue",
+			"join": ""
+		},
+		{
+			"name": "Wakumo Roko",
+			"display": "羽雲ろこ",
+			"colorCode": "#37b5ef",
+			"color": "Sky Blue",
+			"join": ""
+		},
+		{
+			"name": "Himari Kii",
+			"display": "日陽きい",
+			"colorCode": "#fce53a",
+			"color": "Yellow|s",
+			"join": ""
+		},
+		{
+			"name": "Miyashiro Yuki",
+			"display": "宮代ゆき",
+			"colorCode": "white",
+			"color": "White|s",
+			"join": ""
+		}
+	]
+}

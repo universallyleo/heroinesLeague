@@ -1,0 +1,64 @@
+{
+	"id": "heroken",
+	"displayName": "ヒロインズ研究生",
+	"displayShort": "ヒロ研",
+	"debut": "2023-10-16",
+	"members": [
+		{
+			"name": "Asahi Maru",
+			"display": "朝日まる",
+			"joined": "2024-06-17"
+		},
+		{
+			"name": "Tokino Nau",
+			"display": "刻乃なう",
+			"joined": "2024-06-20"
+		},
+		{
+			"name": "Ichinose Chii",
+			"display": "一ノ瀬ちい",
+			"joined": "2024-06-22"
+		},
+		{
+			"name": "Kimino Main",
+			"display": "君乃まいん",
+			"joined": "2025-04-15"
+		},
+		{
+			"name": "Akitsuki Emu",
+			"display": "秋月えむ",
+			"joined": "2025-04-16"
+		},
+		{
+			"name": "Fujisaki Azu",
+			"display": "藤咲あず",
+			"joined": "2025-04-17"
+		},
+		{
+			"name": "Shiraishi Ayu",
+			"display": "白石あゆ",
+			"joined": "2025-04-18"
+		},
+		{
+			"name": "Hirose Rimu",
+			"display": "広瀬りむ",
+			"joined": "2025-04-19"
+		},
+		{
+			"name": "Mano Yuni",
+			"display": "茉野ゆに",
+			"joined": "2025-04-20"
+		},
+		{
+			"name": "Konami Koyu",
+			"display": "小菜実こゆ",
+			"joined": "2025-04-21"
+		},
+		{
+			"name": "Ayase Meme",
+			"display": "綾瀬めめ",
+			"joined": "2025-04-22"
+		}
+	],
+	"sns": { "twitter": "Heroines_RS", "tiktok": "@heroines_rs" }
+}

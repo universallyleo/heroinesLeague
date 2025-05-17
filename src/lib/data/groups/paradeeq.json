@@ -1,0 +1,58 @@
+{
+	"id": "paradeeq",
+	"displayName": "パラディーク",
+	"displayShort": "パラディ",
+	"debut": "2021-04-04",
+	"members": [
+		{
+			"name": "Mizuno Mei",
+			"display": "水野めい",
+			"colorCode": "white",
+			"color": "White",
+			"join": "June 18, 2024"
+		},
+		{
+			"name": "Kurusu Yuru",
+			"display": "来栖ゆる",
+			"colorCode": "#85ff7f",
+			"color": "Green",
+			"join": "June 21, 2024"
+		},
+		{
+			"name": "Kirasaka Mone",
+			"display": "煌坂もね",
+			"colorCode": "#ff99cb",
+			"color": "Pink",
+			"join": "July 6, 2024"
+		},
+		{
+			"name": "Araki Runo",
+			"display": "新木るの",
+			"colorCode": "red",
+			"color": "Red",
+			"join": "April 22, 2025"
+		},
+		{
+			"name": "Misaki Chinatsu",
+			"display": "岬ちなつ",
+			"colorCode": "yellow",
+			"color": "Yellow",
+			"join": "April 23, 2025"
+		},
+		{
+			"name": "Akarida Niji",
+			"display": "灯田にじ",
+			"colorCode": "#1e62e7",
+			"color": "Blue",
+			"join": "April 24, 2025"
+		},
+		{
+			"name": "Hamabe Shizuku",
+			"display": "浜辺しずく",
+			"colorCode": "#7d44aa",
+			"color": "Purple",
+			"join": "April 25, 2025"
+		}
+	],
+	"sns": { "twitter": "para_deeq", "youtube": "UC70rSl9fFl_ojSQ13nMAIRg" }
+}

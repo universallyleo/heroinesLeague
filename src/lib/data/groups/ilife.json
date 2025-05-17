@@ -1,0 +1,54 @@
+{
+	"id": "ilife",
+	"displayName": "iLiFE!",
+	"debut": "2020-06-27",
+	"sns": {
+		"twitter": "iLiFE_official",
+		"ig": "ilife.idol",
+		"tiktok": "ilife_official"
+	},
+	"members": [
+		{
+			"name": "Konoka Riri",
+			"display": "心花りり",
+			"colorCode": "#dd4f4f",
+			"color": "Red",
+			"join": "February 25, 2021"
+		},
+		{
+			"name": "Aisu|Ice",
+			"display": "あいす",
+			"colorCode": "#FFF",
+			"color": "White",
+			"join": "July 11, 2022"
+		},
+		{
+			"name": "Fukumaru Usa",
+			"display": "福丸うさ",
+			"colorCode": "#FFE88E",
+			"color": "Yellow",
+			"join": "July 15, 2023"
+		},
+		{
+			"name": "Wakaba Noa",
+			"display": "若葉のあ",
+			"colorCode": "#97FC6D",
+			"color": "Green",
+			"join": "September 12, 2023"
+		},
+		{
+			"name": "Nara Nodoka",
+			"display": "那蘭のどか",
+			"colorCode": "#FF69A8",
+			"color": "Pink",
+			"join": "September 28, 2024"
+		},
+		{
+			"name": "Sonata Karen",
+			"display": "空詩かれん",
+			"colorCode": "#7073E6",
+			"color": "Blue",
+			"join": "January 20, 2025"
+		}
+	]
+}

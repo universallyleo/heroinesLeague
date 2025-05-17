@@ -1,0 +1,44 @@
+{
+	"id": "dresscode",
+	"displayName": "ドレスコード",
+	"displayShort": "ドレコ",
+	"debut": "2024-11-26",
+	"members": [
+		{
+			"name": "Miyazono Rena",
+			"display": "宮園れな",
+			"colorCode": "#71eda9",
+			"color": "Green",
+			"join": ""
+		},
+		{
+			"name": "Momomiya Mimo",
+			"display": "百宮みも",
+			"colorCode": "#FFA8CE",
+			"color": "Pink",
+			"join": "<small>('''Leader''')</small>"
+		},
+		{
+			"name": "Asuma Rinoa",
+			"display": "飛茉りのあ",
+			"colorCode": "#c785f7",
+			"color": "Purple",
+			"join": ""
+		},
+		{
+			"name": "Asahina Madoka (Dress Code)|Asahina Madoka",
+			"display": "朝比奈まどか",
+			"colorCode": "#FFDB69",
+			"color": "Yellow",
+			"join": ""
+		},
+		{
+			"name": "Kosuzu Moyu",
+			"display": "小鈴もゆ",
+			"colorCode": "#B5D5FE",
+			"color": "Light Blue",
+			"join": ""
+		}
+	],
+	"sns": { "twitter": "dreco_info" }
+}

@@ -1,0 +1,41 @@
+{
+	"id": "ponkotu",
+	"displayName": "ポンコツコンポ",
+	"displayShort": "ポンコツ",
+	"debut": "2019-08-20",
+	"members": [
+		{
+			"name": "Musubime Ribon",
+			"display": "結目りぼん",
+			"colorCode": "#FF56C2",
+			"color": "Pink",
+			"join": "September 15, 2023"
+		},
+		{
+			"name": "Yamada Hanako",
+			"display": "山田花子",
+			"colorCode": "#ED051E",
+			"color": "Red",
+			"join": "September 17, 2023"
+		},
+		{
+			"name": "Beniimo Taruto",
+			"display": "紅芋たると",
+			"colorCode": "#C763F0",
+			"color": "Purple",
+			"join": "April 9, 2025"
+		},
+		{
+			"name": "Charlin",
+			"display": "チャーリン",
+			"colorCode": "#81511C",
+			"color": "Brown",
+			"join": "December 8, 2019"
+		}
+	],
+	"sns": {
+		"instagram": "ponkotsukonpo_official",
+		"twitter": "ponkotsukonpo",
+		"youtube": "UC3YlYOWcUqjYSdxcBH1eDKA"
+	}
+}

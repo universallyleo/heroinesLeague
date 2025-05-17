@@ -1,0 +1,156 @@
+{
+	"league": 1,
+	"groups": [
+		"ilife",
+		"akishibu",
+		"yoruami",
+		"nonfic",
+		"adamth",
+		"ill",
+		"megafon",
+		"tenrin",
+		"dresscode"
+	],
+	"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10, 5],
+	"matches": [
+		{
+			"date": "2025-05-11",
+			"venue": "KANDA SQUARE HALL",
+			"timetable": [
+				{
+					"group": "dresscode",
+					"time": ["1430", "1455"],
+					"tokuten": ["1505", "1605"]
+				},
+				{
+					"group": "tenrin",
+					"time": ["1455", "1520"],
+					"tokuten": ["1530", "1630"]
+				},
+				{
+					"group": "megafon",
+					"time": ["1430", "1455"],
+					"tokuten": ["1505", "1605"]
+				},
+				{
+					"group": "giltygilty",
+					"time": ["1545", "1610"],
+					"tokuten": ["1", "1"]
+				},
+				{
+					"group": "icol",
+					"time": ["1615", "1640"],
+					"tokuten": ["1", "1"]
+				},
+				{
+					"group": "adamth",
+					"time": ["1640", "1705"],
+					"tokuten": ["1", "1"]
+				},
+				{
+					"group": "ill",
+					"time": ["1705", "1735"],
+					"tokuten": ["1", "1"]
+				},
+				{
+					"group": "nonfic",
+					"time": ["1735", "1805"],
+					"tokuten": ["1", "1"]
+				},
+				{
+					"group": "yoruami",
+					"time": ["1810", "1840"],
+					"tokuten": ["1", "1"]
+				},
+				{
+					"group": "akishibu",
+					"time": ["1840", "1910"],
+					"tokuten": ["1", "1"]
+				},
+				{
+					"group": "ilife",
+					"time": ["1910", "1945"],
+					"tokuten": ["1", "1"]
+				}
+			],
+			"result": [315, 72, 151, 154, 96, 53, 76, 71, 84],
+			"src": "https://x.com/tomohei_desu/status/1921521696378441746"
+		},
+		{
+			"date": "2025-06-14",
+			"venue": "品川ステラホール",
+			"timetable": [
+				{
+					"group": "ill",
+					"time": ["1330", "1355"],
+					"tokuten": ["1405", "1505"]
+				},
+				{
+					"group": "tenrin",
+					"time": ["1355", "1420"],
+					"tokuten": ["1430", "1530"]
+				},
+				{
+					"group": "megafon",
+					"time": ["1420", "1445"],
+					"tokuten": ["1455", "1555"]
+				},
+				{
+					"group": "dresscode",
+					"time": ["1445", "1510"],
+					"tokuten": ["1525", "1620"]
+				},
+				{
+					"group": "tenran",
+					"time": ["1515", "1540"],
+					"tokuten": ["1550", "1650"]
+				},
+				{
+					"group": "giltygilty",
+					"time": ["1540", "1605"],
+					"tokuten": ["1615", "1715"]
+				},
+				{
+					"group": "icol",
+					"time": ["1605", "1630"],
+					"tokuten": ["1640", "1740"]
+				},
+				{
+					"group": "akishibu",
+					"time": ["1630", "1655"],
+					"tokuten": ["1705", "1805"]
+				},
+				{
+					"group": "ion",
+					"time": ["1700", "1725"],
+					"tokuten": ["1735", "1835"]
+				},
+				{
+					"group": "chula",
+					"time": ["1725", "1750"],
+					"tokuten": ["1800", "1900"]
+				},
+				{
+					"group": "adamth",
+					"time": ["1750", "1815"],
+					"tokuten": ["1825", "1925"]
+				},
+				{
+					"group": "yoruami",
+					"time": ["1815", "1845"],
+					"tokuten": ["after", "0"]
+				},
+				{
+					"group": "nonfic",
+					"time": ["1850", "1920"],
+					"tokuten": ["after", "0"]
+				},
+				{
+					"group": "ilife",
+					"time": ["1920", "1950"],
+					"tokuten": ["after", "0"]
+				}
+			]
+		}
+	]
+}

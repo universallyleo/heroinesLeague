@@ -1,0 +1,63 @@
+{
+	"league": 2,
+	"groups": [
+		"ponkotu",
+		"nanakoro",
+		"calres",
+		"paradeeq",
+		"parasai",
+		"zuttomotto",
+		"ladybaby",
+		"heroken"
+	],
+	"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10, 5],
+	"matches": [
+		{
+			"date": "2025-05-11",
+			"venue": "渋谷Veats",
+			"timetable": [
+				{
+					"group": "heroken",
+					"time": ["1600", "1625"],
+					"tokuten": ["1635", "1735"]
+				},
+				{
+					"group": "ladybaby",
+					"time": ["1625", "1650"],
+					"tokuten": ["1700", "1800"]
+				},
+				{
+					"group": "zuttomotto",
+					"time": ["1650", "1715"],
+					"tokuten": ["1725", "1825"]
+				},
+				{
+					"group": "parasai",
+					"time": ["1715", "1740"],
+					"tokuten": ["1750", "1850"]
+				},
+				{
+					"group": "paradeeq",
+					"time": ["1740", "1805"],
+					"tokuten": ["1815", "1915"]
+				},
+				{
+					"group": "calres",
+					"time": ["1810", "1840"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "nanakoro",
+					"time": ["1840", "1910"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "ponkotu",
+					"time": ["1910", "1940"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"rank": [2, 4, 3, 5, 1, 6, 7, 8]
+		}
+	]
+}

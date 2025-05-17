@@ -1,0 +1,77 @@
+{
+	"id": "zuttomotto",
+	"displayName": "ZUTTOMOTTO",
+	"displayShort": "ずっとも",
+	"debut": "2023-02-20",
+	"members": [
+		{
+			"name": "Kousaka Rin",
+			"display": "高坂りん",
+			"colorCode": "#FBA35D",
+			"color": "Orange",
+			"join": "<small>(Founding member)</small>"
+		},
+		{
+			"name": "Sena Yunon",
+			"display": "瀬奈ゆのん",
+			"colorCode": "#5CC9E5",
+			"color": "Light Blue",
+			"join": "2023-02-20"
+		},
+		{
+			"name": "Hasumi Hono",
+			"display": "羽澄ほの",
+			"colorCode": "#F6F84D",
+			"color": "Yellow|s",
+			"join": "September 8, 2023"
+		},
+		{
+			"name": "Shinomiya Elu",
+			"display": "四宮える",
+			"colorCode": "#d83131",
+			"color": "Red",
+			"join": "August 27, 2024"
+		},
+		{
+			"name": "Masora Seira",
+			"display": "真空せいら",
+			"colorCode": "#a796e8",
+			"color": "Purple",
+			"join": "August 28, 2024"
+		},
+		{
+			"name": "Shiina Suzu",
+			"display": "椎名すず",
+			"colorCode": "#fff",
+			"color": "White",
+			"join": "April 23, 2025"
+		},
+		{
+			"name": "Mochizuki Mira",
+			"display": "望月みら",
+			"colorCode": "#FF8DE9",
+			"color": "Pink",
+			"join": "April 24, 2025"
+		},
+		{
+			"name": "Sakura An",
+			"display": "佐倉あん",
+			"colorCode": "#95e5a3",
+			"color": "Green",
+			"join": "April 25, 2025"
+		},
+		{
+			"name": "Aoba Waka",
+			"display": "青羽わか",
+			"colorCode": "#5B86EC",
+			"color": "Blue",
+			"join": "April 26, 2025"
+		}
+	],
+	"sns": {
+		"twitter": "zuttomoofficial",
+		"youtube": "@zuttomotto_",
+		"instagram": "zuttomoofficial_",
+		"tiktok": "zuttomotto.official"
+	}
+}

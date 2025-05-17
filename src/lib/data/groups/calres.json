@@ -1,0 +1,78 @@
+{
+	"id": "calres",
+	"displayName": "CAL&RES",
+	"displayShort": "コーレス",
+	"displayNameAlt": ["天使にはなれない", "てんはな"],
+	"debut": "September 3, 2021",
+	"members": [
+		{
+			"name": "Misuzu Rika",
+			"display": "美鈴りか",
+			"colorCode": "#FFA8CB",
+			"color": "Pink",
+			"join": ""
+		},
+		{
+			"name": "Yumeha Ruru",
+			"display": "夢羽るる",
+			"colorCode": "#FFFB94",
+			"color": "Yellow",
+			"join": "July 4, 2022"
+		},
+		{
+			"name": "Umiya Kiwami",
+			"display": "羽宮きわみ",
+			"colorCode": "#08BDB2",
+			"color": "Green",
+			"join": "July 4, 2022"
+		},
+		{
+			"name": "Lime Neo",
+			"display": "来夢ねお",
+			"colorCode": "#465FC3",
+			"color": "Blue",
+			"join": "August 21, 2024"
+		},
+		{
+			"name": "Hinari Moa",
+			"display": "飛成もあ",
+			"colorCode": "#c9aad8",
+			"color": "Purple",
+			"join": "August 27, 2024"
+		},
+		{
+			"name": "Naruse Naru",
+			"display": "成瀬なる",
+			"colorCode": "#6CD1E5",
+			"color": "Light Blue",
+			"join": "April 24, 2025"
+		},
+		{
+			"name": "Kujo Asuna",
+			"display": "九条あすな",
+			"colorCode": "#FF384C",
+			"color": "Red",
+			"join": "April 25, 2025"
+		},
+		{
+			"name": "Asami Maaya",
+			"display": "明日実まあや",
+			"colorCode": "#F49F3F",
+			"color": "Orange",
+			"join": "April 26, 2025"
+		},
+		{
+			"name": "Annin Miru",
+			"display": "杏仁みる",
+			"colorCode": "#fff",
+			"color": "White",
+			"join": "March 13, 2025"
+		}
+	],
+	"sns": {
+		"twitter": "tenhanaofficial",
+		"youtube": "UCpRH161LXLUaBKF8OVeqDvA",
+		"instagram": "tenhana_official",
+		"tiktok": "tenshinihanarenai"
+	}
+}
