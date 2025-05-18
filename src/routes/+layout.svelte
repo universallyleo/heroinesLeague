@@ -1,5 +1,5 @@
 <script>
-	// import Header from './Header.svelte';
+	import { base } from '$app/paths';
 	import '../app.css';
 
 	/** @type {{children: import('svelte').Snippet}} */
