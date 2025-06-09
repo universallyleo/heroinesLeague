@@ -1,13 +1,12 @@
 <script>
 	import {
 		matchDates,
-		CalculateResult,
-		// @ts-ignore
-		groupDisplayShort,
-		seriesFromResult,
-		getGroup
+		getGroup,
+		CalculateLeagueResult,
+		partitionResultToSortedGroups,
+		seriesFromResult
 	} from '$lib/processData.js';
-	import { ShortJPDate } from '$lib/util.js';
+	import { padNum, ShortJPDate } from '$lib/util.js';
 	// import { range } from "lodash-es";
 	// import {
 	//     subdataDisplayInTable,
@@ -29,10 +28,12 @@
 	// let progressData = {};
 	// let headings = [];
 	let { rawdata } = $props();
-	let gpResult = $derived(CalculateResult(rawdata));
-	$inspect('gpResult', gpResult);
-	let progressData = $derived(seriesFromResult(gpResult, matchDates(rawdata), 'accum'));
-	$inspect('progressData', progressData);
+	let leagueResultExt = $derived(CalculateLeagueResult(rawdata));
+	// $inspect('leagueResultExt', leagueResultExt);
+	let gpResult = $derived(partitionResultToSortedGroups(leagueResultExt));
+	// $inspect('gpResult', gpResult);
+	let progressData = $derived(seriesFromResult(gpResult, matchDates(rawdata), 'accumPt'));
+	// $inspect('progressData', progressData);
 	let tblDom;
 
 	function subCategory(i) {
@@ -50,7 +51,7 @@
 <!-- <div style="width: fit-content; margin:.2em auto;">
 	<button on:click={() => imgOut(tblDom)}> 詳細データ画像ダウンロード </button>
 </div> -->
-<div style="width: fit-content; padding: 1em; margin: 0 auto;">
+<div class="tableContainer">
 	<table class="table-bordered" bind:this={tblDom}>
 		<caption>
 			<!-- {seriesCollection.caption}
@@ -67,6 +68,9 @@
 						<div>{ShortJPDate(match.date, true)}</div>
 						<div class="subheading">{match.venue}</div>
 					</th>
+					{#if gpResult[0].shimeiNum[0] > 0}
+						<th></th>
+					{/if}
 				{/each}
 			</tr>
 			<!--
@@ -82,16 +86,47 @@
 					<td class={['headingCell', subCategory(i)]}>
 						{getGroup(gp.group).displayName}
 					</td>
-					{#each { length: gp.accum.length }, n}
+					{#each { length: gp.accumPt.length }, n}
 						<td class="dataCell">
-							<div>{gp.accum[n]}</div>
+							<div class="mainData">{gp.accumPt[n]}</div>
+							<div class="diff">
+								<span class="desc">Pt差</span><br />
+								{gp.accumPtDiff[n] >= 0 ? gp.accumPtDiff[n] : '-'}
+							</div>
 							<div class="subData">
-								{#if gp.entrancePt[n] > 0}
-									入場 {gp.entrancePt[n]}
+								{#if gp.shimeiNum[n] != null}
+									<div class="subDataRow">
+										<div class="desc">目当</div>
+										<div></div>
+										<div class="subpt">{@html padNum(gp.shimeiNum[n], 4, '&nbsp;')} pt</div>
+										<div style="font-size:smaller;">
+											{gp.shimeiDiff[n] >= 0 ? `差  ${gp.shimeiDiff[n]}` : '-'}
+										</div>
+									</div>
 								{/if}
-								({gp.individualRank[n]}位)
+								{#if gp.fcCount[n] != null}
+									<div class="subDataRow">
+										<div class="desc">FC</div>
+										<div class="desc">{gp.fcRank[n]}位</div>
+										<div class="subpt">{@html padNum(gp.fcCount[n], 4, '&nbsp;')} pt</div>
+									</div>
+								{/if}
+								<div class="subDataRow">
+									<div class="desc">得点</div>
+									<div class="desc">{gp.totalRank[n]}位</div>
+									<div class="subpt">
+										<!-- <span style="color:red">{`${gp.getPt[n]}`.padStart(4, '_')}</span> pt -->
+										<span style="color:red">{@html padNum(gp.getPt[n], 4, '&nbsp;')}</span> pt
+									</div>
+								</div>
 							</div>
 						</td>
+						<!-- {#if gp.shimeiNum[n] > 0}
+							<td>
+								<div class="subData">{gp.shimeiDiff}</div>
+								<div class="subData">{gp.shimeiLostRatio}</div>
+							</td>
+						{/if} -->
 					{/each}
 				</tr>
 			{/each}
@@ -107,6 +142,12 @@
 -->
 
 <style>
+	.tableContainer {
+		width: fit-content;
+		padding: 1em;
+		margin: 0 auto;
+		overflow-x: scroll;
+	}
 	.graphContainer {
 		/* width: max-content; */
 		width: 95%;
@@ -137,17 +178,64 @@
 	} */
 
 	.dataCell {
-		font-size: small;
 		min-width: 6em;
 		display: grid;
-		grid-row: 1fr 1fr;
 		gap: 2px;
+		grid-template-columns: auto 2em;
+		grid-template-areas:
+			'main diff'
+			'sub sub';
 	}
 
-	.dataCell .subData {
+	.dataCell .desc {
+		font-size: smaller;
+		color: #777;
+		/* background-color: bisque; */
+	}
+
+	.dataCell .subpt {
+		text-align: start;
+		/* border-left: 1px solid black; */
+	}
+
+	.mainData {
+		font-size: larger;
+		font-weight: bold;
+		grid-area: main;
+		/* padding-top: 0.2em; */
+		align-self: center;
+		padding: 0.3em 0;
+		background: rgb(214, 236, 248);
+	}
+
+	.diff {
+		font-size: small;
+		grid-area: diff;
+		display: grid;
+		grid-template-rows: 1fr 1fr;
+		border: 1px solid #999;
+	}
+
+	/* .subData {
 		font-size: smaller;
 		font-weight: normal;
 		color: hsl(0, 0%, 50%);
+	} */
+	.subData {
+		grid-area: sub;
+		display: grid;
+		grid-template-rows: repeat(auto-fit, 1fr);
+	}
+
+	.subDataRow {
+		font-family: monospace;
+		font-size: 0.9375em;
+		display: grid;
+		grid-template-columns: 2.2em 1.8em 1fr 1fr;
+	}
+
+	.subDataRow:first-child {
+		border-top: 1px solid #555;
 	}
 
 	.upperGp {

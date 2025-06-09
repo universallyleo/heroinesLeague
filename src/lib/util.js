@@ -1,13 +1,39 @@
+export function padNum(num, maxDigit, by) {
+	let s = num.toString();
+	if (by == '&nbsp;') {
+		let d = maxDigit - num.toString().length;
+		return (d > 0 ? Array(d).fill('&nbsp;').join('') : '') + s;
+	}
+	return s.padStart(maxDigit, by);
+}
+
 export function rank(arr, f = (a, b) => b - a) {
 	// see https://stackoverflow.com/questions/14834571/ranking-array-elements
-	// this allows recurring numbers
+	// this allows same point getting same rank
+	// result.inv[i] = i-th ranked entry
+	// result.prev[i] = index of entry that is ranked one place higher (smaller)
 	return arr
 		.map((x, i) => [x, i])
 		.sort((a, b) => f(a[0], b[0]))
 		.reduce(
-			(a, x, i, s) => ((a[x[1]] = i > 0 && f(s[i - 1][0], x[0]) === 0 ? a[s[i - 1][1]] : i + 1), a),
-			[]
+			(a, x, i, s) => {
+				[a.rank[x[1]], a.prev[x[1]]] =
+					i > 0 && f(s[i - 1][0], x[0]) === 0
+						? [a.rank[s[i - 1][1]], a.prev[s[i - 1][1]]]
+						: [i + 1, i > 0 ? s[i - 1][1] : -1];
+				a.inv[i] = x[1];
+				return a;
+			},
+			{ rank: [], prev: [], inv: [] }
 		);
+}
+
+export function diffFromRanked(arr, rank, prev) {
+	return arr.map((x, i) => (rank[i] > 1 ? arr[prev[i]] - x : -1));
+}
+
+export function betterObjectFromEntries(entries, source) {
+	return Object.fromEntries(entries.filter((k) => k in source).map((k) => [k, source[k]]));
 }
 
 const nowDTObj = new Date();

@@ -27,12 +27,12 @@
 {/snippet}
 
 <section>
-	{#if flexCol}
-		<Accordion>
-			{@render leagueAccord('League 1', leagueOne[0], true)}
-			{@render leagueAccord('League 2', leagueTwo[0])}
-		</Accordion>
-	{:else}
+	<!-- {#if flexCol} -->
+	<Accordion>
+		{@render leagueAccord('League 1', leagueOne[0], true)}
+		{@render leagueAccord('League 2', leagueTwo[0], true)}
+	</Accordion>
+	<!-- {:else}
 		<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1px;">
 			<div>
 				{@render leagueAccord('League 1', leagueOne[0], true)}
@@ -41,7 +41,7 @@
 				{@render leagueAccord('League 2', leagueTwo[0], true)}
 			</div>
 		</div>
-	{/if}
+	{/if} -->
 </section>
 
 <style>

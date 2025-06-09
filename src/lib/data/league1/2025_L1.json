@@ -12,6 +12,7 @@
 		"dresscode"
 	],
 	"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10, 5],
+	"fcRankToPoints": [50, 40, 30, 20, 15, 10, 10, 5, 0],
 	"matches": [
 		{
 			"date": "2025-05-11",
@@ -73,8 +74,8 @@
 					"tokuten": ["1", "1"]
 				}
 			],
-			"result": [315, 72, 151, 154, 96, 53, 76, 71, 84],
-			"src": "https://x.com/tomohei_desu/status/1921521696378441746"
+			"shimeiNum": [315, 72, 151, 154, 96, 53, 76, 71, 84],
+			"src": ["https://x.com/tomohei_desu/status/1921521696378441746"]
 		},
 		{
 			"date": "2025-06-14",
