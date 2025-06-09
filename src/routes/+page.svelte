@@ -8,8 +8,7 @@
 	import { leagueOne, leagueTwo } from '$lib/processData.js';
 
 	let innerWidth = $state(0);
-	let flexCol = $derived(innerWidth <= 1080);
-	$inspect(flexCol);
+	$inspect('innerWidth: ', innerWidth);
 </script>
 
 <svelte:head>
@@ -22,24 +21,24 @@
 {#snippet leagueAccord(name, data, open = false)}
 	<AccordionItem {open}>
 		{#snippet header()}{name}{/snippet}
-		<ProgressTable rawdata={data}></ProgressTable>
+		<ProgressTable rawdata={data} clamp={innerWidth < 600}></ProgressTable>
 	</AccordionItem>
 {/snippet}
 
 <section>
-	{#if flexCol}
+	{#if innerWidth <= 1080}
 		<Accordion>
 			{@render leagueAccord('League 1', leagueOne[0], true)}
 			{@render leagueAccord('League 2', leagueTwo[0], true)}
 		</Accordion>
 	{:else}
 		<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1px;">
-			<div>
+			<Accordion>
 				{@render leagueAccord('League 1', leagueOne[0], true)}
-			</div>
-			<div>
+			</Accordion>
+			<Accordion>
 				{@render leagueAccord('League 2', leagueTwo[0], true)}
-			</div>
+			</Accordion>
 		</div>
 	{/if}
 </section>

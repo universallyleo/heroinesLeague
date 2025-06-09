@@ -1,6 +1,7 @@
 <script>
 	import { base } from '$app/paths';
 	import '../app.css';
+	import ghlogo from '$lib/images/github.svg';
 
 	/** @type {{children: import('svelte').Snippet}} */
 	let { children } = $props();
@@ -14,9 +15,9 @@
 	</main>
 
 	<footer>
-		<!-- <p>
-			visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to learn about SvelteKit
-		</p> -->
+		<a href="https://github.com/universallyleo/heroinesLeague">
+			<img width="32" src={ghlogo} alt="Source Code" />
+		</a>
 	</footer>
 </div>
 
@@ -44,6 +45,7 @@
 		justify-content: center;
 		align-items: center;
 		padding: 12px;
+		margin-top: 1em;
 	}
 	/* 
 	footer a {

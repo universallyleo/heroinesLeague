@@ -1,7 +1,14 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 
-	let { children, header, arrowup = null, arrowdown = null, open = $bindable(false) } = $props();
+	let {
+		children,
+		header,
+		arrowup = null,
+		arrowdown = null,
+		open = $bindable(false),
+		contentCSS = null
+	} = $props();
 
 	// single selection
 	// const self = {};
@@ -59,10 +66,8 @@
 	</button>
 </h2>
 {#if open}
-	<div class="content" transition:slide={{ duration: 400 }}>
-		<div>
-			{@render children()}
-		</div>
+	<div class="content" transition:slide={{ duration: 400 }} style={contentCSS}>
+		{@render children()}
 	</div>
 {/if}
 

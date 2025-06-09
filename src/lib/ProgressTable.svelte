@@ -4,30 +4,14 @@
 		getGroup,
 		CalculateLeagueResult,
 		partitionResultToSortedGroups,
-		seriesFromResult
+		seriesFromResult,
+		groupDisplayShort
 	} from '$lib/processData.js';
 	import { isFuture, padNum, ShortJPDate } from '$lib/util.js';
-	// import { range } from "lodash-es";
-	// import {
-	//     subdataDisplayInTable,
-	//     prepareFixCD,
-	//     prepareFixMB,
-	//     prepareFixAllMB,
-	//     preapreOverallProgress,
-	//     prepareReceptionProg,
-	// } from "./seriesSpec.js";
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
-	// import AccordionItem from "../../lib/AccordionItem.svelte";
 
-	// export let mode;
-	// export let members;
-	// export let includings;
-	// export let extra = {};
-
-	// let seriesCollection = {};
-	// let progressData = {};
-	// let headings = [];
-	let { rawdata } = $props();
+	let { rawdata, clamp } = $props();
+	$inspect('clamp', clamp);
 	let leagueResultExt = $derived(CalculateLeagueResult(rawdata));
 	// $inspect('leagueResultExt', leagueResultExt);
 	let gpResult = $derived(partitionResultToSortedGroups(leagueResultExt));
@@ -92,7 +76,7 @@
 				<tr>
 					<td class={['headingCell', subCategory(i)]}>{i + 1}</td>
 					<td class={['headingCell', subCategory(i)]}>
-						{getGroup(gp.group).displayName}
+						{clamp ? groupDisplayShort(gp.group) : getGroup(gp.group).displayName}
 					</td>
 					{#each { length: gp.accumPt.length }, n}
 						<td class="dataCell">
@@ -155,6 +139,8 @@
 		width: fit-content;
 		padding: 1em;
 		margin: 0 auto;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 		overflow-x: scroll;
 	}
 	.graphContainer {
@@ -276,11 +262,19 @@
 	}
 
 	.headingCell {
-		padding-left: 0.4em;
-		padding-right: 0.2em;
+		position: sticky;
+		left: 0;
+		z-index: 2;
 		border-right: 1px solid black;
 		border-top: 1px solid #ddd;
 		border-bottom: 1px solid #ddd;
+	}
+
+	@media (min-width: 350px) {
+		.headingCell {
+			padding-left: 0.4em;
+			padding-right: 0.2em;
+		}
 	}
 
 	.cdInfo {
