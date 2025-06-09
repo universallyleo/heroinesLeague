@@ -6,7 +6,7 @@
 		partitionResultToSortedGroups,
 		seriesFromResult
 	} from '$lib/processData.js';
-	import { padNum, ShortJPDate } from '$lib/util.js';
+	import { isFuture, padNum, ShortJPDate } from '$lib/util.js';
 	// import { range } from "lodash-es";
 	// import {
 	//     subdataDisplayInTable,
@@ -63,10 +63,18 @@
 			<tr>
 				<th>現順位</th>
 				<th>グループ</th>
-				{#each rawdata.matches as match (match.date)}
+				{#each rawdata.matches as match, i (match.date)}
 					<th class="headingRow">
 						<div>{ShortJPDate(match.date, true)}</div>
-						<div class="subheading">{match.venue}</div>
+						<div class="subheading">
+							{match.venue}
+							{#if !isFuture(match.date)}
+								{#if 'shimeiTotal' in leagueResultExt.matches[i]}
+									<br />
+									<span class="desc">総入場pt: {leagueResultExt.matches[i].shimeiTotal}</span>
+								{/if}
+							{/if}
+						</div>
 					</th>
 					{#if gpResult[0].shimeiNum[0] > 0}
 						<th></th>
@@ -99,8 +107,9 @@
 										<div class="desc">目当</div>
 										<div></div>
 										<div class="subpt">{@html padNum(gp.shimeiNum[n], 4, '&nbsp;')} pt</div>
-										<div style="font-size:smaller;">
-											{gp.shimeiDiff[n] >= 0 ? `差  ${gp.shimeiDiff[n]}` : '-'}
+										<div>
+											<span class="desc">差</span>
+											{gp.shimeiDiff[n] >= 0 ? ` ${gp.shimeiDiff[n]}` : '-'}
 										</div>
 									</div>
 								{/if}
@@ -187,7 +196,7 @@
 			'sub sub';
 	}
 
-	.dataCell .desc {
+	.desc {
 		font-size: smaller;
 		color: #777;
 		/* background-color: bisque; */

@@ -93,6 +93,7 @@ export function groupDisplayShort(search_id) {
  * @extends MatchDataRaw
  * @property {number[]} [shimeiRank]
  * @property {number[]} [shimeiDiff]
+ * @property {number} [shimeiTotal]
  * @property {number[]} [fcCount]
  * @property {number[]} totalRank
  * @property {number[]} getPt
@@ -190,6 +191,7 @@ export function CalculateLeagueResult(raw) {
 			let shimeiRk = rank(match.shimeiNum);
 			mExt.shimeiRank = shimeiRk.rank;
 			mExt.shimeiDiff = diffFromRanked(match.shimeiNum, shimeiRk.rank, shimeiRk.prev);
+			mExt.shimeiTotal = match.shimeiNum.reduce((a, x) => a + x, 0);
 		}
 		// if (totalCount.length == 0) totalCount = match.rank;
 
