@@ -52,3 +52,15 @@ export function ShortJPDate(ISOdate, noyear = false) {
 	let slash = ISOdate.replace(/-/g, '/');
 	return ISOdate.length > 5 ? (noyear ? slash.slice(5) : slash) : slash;
 }
+
+export const palette = [
+	'#e41a1c',
+	'#377eb8',
+	'#4daf4a',
+	'#984ea3',
+	'#ff7f00',
+	'#8dd3c7',
+	'#a65628',
+	'#f781bf',
+	'#999999'
+];

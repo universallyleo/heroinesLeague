@@ -1,5 +1,5 @@
 // import aggregate from "$lib/data/aggregate.json";
-import { rank, ShortJPDate, isFuture, diffFromRanked } from './util.js';
+import { rank, ShortJPDate, isFuture, diffFromRanked, palette } from './util.js';
 
 const groupFiles = import.meta.glob('./data/groups/*.json', { eager: true });
 const leagueOneFiles = import.meta.glob('./data/league1/*.json', { eager: true });
@@ -255,10 +255,12 @@ export function partitionResultToSortedGroups(resultdata) {
 export function seriesFromResult(gpresultdata, labels, series) {
 	return {
 		labels,
-		datasets: gpresultdata.map((gr) => {
+		datasets: gpresultdata.map((gr, i) => {
 			return {
 				label: groupDisplayShort(gr.group),
-				data: gr[series]
+				data: gr[series],
+				borderColor: `${palette[i]}`,
+				backgroundColor: `${palette[i]}`
 			};
 		})
 	};
