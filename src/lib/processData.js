@@ -82,6 +82,7 @@ export function groupDisplayShort(search_id) {
  * @property {Array<number>} [fcRankToCount] n-th entry = counts given to (n+1)st placed group
  * @property {Array<number>} [rank] both result and rank are read in the order of the league data group
  * @property {Array<string>} [src] array of sources of match result data
+ * @property {Array<string,number>} [guestShimei]
  * if have shimei and fcRank
  * 		=> match rank determined by (fcRankToCount + shimeiNum)
  * { league: "1",
@@ -162,6 +163,7 @@ export function CalculateLeagueResult(raw) {
 
 	for (const [sn, match] of Object.entries(raw.matches)) {
 		let n = parseInt(sn);
+		// console.log(`************ ${n} ************`);
 		/** @type {MatchDataExt} */
 		let mExt = { ...match }; // faster than structured clone; our data are only array of numbers anyway
 
@@ -169,7 +171,7 @@ export function CalculateLeagueResult(raw) {
 		if (['shimeiNum', 'fcRank', 'rank'].reduce((p, c) => p && !(c in match), true)) {
 			mExt.totalRank = Array(numGp).fill(-1);
 			mExt.getPt = Array(numGp).fill(0);
-			mExt.accumPt = n > 0 ? res.matches[n - 1].accumPt : Array(numGp).fill(0);
+			mExt.accumPt = Array(numGp).fill(0);
 			mExt.accumDiff = Array(numGp).fill(0);
 			continue;
 		}
@@ -240,6 +242,7 @@ export function partitionResultToSortedGroups(resultdata) {
 	let n = resultdata.matches.length;
 	// @ts-ignore
 	gpResultData.sort((a, b) => a.accumRank[n - 1] - b.accumRank[n - 1]);
+	console.log('gpResultData', gpResultData);
 	// @ts-ignore
 	return gpResultData;
 }

@@ -12,7 +12,7 @@
 		"dresscode"
 	],
 	"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10, 5],
-	"fcRankToPoints": [50, 40, 30, 20, 15, 10, 10, 5, 0],
+	"fcRankToCount": [50, 40, 30, 20, 15, 10, 10, 5, 0],
 	"matches": [
 		{
 			"date": "2025-05-11",
@@ -150,6 +150,79 @@
 					"group": "ilife",
 					"time": ["1920", "1950"],
 					"tokuten": ["after", "0"]
+				}
+			],
+			"shimeiNum": [306, 241, 176, 188, 104, 129, 104, 103, 85],
+			"fcRank": [1, 9, 2, 3, 6, 5, 6, 4, 8],
+			"guestShimei": [
+				["ion", 48],
+				["chula", 35],
+				["tenran", 12]
+			]
+		},
+		{
+			"date": "2025-07-14",
+			"venue": "豊洲PIT",
+			"timetable": [
+				{
+					"group": "ill",
+					"time": ["", ""],
+					"tokuten": ["", ""]
+				},
+				{
+					"group": "tenrin",
+					"time": ["", ""],
+					"tokuten": ["", ""]
+				},
+				{
+					"group": "megafon",
+					"time": ["", ""],
+					"tokuten": ["", ""]
+				},
+				{
+					"group": "dresscode",
+					"time": ["", ""],
+					"tokuten": ["", ""]
+				},
+				{
+					"group": "tenran",
+					"time": ["", ""],
+					"tokuten": ["", ""]
+				},
+				{
+					"group": "akishibu",
+					"time": ["", ""],
+					"tokuten": ["", ""]
+				},
+				{
+					"group": "ion",
+					"time": ["", ""],
+					"tokuten": ["", ""]
+				},
+				{
+					"group": "chula",
+					"time": ["", ""],
+					"tokuten": ["", ""]
+				},
+				{
+					"group": "adamth",
+					"time": ["", ""],
+					"tokuten": ["", ""]
+				},
+				{
+					"group": "yoruami",
+					"time": ["", ""],
+					"tokuten": ["", ""]
+				},
+				{
+					"group": "nonfic",
+					"time": ["", ""],
+					"tokuten": ["", ""]
+				},
+				{
+					"group": "ilife",
+					"time": ["", ""],
+					"tokuten": ["", ""]
 				}
 			]
 		}

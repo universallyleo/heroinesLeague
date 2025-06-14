@@ -60,9 +60,6 @@
 							{/if}
 						</div>
 					</th>
-					{#if gpResult[0].shimeiNum[0] > 0}
-						<th></th>
-					{/if}
 				{/each}
 			</tr>
 			<!--
@@ -79,37 +76,38 @@
 						{clamp ? groupDisplayShort(gp.group) : getGroup(gp.group).displayName}
 					</td>
 					{#each { length: gp.accumPt.length }, n}
-						<td class="dataCell">
-							<div class="mainData">{gp.accumPt[n]}</div>
-							<div class="diff">
-								<span class="desc">Pt差</span><br />
-								{gp.accumPtDiff[n] >= 0 ? gp.accumPtDiff[n] : '-'}
-							</div>
-							<div class="subData">
-								{#if gp.shimeiNum[n] != null}
-									<div class="subDataRow">
-										<div class="desc">目当</div>
-										<div></div>
-										<div class="subpt">{@html padNum(gp.shimeiNum[n], 4, '&nbsp;')} pt</div>
-										<div>
-											<span class="desc">差</span>
-											{gp.shimeiDiff[n] >= 0 ? ` ${gp.shimeiDiff[n]}` : '-'}
+						<td>
+							<div class="dataCell">
+								<div class="mainData">{gp.accumPt[n]}</div>
+								<div class="diff">
+									<span class="desc">Pt差</span><br />
+									{gp.accumPtDiff[n] >= 0 ? gp.accumPtDiff[n] : '-'}
+								</div>
+								<div class="subData">
+									{#if gp.shimeiNum[n] != null}
+										<div class="subDataRow">
+											<div class="desc">目当</div>
+											<div></div>
+											<div class="subpt">{@html padNum(gp.shimeiNum[n], 4, '&nbsp;')} pt</div>
+											<div>
+												<span class="desc">差</span>
+												{gp.shimeiDiff[n] >= 0 ? ` ${gp.shimeiDiff[n]}` : '-'}
+											</div>
 										</div>
-									</div>
-								{/if}
-								{#if gp.fcCount[n] != null}
+									{/if}
+									{#if gp.fcCount[n] != null}
+										<div class="subDataRow">
+											<div class="desc">FC</div>
+											<div class="desc">{gp.fcRank[n]}位</div>
+											<div class="subpt">{@html padNum(gp.fcCount[n], 4, '&nbsp;')} pt</div>
+										</div>
+									{/if}
 									<div class="subDataRow">
-										<div class="desc">FC</div>
-										<div class="desc">{gp.fcRank[n]}位</div>
-										<div class="subpt">{@html padNum(gp.fcCount[n], 4, '&nbsp;')} pt</div>
-									</div>
-								{/if}
-								<div class="subDataRow">
-									<div class="desc">得点</div>
-									<div class="desc">{gp.totalRank[n]}位</div>
-									<div class="subpt">
-										<!-- <span style="color:red">{`${gp.getPt[n]}`.padStart(4, '_')}</span> pt -->
-										<span style="color:red">{@html padNum(gp.getPt[n], 4, '&nbsp;')}</span> pt
+										<div class="desc">得点</div>
+										<div class="desc">{gp.totalRank[n]}位</div>
+										<div class="subpt">
+											<span style="color:red">{@html padNum(gp.getPt[n], 4, '&nbsp;')}</span> pt
+										</div>
 									</div>
 								</div>
 							</div>
@@ -157,6 +155,7 @@
 	}
 	th,
 	td {
+		vertical-align: top;
 		text-align: center;
 		padding: 4px 5px;
 	}
@@ -255,6 +254,8 @@
 
 	.headingRow {
 		border-bottom: 1px solid #ddd;
+		/* min-width: 10em;
+		width: auto; */
 	}
 	.subheading {
 		font-size: small;
