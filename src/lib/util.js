@@ -1,7 +1,7 @@
-export function padNum(num, maxDigit, by) {
-	let s = num.toString();
+export function padNum(num, maxDigit, positiveOnly = true, by = '&nbsp;') {
+	let s = positiveOnly && num < 0 ? '-' : num.toString();
 	if (by == '&nbsp;') {
-		let d = maxDigit - num.toString().length;
+		let d = maxDigit - s.length;
 		return (d > 0 ? Array(d).fill('&nbsp;').join('') : '') + s;
 	}
 	return s.padStart(maxDigit, by);

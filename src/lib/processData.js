@@ -98,6 +98,7 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} [fcCount]
  * @property {number[]} totalRank
  * @property {number[]} getPt
+ * @property {number[]} getPtDiff
  * @property {number[]} accumPt
  * @property {number[]} accumPtDiff
  * @property {number[]} accumRank
@@ -126,6 +127,7 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} fcCount calculated using fcRankToCount
  * @property {number[]} totalRank determined by fcCount+shimeiNum
  * @property {number[]} getPt = rankToPoints[totalRank]
+ * @property {number[]} getPtDiff
  * @property {number[]} accumPt
  * @property {number[]} accumPtDiff
  * @property {number[]} accumRank
@@ -200,6 +202,7 @@ export function CalculateLeagueResult(raw) {
 		let rankedData = totalCount.length == 0 ? rank(match.rank, (a, b) => a - b) : rank(totalCount);
 		mExt.totalRank = rankedData.rank;
 		mExt.getPt = rankedData.rank.map((r) => rkConvert[r - 1]);
+		mExt.getPtDiff = diffFromRanked(mExt.getPt, rankedData.rank, rankedData.prev);
 
 		mExt.accumPt =
 			n > 0 ? mExt.getPt.map((pt, i) => pt + res.matches[n - 1].accumPt[i]) : mExt.getPt;
@@ -226,6 +229,7 @@ export function partitionResultToSortedGroups(resultdata) {
 		'fcCount',
 		'totalRank',
 		'getPt',
+		'getPtDiff',
 		'accumPt',
 		'accumPtDiff',
 		'accumRank'

@@ -9,6 +9,7 @@
 	} from '$lib/processData.js';
 	import { isFuture, padNum, ShortJPDate } from '$lib/util.js';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
+	import DataCell from './DataCell.svelte';
 
 	let { rawdata, clamp } = $props();
 	$inspect('clamp', clamp);
@@ -45,7 +46,7 @@
 		</caption>
 		<thead>
 			<tr>
-				<th>現順位</th>
+				<th style="width:1em;">現順位</th>
 				<th>グループ</th>
 				{#each rawdata.matches as match, i (match.date)}
 					<th class="headingRow">
@@ -55,7 +56,9 @@
 							{#if !isFuture(match.date)}
 								{#if 'shimeiTotal' in leagueResultExt.matches[i]}
 									<br />
-									<span class="desc">総入場pt: {leagueResultExt.matches[i].shimeiTotal}</span>
+									<span style="font-size:smaller;border-top: dashed 1px #999;">
+										総入場pt: {leagueResultExt.matches[i].shimeiTotal}
+									</span>
 								{/if}
 							{/if}
 						</div>
@@ -77,47 +80,8 @@
 					</td>
 					{#each { length: gp.accumPt.length }, n}
 						<td>
-							<div class="dataCell">
-								<div class="mainData">{gp.accumPt[n]}</div>
-								<div class="diff">
-									<span class="desc">Pt差</span><br />
-									{gp.accumPtDiff[n] >= 0 ? gp.accumPtDiff[n] : '-'}
-								</div>
-								<div class="subData">
-									{#if gp.shimeiNum[n] != null}
-										<div class="subDataRow">
-											<div class="desc">目当</div>
-											<div></div>
-											<div class="subpt">{@html padNum(gp.shimeiNum[n], 4, '&nbsp;')} pt</div>
-											<div>
-												<span class="desc">差</span>
-												{gp.shimeiDiff[n] >= 0 ? ` ${gp.shimeiDiff[n]}` : '-'}
-											</div>
-										</div>
-									{/if}
-									{#if gp.fcCount[n] != null}
-										<div class="subDataRow">
-											<div class="desc">FC</div>
-											<div class="desc">{gp.fcRank[n]}位</div>
-											<div class="subpt">{@html padNum(gp.fcCount[n], 4, '&nbsp;')} pt</div>
-										</div>
-									{/if}
-									<div class="subDataRow">
-										<div class="desc">得点</div>
-										<div class="desc">{gp.totalRank[n]}位</div>
-										<div class="subpt">
-											<span style="color:red">{@html padNum(gp.getPt[n], 4, '&nbsp;')}</span> pt
-										</div>
-									</div>
-								</div>
-							</div>
+							<DataCell gpResult={gp} {n}></DataCell>
 						</td>
-						<!-- {#if gp.shimeiNum[n] > 0}
-							<td>
-								<div class="subData">{gp.shimeiDiff}</div>
-								<div class="subData">{gp.shimeiLostRatio}</div>
-							</td>
-						{/if} -->
 					{/each}
 				</tr>
 			{/each}
@@ -129,7 +93,7 @@
 	<ProgressGraph title="累計ポイント" {progressData} />
 </div>
 
-<!-- #region style 
+<!-- #region style
 -->
 
 <style>
@@ -171,67 +135,6 @@
 		background-color: #efefef;
 	} */
 
-	.dataCell {
-		min-width: 6em;
-		display: grid;
-		gap: 2px;
-		grid-template-columns: auto 2em;
-		grid-template-areas:
-			'main diff'
-			'sub sub';
-	}
-
-	.desc {
-		font-size: smaller;
-		color: #777;
-		/* background-color: bisque; */
-	}
-
-	.dataCell .subpt {
-		text-align: start;
-		/* border-left: 1px solid black; */
-	}
-
-	.mainData {
-		font-size: larger;
-		font-weight: bold;
-		grid-area: main;
-		/* padding-top: 0.2em; */
-		align-self: center;
-		padding: 0.3em 0;
-		background: rgb(214, 236, 248);
-	}
-
-	.diff {
-		font-size: small;
-		grid-area: diff;
-		display: grid;
-		grid-template-rows: 1fr 1fr;
-		border: 1px solid #999;
-	}
-
-	/* .subData {
-		font-size: smaller;
-		font-weight: normal;
-		color: hsl(0, 0%, 50%);
-	} */
-	.subData {
-		grid-area: sub;
-		display: grid;
-		grid-template-rows: repeat(auto-fit, 1fr);
-	}
-
-	.subDataRow {
-		font-family: monospace;
-		font-size: 0.9375em;
-		display: grid;
-		grid-template-columns: 2.2em 1.8em 1fr 1fr;
-	}
-
-	.subDataRow:first-child {
-		border-top: 1px solid #555;
-	}
-
 	.upperGp {
 		background-color: hsl(60, 100%, 70%);
 	}
@@ -254,8 +157,7 @@
 
 	.headingRow {
 		border-bottom: 1px solid #ddd;
-		/* min-width: 10em;
-		width: auto; */
+		width: 7.8em;
 	}
 	.subheading {
 		font-size: small;
