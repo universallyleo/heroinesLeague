@@ -8,7 +8,7 @@
 	import { leagueOne, leagueTwo } from '$lib/processData.js';
 
 	let innerWidth = $state(0);
-	$inspect('innerWidth: ', innerWidth);
+	// $inspect('innerWidth: ', innerWidth);
 </script>
 
 <svelte:head>

@@ -7,9 +7,10 @@
 		seriesFromResult,
 		groupDisplayShort
 	} from '$lib/processData.js';
-	import { isFuture, padNum, ShortJPDate } from '$lib/util.js';
+	import { isFuture, ShortJPDate } from '$lib/util.js';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 	import DataCell from './DataCell.svelte';
+	import OptionsDiv from './OptionsDiv.svelte';
 
 	let { rawdata, clamp } = $props();
 	$inspect('clamp', clamp);
@@ -19,7 +20,9 @@
 	// $inspect('gpResult', gpResult);
 	let progressData = $derived(seriesFromResult(gpResult, matchDates(rawdata), 'accumPt'));
 	// $inspect('progressData', progressData);
-	let tblDom;
+	let opts = $state({
+		simpleTable: true
+	});
 
 	function subCategory(i) {
 		// c.f. https://x.com/Barichy2/status/1921414855908581850/photo/2
@@ -33,35 +36,35 @@
 
 <!-- #region HTML
 -->
-<!-- <div style="width: fit-content; margin:.2em auto;">
-	<button on:click={() => imgOut(tblDom)}> 詳細データ画像ダウンロード </button>
-</div> -->
+<div style="margin-top:.5em;">
+	<OptionsDiv bind:opts />
+</div>
+
 <div class="tableContainer">
-	<table class="table-bordered" bind:this={tblDom}>
+	<table class="table-bordered">
 		<caption>
-			<!-- {seriesCollection.caption}
-			<span class="weaker">{seriesCollection.subcaption}</span> -->
-			<!-- 順位・累計点数 -->
 			リーグ戦結果 ( リーグ{rawdata.league} )
 		</caption>
 		<thead>
 			<tr>
-				<th style="width:1em;">現順位</th>
+				<th style="width:1em;">順</th>
 				<th>グループ</th>
 				{#each rawdata.matches as match, i (match.date)}
 					<th class="headingRow">
 						<div>{ShortJPDate(match.date, true)}</div>
-						<div class="subheading">
-							{match.venue}
-							{#if !isFuture(match.date)}
-								{#if 'shimeiTotal' in leagueResultExt.matches[i]}
-									<br />
-									<span style="font-size:smaller;border-top: dashed 1px #999;">
-										総入場pt: {leagueResultExt.matches[i].shimeiTotal}
-									</span>
+						{#if !opts.simpleTable}
+							<div class="subheading">
+								{match.venue}
+								{#if !isFuture(match.date)}
+									{#if 'shimeiTotal' in leagueResultExt.matches[i]}
+										<br />
+										<span style="font-size:smaller;border-top: dashed 1px #999;">
+											総入場pt: {leagueResultExt.matches[i].shimeiTotal}
+										</span>
+									{/if}
 								{/if}
-							{/if}
-						</div>
+							</div>
+						{/if}
 					</th>
 				{/each}
 			</tr>
@@ -80,7 +83,7 @@
 					</td>
 					{#each { length: gp.accumPt.length }, n}
 						<td>
-							<DataCell gpResult={gp} {n}></DataCell>
+							<DataCell gpResult={gp} {n} simplify={opts.simpleTable}></DataCell>
 						</td>
 					{/each}
 				</tr>

@@ -96,9 +96,9 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} [shimeiDiff]
  * @property {number} [shimeiTotal]
  * @property {number[]} [fcCount]
+ * @property {number[]} countDiff
  * @property {number[]} totalRank
  * @property {number[]} getPt
- * @property {number[]} getPtDiff
  * @property {number[]} accumPt
  * @property {number[]} accumPtDiff
  * @property {number[]} accumRank
@@ -126,8 +126,8 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} fcRank
  * @property {number[]} fcCount calculated using fcRankToCount
  * @property {number[]} totalRank determined by fcCount+shimeiNum
+ * @property {number[]} countDiff
  * @property {number[]} getPt = rankToPoints[totalRank]
- * @property {number[]} getPtDiff
  * @property {number[]} accumPt
  * @property {number[]} accumPtDiff
  * @property {number[]} accumRank
@@ -190,19 +190,24 @@ export function CalculateLeagueResult(raw) {
 			totalCount = mExt.fcCount;
 		}
 		if ('shimeiNum' in match) {
-			totalCount =
-				totalCount.length > 0 ? totalCount.map((x, i) => x + match.shimeiNum[i]) : match.shimeiNum;
 			let shimeiRk = rank(match.shimeiNum);
 			mExt.shimeiRank = shimeiRk.rank;
 			mExt.shimeiDiff = diffFromRanked(match.shimeiNum, shimeiRk.rank, shimeiRk.prev);
 			mExt.shimeiTotal = match.shimeiNum.reduce((a, x) => a + x, 0);
+			if ('fcRank' in match) {
+				totalCount = totalCount.map((x, i) => x + match.shimeiNum[i]);
+				let countRk = rank(totalCount);
+				mExt.countDiff = diffFromRanked(totalCount, countRk.rank, countRk.prev);
+			} else {
+				totalCount = match.shimeiNum;
+				mExt.countDiff = mExt.shimeiDiff;
+			}
 		}
-		// if (totalCount.length == 0) totalCount = match.rank;
 
-		let rankedData = totalCount.length == 0 ? rank(match.rank, (a, b) => a - b) : rank(totalCount);
+		let rankedData = match.rank ? rank(match.rank, (a, b) => a - b) : rank(totalCount);
 		mExt.totalRank = rankedData.rank;
 		mExt.getPt = rankedData.rank.map((r) => rkConvert[r - 1]);
-		mExt.getPtDiff = diffFromRanked(mExt.getPt, rankedData.rank, rankedData.prev);
+		// mExt.getPtDiff = diffFromRanked(mExt.getPt, rankedData.rank, rankedData.prev);
 
 		mExt.accumPt =
 			n > 0 ? mExt.getPt.map((pt, i) => pt + res.matches[n - 1].accumPt[i]) : mExt.getPt;
@@ -228,8 +233,8 @@ export function partitionResultToSortedGroups(resultdata) {
 		'fcRank',
 		'fcCount',
 		'totalRank',
+		'countDiff',
 		'getPt',
-		'getPtDiff',
 		'accumPt',
 		'accumPtDiff',
 		'accumRank'

@@ -11,6 +11,7 @@
 		"heroken"
 	],
 	"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10, 5],
+	"fcRankToCount": [30, 20, 10, 5, 3, 2, 0, 0],
 	"matches": [
 		{
 			"date": "2025-05-11",
