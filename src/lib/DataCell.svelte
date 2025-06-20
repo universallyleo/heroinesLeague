@@ -1,18 +1,21 @@
 <script>
 	import SubDataRow from './SubDataRow.svelte';
-	let { gpResult, n, simplify } = $props();
+	let { gpResult, n, detailed } = $props();
 
 	let hasShimei = $derived(gpResult.shimeiNum[n] != null);
 	let hasFC = $derived(gpResult.fcCount[n] != null);
 </script>
 
 <div class="dataCell">
-	<div class="mainData">{gpResult.accumPt[n]}</div>
+	<!-- style:grid-template-columns={detailed ? `auto 2em` : `2em 1.5em`} -->
+	<div class="mainData">
+		{gpResult.accumPt[n]}
+	</div>
 	<div class="mainDiff">
 		<span class="desc">Pt差</span><br />
 		{gpResult.accumPtDiff[n] >= 0 ? gpResult.accumPtDiff[n] : '-'}
 	</div>
-	{#if !simplify}
+	{#if detailed}
 		<div class={['subData', hasShimei || hasFC ? 'boxed' : '']}>
 			{#if hasShimei}
 				<SubDataRow label="目当" pt={gpResult.shimeiNum[n]} diff={gpResult.shimeiDiff[n]} />
@@ -41,9 +44,9 @@
 <style>
 	.dataCell {
 		width: 100%;
+		grid-template-columns: auto 2em;
 		display: grid;
 		gap: 2px;
-		grid-template-columns: auto 2em;
 		grid-template-areas:
 			'main diff'
 			'sub sub';

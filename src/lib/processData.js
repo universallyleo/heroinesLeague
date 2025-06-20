@@ -251,7 +251,7 @@ export function partitionResultToSortedGroups(resultdata) {
 	let n = resultdata.matches.length;
 	// @ts-ignore
 	gpResultData.sort((a, b) => a.accumRank[n - 1] - b.accumRank[n - 1]);
-	console.log('gpResultData', gpResultData);
+	// console.log('gpResultData', gpResultData);
 	// @ts-ignore
 	return gpResultData;
 }

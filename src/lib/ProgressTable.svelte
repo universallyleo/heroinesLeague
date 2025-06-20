@@ -21,15 +21,15 @@
 	let progressData = $derived(seriesFromResult(gpResult, matchDates(rawdata), 'accumPt'));
 	// $inspect('progressData', progressData);
 	let opts = $state({
-		simpleTable: true
+		detailTable: true
 	});
 
 	function subCategory(i) {
 		// c.f. https://x.com/Barichy2/status/1921414855908581850/photo/2
 		if (rawdata.league == 1) {
-			return i < 4 ? 'upperGp' : i > 5 ? 'lowerGp' : '';
+			return i < 4 ? 'upperGp' : i > 5 ? 'lowerGp' : 'midGp';
 		} else {
-			return i < 2 ? 'upperGp' : '';
+			return i < 2 ? 'upperGp' : 'midGp';
 		}
 	}
 </script>
@@ -47,12 +47,12 @@
 		</caption>
 		<thead>
 			<tr>
-				<th style="width:1em;">順</th>
-				<th>グループ</th>
+				<th class="sticky headingRow" style="left:0;width:1em;">順</th>
+				<th class="sticky headingRow" style="left:1.7em;">グループ</th>
 				{#each rawdata.matches as match, i (match.date)}
-					<th class="headingRow">
+					<th class="headingRow" style:width={opts.detailTable ? '7.8em' : '5em'}>
 						<div>{ShortJPDate(match.date, true)}</div>
-						{#if !opts.simpleTable}
+						{#if opts.detailTable}
 							<div class="subheading">
 								{match.venue}
 								{#if !isFuture(match.date)}
@@ -77,13 +77,22 @@
 		<tbody>
 			{#each gpResult as gp, i}
 				<tr>
-					<td class={['headingCell', subCategory(i)]}>{i + 1}</td>
-					<td class={['headingCell', subCategory(i)]}>
+					<td class={['headingCell', 'sticky', subCategory(i)]} style="left:0;">{i + 1}</td>
+					<td
+						class={['headingCell', 'sticky', 'gpLogo', subCategory(i)]}
+						style="font-size:smaller;left:1.7em;"
+					>
+						<img
+							src={`.\/gpLogo\/${gp.group}.jpg`}
+							width={clamp ? '40' : '60'}
+							alt={getGroup(gp.group).displayName}
+						/>
+						<br />
 						{clamp ? groupDisplayShort(gp.group) : getGroup(gp.group).displayName}
 					</td>
 					{#each { length: gp.accumPt.length }, n}
 						<td>
-							<DataCell gpResult={gp} {n} simplify={opts.simpleTable}></DataCell>
+							<DataCell gpResult={gp} {n} detailed={opts.detailTable}></DataCell>
 						</td>
 					{/each}
 				</tr>
@@ -138,8 +147,15 @@
 		background-color: #efefef;
 	} */
 
+	.gpLogo {
+		vertical-align: middle;
+	}
+
 	.upperGp {
 		background-color: hsl(60, 100%, 70%);
+	}
+	.midGp {
+		background-color: white;
 	}
 	.lowerGp {
 		background-color: pink;
@@ -152,7 +168,7 @@
 		border-spacing: 0 !important;
 		border-collapse: collapse;
 		display: block;
-		overflow-x: auto;
+		/* overflow-x: auto; */
 		/* margin: 0 auto; */
 		padding: 0.4em;
 		font-family: Arial, Helvetica, sans-serif;
@@ -160,17 +176,19 @@
 
 	.headingRow {
 		border-bottom: 1px solid #ddd;
-		width: 7.8em;
+		background-color: white;
+		/* width: 7.8em; */
 	}
 	.subheading {
 		font-size: small;
 		font-weight: normal;
 	}
 
-	.headingCell {
+	.sticky {
 		position: sticky;
-		left: 0;
 		z-index: 2;
+	}
+	.headingCell {
 		border-right: 1px solid black;
 		border-top: 1px solid #ddd;
 		border-bottom: 1px solid #ddd;

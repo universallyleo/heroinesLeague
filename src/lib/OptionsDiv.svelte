@@ -4,7 +4,7 @@
 
 <div class="container">
 	<label>
-		<input type="checkbox" bind:checked={opts.simpleTable} /> マッチ得点と累計のみ
+		<input type="checkbox" bind:checked={opts.detailTable} /> 得点詳細
 	</label>
 </div>
 
