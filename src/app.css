@@ -1,4 +1,4 @@
-@import '@fontsource/fira-mono';
+/* @import '@fontsource/fira-mono'; */
 
 :root {
 	--font-body:
@@ -67,15 +67,6 @@ pre {
 	color: var(--color-text);
 }
 
-.text-column {
-	display: flex;
-	max-width: 48rem;
-	flex: 0.6;
-	flex-direction: column;
-	justify-content: center;
-	margin: 0 auto;
-}
-
 input,
 button {
 	font-size: inherit;
@@ -101,5 +92,24 @@ button:focus:not(:focus-visible) {
 	padding: 0;
 	position: absolute;
 	width: 1px;
+	white-space: nowrap;
+}
+
+table caption {
+	padding-bottom: 0.4em;
+	font-weight: bold;
+	font-size: large;
+}
+th,
+td {
+	vertical-align: top;
+	text-align: center;
+	padding: 4px 5px;
+}
+tr {
+	border-bottom: solid 1px #efefef;
+}
+
+tbody tr td {
 	white-space: nowrap;
 }

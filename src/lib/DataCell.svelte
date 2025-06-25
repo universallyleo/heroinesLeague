@@ -44,9 +44,9 @@
 <style>
 	.dataCell {
 		width: 100%;
-		grid-template-columns: auto 2em;
 		display: grid;
 		gap: 2px;
+		grid-template-columns: auto 2em;
 		grid-template-areas:
 			'main diff'
 			'sub sub';

@@ -120,6 +120,7 @@ export function groupDisplayShort(search_id) {
  *
  * @typedef {Object} GroupResultSeries
  * @property {string} group  i-th entry of each of the remaining properties is the data from i-th match
+ * @property {number} id
  * @property {number[]} shimeiNum
  * @property {number[]} shimeiRank
  * @property {number[]} shimeiDiff difference in shimei number from the group of one rank higher
@@ -220,6 +221,13 @@ export function CalculateLeagueResult(raw) {
 	// @ts-ignore
 	return res;
 }
+// /**
+//  * @param  {LeagueDataExt} resultdata
+//  * */
+// export function extractSingleMatchFromExtRes(resultdata, matchID){
+// 	// let res = structuredClone( resultdata.matches[matchID] );
+// 	// let res =
+// }
 
 /**
  * @param  {LeagueDataExt} resultdata
@@ -243,7 +251,7 @@ export function partitionResultToSortedGroups(resultdata) {
 
 	for (const [si, gp] of Object.entries(resultdata.groups)) {
 		let i = parseInt(si);
-		gpResultData[i] = { group: gp };
+		gpResultData[i] = { group: gp, id: si };
 		for (const key of keys) {
 			gpResultData[i][key] = resultdata.matches.map((m) => (key in m ? m[key][i] : null));
 		}

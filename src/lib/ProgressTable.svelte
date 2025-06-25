@@ -11,18 +11,21 @@
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 	import DataCell from './DataCell.svelte';
 	import OptionsDiv from './OptionsDiv.svelte';
+	import MatchResult from './MatchResult.svelte';
 
 	let { rawdata, clamp } = $props();
 	$inspect('clamp', clamp);
 	let leagueResultExt = $derived(CalculateLeagueResult(rawdata));
 	// $inspect('leagueResultExt', leagueResultExt);
-	let gpResult = $derived(partitionResultToSortedGroups(leagueResultExt));
-	// $inspect('gpResult', gpResult);
-	let progressData = $derived(seriesFromResult(gpResult, matchDates(rawdata), 'accumPt'));
+	let gpResults = $derived(partitionResultToSortedGroups(leagueResultExt));
+	// $inspect('gpResults', gpResults);
+	let progressData = $derived(seriesFromResult(gpResults, matchDates(rawdata), 'accumPt'));
 	// $inspect('progressData', progressData);
 	let opts = $state({
 		detailTable: true
 	});
+	let openMatchesDetails = $state(rawdata.matches.map((x) => false)); // binding would not work reactively if using $derived
+	// c.f. https://github.com/sveltejs/svelte/issues/12320
 
 	function subCategory(i) {
 		// c.f. https://x.com/Barichy2/status/1921414855908581850/photo/2
@@ -31,6 +34,11 @@
 		} else {
 			return i < 2 ? 'upperGp' : 'midGp';
 		}
+	}
+
+	function openMatchDetails(i) {
+		openMatchesDetails[i] = true;
+		console.log('open match', openMatchesDetails);
 	}
 </script>
 
@@ -51,7 +59,22 @@
 				<th class="sticky headingRow" style="left:1.7em;">グループ</th>
 				{#each rawdata.matches as match, i (match.date)}
 					<th class="headingRow" style:width={opts.detailTable ? '7.8em' : '5em'}>
-						<div>{ShortJPDate(match.date, true)}</div>
+						<div>
+							<button class="plainBtn" onclick={() => openMatchDetails(i)}>
+								{ShortJPDate(match.date, true)}
+							</button>
+						</div>
+						{#if !isFuture(match.date)}
+							<MatchResult
+								bind:open={openMatchesDetails[i]}
+								{clamp}
+								leagueNum={rawdata.league}
+								venue={match.venue}
+								date={match.date}
+								{gpResults}
+								matchID={i}
+							/>
+						{/if}
 						{#if opts.detailTable}
 							<div class="subheading">
 								{match.venue}
@@ -75,7 +98,7 @@
 		</thead>
 
 		<tbody>
-			{#each gpResult as gp, i}
+			{#each gpResults as gp, i}
 				<tr>
 					<td class={['headingCell', 'sticky', subCategory(i)]} style="left:0;">{i + 1}</td>
 					<td
@@ -122,25 +145,6 @@
 		width: 95%;
 		margin: 0 auto;
 		/* border: 2px black solid; */
-	}
-
-	table caption {
-		padding-bottom: 0.4em;
-		font-weight: bold;
-		font-size: large;
-	}
-	th,
-	td {
-		vertical-align: top;
-		text-align: center;
-		padding: 4px 5px;
-	}
-	tr {
-		border-bottom: solid 1px #efefef;
-	}
-
-	tbody tr td {
-		white-space: nowrap;
 	}
 
 	/* tbody tr:nth-child(odd) {
@@ -204,5 +208,15 @@
 	.cdInfo {
 		width: 100px;
 		max-width: 140px;
+	}
+
+	.plainBtn {
+		background: none;
+		border: none;
+		padding: 0;
+		margin: 0;
+		font: inherit;
+		color: inherit;
+		cursor: pointer;
 	}
 </style>

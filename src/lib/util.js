@@ -53,6 +53,43 @@ export function ShortJPDate(ISOdate, noyear = false) {
 	return ISOdate.length > 5 ? (noyear ? slash.slice(5) : slash) : slash;
 }
 
+export function numberToKanji(num) {
+	const digits = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+	const units = ['', '十', '百', '千'];
+	const bigUnits = ['', '万', '億', '兆'];
+
+	if (num === 0) return '零';
+
+	let result = '';
+	let strNum = String(num);
+	let bigUnitIndex = 0;
+
+	while (strNum.length > 0) {
+		let chunk = strNum.slice(-4); // take last 4 digits
+		strNum = strNum.slice(0, -4);
+
+		let part = '';
+		for (let i = 0; i < chunk.length; i++) {
+			let digit = Number(chunk[chunk.length - 1 - i]);
+			if (digit !== 0) {
+				// omit "一" in the "十" or "百" or "千" place if it's the only one
+				if (digit === 1 && i > 0) {
+					part = units[i] + part;
+				} else {
+					part = digits[digit] + units[i] + part;
+				}
+			}
+		}
+
+		if (part) {
+			result = part + bigUnits[bigUnitIndex] + result;
+		}
+		bigUnitIndex++;
+	}
+
+	return result;
+}
+
 export const palette = [
 	'#e41a1c',
 	'#377eb8',
