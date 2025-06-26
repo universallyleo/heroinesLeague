@@ -83,6 +83,7 @@ export function groupDisplayShort(search_id) {
  * @property {Array<number>} [rank] both result and rank are read in the order of the league data group
  * @property {Array<string>} [src] array of sources of match result data
  * @property {Array<string,number>} [guestShimei]
+ * @property {Array<string,number>} [guestRank]
  * if have shimei and fcRank
  * 		=> match rank determined by (fcRankToCount + shimeiNum)
  * { league: "1",
