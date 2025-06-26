@@ -37,7 +37,7 @@ export function betterObjectFromEntries(entries, source) {
 }
 
 const nowDTObj = new Date();
-export function isFuture(date, shift = 0) {
+export function isFuture(date, shift = 1) {
 	let target = new Date(date);
 	shift == 0 ? null : target.setDate(target.getDate() + shift);
 	return target.getTime() > nowDTObj.getTime();

@@ -16,7 +16,7 @@
 	let { rawdata, clamp } = $props();
 	$inspect('clamp', clamp);
 	let leagueResultExt = $derived(CalculateLeagueResult(rawdata));
-	// $inspect('leagueResultExt', leagueResultExt);
+	$inspect('leagueResultExt', leagueResultExt);
 	let gpResults = $derived(partitionResultToSortedGroups(leagueResultExt));
 	// $inspect('gpResults', gpResults);
 	let progressData = $derived(seriesFromResult(gpResults, matchDates(rawdata), 'accumPt'));
