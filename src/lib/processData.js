@@ -82,7 +82,7 @@ export function groupDisplayShort(search_id) {
  * @property {Array<number>} [fcRankToCount] n-th entry = counts given to (n+1)st placed group
  * @property {Array<number>} [rank] both result and rank are read in the order of the league data group
  * @property {Array<string>} [src] array of sources of match result data
- * @property {Array<string,number>} [guestShimei]
+ * @property {Array<string,number>} [guestShimeiFC] [guest name, shimeiNum, FCrank, FCpt]
  * @property {Array<string,number>} [guestRank]
  * if have shimei and fcRank
  * 		=> match rank determined by (fcRankToCount + shimeiNum)
@@ -150,6 +150,10 @@ export function matchDates(raw) {
  */
 export function futureMatches(raw) {
 	return raw.matches.filter(({ date }) => isFuture(date));
+}
+
+export function hasResult(matchDataRaw) {
+	return matchDataRaw?.shimeiNum || matchDataRaw?.rank;
 }
 
 /**

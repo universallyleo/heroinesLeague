@@ -1,0 +1,64 @@
+{
+	"id": "chula",
+	"displayName": "chuLa",
+	"debut": "2024-06-06",
+	"sns": { "twitter": "chula_official", "youtube": "jumpstv01" },
+	"members": [
+		{
+			"name": "Hamachi Hiyo",
+			"display": "はまちひよ",
+			"colorCode": "#79c7fd",
+			"color": "Light Blue",
+			"join": "May 7, 2025"
+		},
+		{
+			"name": "Ameiro Ringo",
+			"display": "飴色りんご",
+			"colorCode": "#f6041a",
+			"color": "Red",
+			"join": "May 8, 2025"
+		},
+		{
+			"name": "Yagi Horun",
+			"display": "八木ほるん",
+			"colorCode": "#F4A1C5",
+			"color": "Pink",
+			"join": "May 9, 2025"
+		},
+		{
+			"name": "Tamayura Setsuna",
+			"display": "玉響せつな",
+			"colorCode": "white",
+			"color": "White|s",
+			"join": "May 30, 2024, Graduated January 17, 2025; Re-joined May 10, 2025"
+		},
+		{
+			"name": "Kagami Mirano",
+			"display": "明鏡みらの",
+			"colorCode": "#58CE91",
+			"color": "Green",
+			"join": "May 11, 2025"
+		},
+		{
+			"name": "Hisaki Mio",
+			"display": "陽咲みお",
+			"colorCode": "#ffa500",
+			"color": "Orange",
+			"join": "May 12, 2025"
+		},
+		{
+			"name": "Tsurara Rara",
+			"display": "紫藤らら",
+			"colorCode": "#8014b8",
+			"color": "Purple",
+			"join": "May 13, 2025"
+		},
+		{
+			"name": "Watamori Rowa",
+			"display": "綿森ろわ",
+			"colorCode": "#025ED4",
+			"color": "Blue",
+			"join": "May 14, 2025"
+		}
+	]
+}

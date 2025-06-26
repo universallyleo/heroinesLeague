@@ -5,7 +5,8 @@
 		CalculateLeagueResult,
 		partitionResultToSortedGroups,
 		seriesFromResult,
-		groupDisplayShort
+		groupDisplayShort,
+		hasResult
 	} from '$lib/processData.js';
 	import { isFuture, ShortJPDate } from '$lib/util.js';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
@@ -38,7 +39,6 @@
 
 	function openMatchDetails(i) {
 		openMatchesDetails[i] = true;
-		console.log('open match', openMatchesDetails);
 	}
 </script>
 
@@ -64,7 +64,7 @@
 								{ShortJPDate(match.date, true)}
 							</button>
 						</div>
-						{#if !isFuture(match.date)}
+						{#if hasResult(match)}
 							<MatchResult
 								bind:open={openMatchesDetails[i]}
 								{clamp}
@@ -72,16 +72,17 @@
 								venue={match.venue}
 								date={match.date}
 								{gpResults}
+								guestShimeiFC={match?.guestShimeiFC ?? []}
 								matchID={i}
 							/>
 						{/if}
 						{#if opts.detailTable}
 							<div class="subheading">
 								{match.venue}
-								{#if !isFuture(match.date)}
+								{#if hasResult(match)}
 									{#if 'shimeiTotal' in leagueResultExt.matches[i]}
 										<br />
-										<span style="font-size:smaller;border-top: dashed 1px #999;">
+										<span style="font-size:smaller;border-top: dashed 1px #999; padding-top:.2em;">
 											総入場pt: {leagueResultExt.matches[i].shimeiTotal}
 										</span>
 									{/if}

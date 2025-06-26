@@ -11,7 +11,7 @@
 		"heroken"
 	],
 	"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10, 5],
-	"fcRankToCount": [30, 20, 10, 5, 3, 2, 0, 0],
+	"fcRankToCount": [30, 20, 10, 5, 3, 2, 0, 0, 0, 0, 0],
 	"matches": [
 		{
 			"date": "2025-05-11",
@@ -120,12 +120,14 @@
 					"tokuten": ["after", ""]
 				}
 			],
-			"rank": [5, 2, 1, 4, 3, 6, 7, 8],
-			"guestRank": [
-				["ion", 1],
-				["chula", 2],
-				["tenran", 3]
-			]
+			"shimeiNum": [75, 85, 115, 90, 102, 74, 40, 28],
+			"fcRank": [3, 1, 5, 7, 7, 7, 4, 7],
+			"guestShimeiFC": [
+				["ion", 76, 2, 20],
+				["chula", 39, 6, 2],
+				["tenran", 8, 7, 0]
+			],
+			"src": "https://x.com/kamekichi_id/status/1938211479972667663"
 		}
 	]
 }

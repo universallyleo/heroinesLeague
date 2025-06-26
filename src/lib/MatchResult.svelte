@@ -1,6 +1,6 @@
 <script>
 	import { getGroup, groupDisplayShort } from './processData';
-	import { numberToKanji } from './util';
+	import { diffFromRanked, numberToKanji, rank } from './util';
 
 	let {
 		open = $bindable(false),
@@ -10,7 +10,8 @@
 		date,
 		timetable = [],
 		gpResults,
-		matchID
+		matchID,
+		guestShimeiFC = []
 	} = $props();
 
 	let hasShimei = $derived(gpResults[0].shimeiNum[matchID] != null);
@@ -18,6 +19,12 @@
 	let sortedGps = $derived(
 		gpResults.toSorted((a, b) => a.totalRank[matchID] - b.totalRank[matchID])
 	);
+	let guestShimeiArr = $derived(guestShimeiFC.map((x) => x[1]));
+	let guestShimeiRkData = $derived(rank(guestShimeiArr));
+	let guestShimeiDiff = $derived(
+		diffFromRanked(guestShimeiArr, guestShimeiRkData.rank, guestShimeiRkData.prev)
+	);
+
 	let modal;
 
 	// When the user clicks on <span> (x), close the modal
@@ -29,6 +36,10 @@
 	$effect(() => {
 		if (open) modal.style.display = 'block';
 	});
+
+	function diffFromFranked(guestShimeiArr, rank, prev) {
+		throw new Error('Function not implemented.');
+	}
 </script>
 
 <div
@@ -119,6 +130,84 @@
 				</tbody>
 			</table>
 		</div>
+
+		{#if guestShimeiFC.length > 0}
+			<div>
+				ゲスト
+				<table class="simpTb">
+					<thead>
+						<tr>
+							<th class="sticky headingRow" style="left:0;width:1em;">順</th>
+							<th class="sticky headingRow" style="left:1.7em;">グループ</th>
+							{#if hasShimei}
+								<th class="headingRow">指名入場数</th>
+							{/if}
+							{#if hasFC}
+								<th class="headingRow">FC投票得点</th>
+							{/if}
+							{#if hasShimei && hasFC}
+								<th class="headingRow">総合得点</th>
+							{/if}
+						</tr>
+					</thead>
+
+					<tbody>
+						{#each guestShimeiFC as gp, i}
+							<tr>
+								<td class="headingCell sticky" style="left:0;">{i + 1}</td>
+								<td class="headingCell sticky gpLogo" style="font-size:smaller;left:1.7em;">
+									<!-- <img
+									src={`.\/gpLogo\/${gpResults[n - 1].group}.jpg`}
+									width={clamp ? '40' : '60'}
+									alt={getGroup(gpResults[n - 1].group).displayName}
+								/> 
+								<br /> -->
+									{clamp ? groupDisplayShort(gp[0]) : getGroup(gp[0]).displayName}
+								</td>
+								{#if hasShimei}
+									<td class="datacell">
+										<div class="rkDiffCell">
+											<div class="rk">{guestShimeiRkData.rank[i]}位</div>
+											<div class="val">
+												{gp[1]}
+											</div>
+											{#if guestShimeiDiff[i] > 0}
+												<div class="diff">差 {guestShimeiDiff[i]}</div>
+											{/if}
+										</div>
+									</td>
+								{/if}
+
+								{#if hasFC}
+									<td class="datacell">
+										<div class="rkDiffCell">
+											<div class="rk">{gp[2]}位</div>
+											<div class="val">
+												{gp[3]}
+											</div>
+										</div>
+									</td>
+								{/if}
+								{#if hasShimei && hasFC}
+									<td class="datacell">
+										<div class="rkDiffCell">
+											<div class="val">
+												{gp[1] + gp[3]}
+											</div>
+											{#if i > 0}
+												<div class="diff">
+													差 {guestShimeiFC[i - 1][1] + guestShimeiFC[i - 1][3] - gp[1] - gp[3]}
+												</div>
+											{/if}
+										</div>
+									</td>
+								{/if}
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		{/if}
 	</div>
 </div>
 

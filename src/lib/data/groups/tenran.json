@@ -1,0 +1,44 @@
+{
+	"id": "tenran",
+	"displayName": "テンシンランマン",
+	"displayShort": "テンラン",
+	"debut": "2025-05-24",
+	"members": [
+		{
+			"name": "Kotone Una",
+			"display": "琴音うな",
+			"colorCode": "#FFF380",
+			"color": "Yellow|s",
+			"join": ""
+		},
+		{
+			"name": "Ogura Azuki",
+			"display": "小倉あずき",
+			"colorCode": "#B171E7",
+			"color": "Purple",
+			"join": "<!--Formerly Edogawa Karen?-->"
+		},
+		{
+			"name": "Misono Sora",
+			"display": "味園そら",
+			"colorCode": "#7076e5",
+			"color": "Blue",
+			"join": "<!--Formerly Haneda Koko?-->"
+		},
+		{
+			"name": "Oda Koyun",
+			"display": "織田こゆん",
+			"colorCode": "#95e5a3",
+			"color": "Green",
+			"join": ""
+		},
+		{
+			"name": "Ebihara Ten (HEROINES)|Ebihara Ten",
+			"display": "海老原てん",
+			"colorCode": "white",
+			"color": "White|s",
+			"join": ""
+		}
+	],
+	"sns": { "twitter": "tenran_official" }
+}

@@ -1,0 +1,59 @@
+{
+	"id": "ion",
+	"displayName": "iON!",
+	"displayShort": "アイオン",
+	"debut": "2025-05-22",
+
+	"members": [
+		{
+			"name": "Koharu Nene",
+			"display": "恋春ねね",
+			"colorCode": "#FC78BD",
+			"color": "Pink",
+			"join": ""
+		},
+		{
+			"name": "Uno Yuri",
+			"display": "宇野ゆり",
+			"colorCode": "#F24340",
+			"color": "Red",
+			"join": "<small>('''Leader''')</small>"
+		},
+		{
+			"name": "Hanamaru Peco",
+			"display": "花丸ぺこ",
+			"colorCode": "#FAA552",
+			"color": "Orange",
+			"join": ""
+		},
+		{
+			"name": "Hakane Kono",
+			"display": "儚寧この",
+			"colorCode": "#01E09D",
+			"color": "Green",
+			"join": ""
+		},
+		{
+			"name": "Kurisu Mugi",
+			"display": "栗栖むぎ",
+			"colorCode": "#F4D45B",
+			"color": "Yellow",
+			"join": ""
+		},
+		{
+			"name": "Kaguya Kurara",
+			"display": "伽久耶くらら",
+			"colorCode": "#C25EE2",
+			"color": "Purple",
+			"join": ""
+		},
+		{
+			"name": "Suzumiya Rise",
+			"display": "鈴都りせ",
+			"colorCode": "#6888E7",
+			"color": "Blue",
+			"join": ""
+		}
+	],
+	"sns": { "twitter": "iON_idol_" }
+}

@@ -5,7 +5,8 @@ function convertMBData(inputText) {
 		.filter(Boolean);
 	const result = [];
 
-	const pattern = /^\*\[\[(.+?)\]\]\s+\((.+?);\s+\{\{colortext\|(.+?)\|(.+?)\}\}\)\s*(.*?)$/i;
+	const pattern =
+		/^\*\s+\[\[(.+?)\]\]\s+\((.+?);\s+\{\{(?:Colortext|colortext)\|(.+?)\|(.+?)\}\}\)\s*(.*?)$/i;
 
 	for (const line of lines) {
 		const match = line.match(pattern);
