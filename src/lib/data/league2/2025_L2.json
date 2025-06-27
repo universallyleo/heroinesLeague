@@ -128,6 +128,16 @@
 				["tenran", 8, 7, 0]
 			],
 			"src": "https://x.com/kamekichi_id/status/1938211479972667663"
+		},
+		{
+			"date": "2025-07-17",
+			"venue": "東京某処",
+			"timetable": []
+		},
+		{
+			"date": "2025-07-31",
+			"venue": "大阪バナナホール",
+			"timetable": []
 		}
 	]
 }

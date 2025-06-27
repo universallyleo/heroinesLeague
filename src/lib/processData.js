@@ -1,5 +1,5 @@
 // import aggregate from "$lib/data/aggregate.json";
-import { rank, ShortJPDate, isFuture, diffFromRanked, palette } from './util.js';
+import { rank, ShortJPDate, isFuture, palette, rankDiffAssign, diffFromRanked } from './util.js';
 
 const groupFiles = import.meta.glob('./data/groups/*.json', { eager: true });
 const leagueOneFiles = import.meta.glob('./data/league1/*.json', { eager: true });
@@ -72,6 +72,9 @@ export function groupDisplayShort(search_id) {
  * @property {Array<string>} time starts and ends time
  * @property {Array<string>} tokuten starts and ends time of buppan
  *
+ *
+ * @typedef {[string, number, number, number]} GuestDataRaw [codename, shimeiNum, FCrank, FCpt]
+ *
  * @typedef {Object} MatchDataRaw
  * @property {string} date
  * @property {string} venue
@@ -82,14 +85,24 @@ export function groupDisplayShort(search_id) {
  * @property {Array<number>} [fcRankToCount] n-th entry = counts given to (n+1)st placed group
  * @property {Array<number>} [rank] both result and rank are read in the order of the league data group
  * @property {Array<string>} [src] array of sources of match result data
- * @property {Array<string,number>} [guestShimeiFC] [guest name, shimeiNum, FCrank, FCpt]
- * @property {Array<string,number>} [guestRank]
+ * @property {GuestDataRaw} [guestShimeiFC]
+ * @property {string[]} [comments]
  * if have shimei and fcRank
  * 		=> match rank determined by (fcRankToCount + shimeiNum)
  * { league: "1",
  * 	groups: ["A", "B", "C"],
  *  matches: [ {date, venu, rank: [3,1,2]} ]}
  * means group A is ranked 3, group B is ranked 1, group C is ranked 2
+ *
+ * @typedef {Object} GuestResultData
+ * @property {string} group
+ * @property {number[]} [shimeiRank] these are array just for conveniences, they all only have one entry
+ * @property {number[]} [shimeiDiff]
+ * @property {number[]} [fcRank]
+ * @property {number[]} [fcCount]
+ * @property {number[]} [countDiff]
+ * @property {number[]} totalRank
+ * @property {number[]} [getPt]
  *
  * @typedef {Object} MatchDataExt
  * @extends MatchDataRaw
@@ -103,6 +116,7 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} accumPt
  * @property {number[]} accumPtDiff
  * @property {number[]} accumRank
+ * @property {GuestMatchData[]} guestResults
  *
  * @typedef {Object} LeagueDataRaw
  * @property {string} league
@@ -133,7 +147,6 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} accumPt
  * @property {number[]} accumPtDiff
  * @property {number[]} accumRank
- * // @property {number[]} shimeiLostRatio
  */
 
 //#region match data fn
@@ -154,6 +167,21 @@ export function futureMatches(raw) {
 
 export function hasResult(matchDataRaw) {
 	return matchDataRaw?.shimeiNum || matchDataRaw?.rank;
+}
+
+/**
+ * @typedef {Object} ResultType
+ * @property {boolean} hasShimei
+ * @property {boolean} hasFC
+ *
+ * @param  {GroupResultSeries} gpResult
+ * @param  {number} matchID=0, which match we consider
+ * @return {ResultType}
+ */
+export function resultTypes(gpResult, matchID = 0) {
+	let hasShimei = gpResult.shimeiNum[matchID] != null;
+	let hasFC = gpResult.fcCount[matchID] != null;
+	return { hasShimei, hasFC };
 }
 
 /**
@@ -196,14 +224,15 @@ export function CalculateLeagueResult(raw) {
 			totalCount = mExt.fcCount;
 		}
 		if ('shimeiNum' in match) {
-			let shimeiRk = rank(match.shimeiNum);
-			mExt.shimeiRank = shimeiRk.rank;
-			mExt.shimeiDiff = diffFromRanked(match.shimeiNum, shimeiRk.rank, shimeiRk.prev);
+			// let shimeiRk = rank(match.shimeiNum);
+			// mExt.shimeiRank = shimeiRk.rank;
+			// mExt.shimeiDiff = diffFromRanked(match.shimeiNum, shimeiRk.rank, shimeiRk.prev);
+			rankDiffAssign(match.shimeiNum, mExt, 'shimeiRank', 'shimeiDiff');
 			mExt.shimeiTotal = match.shimeiNum.reduce((a, x) => a + x, 0);
+
 			if ('fcRank' in match) {
 				totalCount = totalCount.map((x, i) => x + match.shimeiNum[i]);
-				let countRk = rank(totalCount);
-				mExt.countDiff = diffFromRanked(totalCount, countRk.rank, countRk.prev);
+				rankDiffAssign(totalCount, mExt, '', 'countDiff');
 			} else {
 				totalCount = match.shimeiNum;
 				mExt.countDiff = mExt.shimeiDiff;
@@ -217,9 +246,34 @@ export function CalculateLeagueResult(raw) {
 
 		mExt.accumPt =
 			n > 0 ? mExt.getPt.map((pt, i) => pt + res.matches[n - 1].accumPt[i]) : mExt.getPt;
-		rankedData = rank(mExt.accumPt);
-		mExt.accumRank = rankedData.rank;
-		mExt.accumPtDiff = diffFromRanked(mExt.accumPt, rankedData.rank, rankedData.prev);
+		// rankedData = rank(mExt.accumPt);
+		// mExt.accumRank = rankedData.rank;
+		// mExt.accumPtDiff = diffFromRanked(mExt.accumPt, rankedData.rank, rankedData.prev);
+		rankDiffAssign(mExt.accumPt, mExt, 'accumRank', 'accumPtDiff');
+
+		// tidy guest data if there is any
+		mExt.guestResults = [];
+		if ('guestShimeiFC' in match) {
+			let shimei = match.guestShimeiFC.map((x) => x[1]);
+			let shimeiRk = rank(shimei);
+			let diff = diffFromRanked(shimei, shimeiRk.rank, shimeiRk.prev);
+			let gd = match.guestShimeiFC.map((x, i) => {
+				let prevCount =
+					i == 0 ? x[1] + x[3] : match.guestShimeiFC[i - 1][1] + match.guestShimeiFC[i - 1][3];
+				return {
+					group: x[0],
+					shimeiNum: [x[1]],
+					shimeiRank: [shimeiRk.rank[i]],
+					shimeiDiff: [diff[i]],
+					fcRank: [x[2]],
+					fcCount: [x[3]],
+					totalRank: [i + 1],
+					countDiff: [prevCount - x[1] - x[3]],
+					getPt: [-1] // for distinguish guest from match groups
+				};
+			});
+			mExt.guestResults = gd;
+		}
 
 		res.matches[n] = mExt;
 	}
@@ -258,6 +312,7 @@ export function partitionResultToSortedGroups(resultdata) {
 		let i = parseInt(si);
 		gpResultData[i] = { group: gp, id: si };
 		for (const key of keys) {
+			// !every data that has no value will be default to null
 			gpResultData[i][key] = resultdata.matches.map((m) => (key in m ? m[key][i] : null));
 		}
 	}

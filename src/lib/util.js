@@ -32,6 +32,12 @@ export function diffFromRanked(arr, rank, prev) {
 	return arr.map((x, i) => (rank[i] > 1 ? arr[prev[i]] - x : -1));
 }
 
+export function rankDiffAssign(arr, obj, rkKey, diffKey, f = (a, b) => b - a) {
+	let ranked = rank(arr, f);
+	if (rkKey !== '') obj[rkKey] = ranked.rank;
+	if (diffKey !== '') obj[diffKey] = diffFromRanked(arr, ranked.rank, ranked.prev);
+}
+
 export function betterObjectFromEntries(entries, source) {
 	return Object.fromEntries(entries.filter((k) => k in source).map((k) => [k, source[k]]));
 }

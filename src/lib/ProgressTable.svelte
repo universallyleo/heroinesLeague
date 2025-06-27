@@ -8,7 +8,7 @@
 		groupDisplayShort,
 		hasResult
 	} from '$lib/processData.js';
-	import { isFuture, ShortJPDate } from '$lib/util.js';
+	import { ShortJPDate } from '$lib/util.js';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 	import DataCell from './DataCell.svelte';
 	import OptionsDiv from './OptionsDiv.svelte';
@@ -72,7 +72,7 @@
 								venue={match.venue}
 								date={match.date}
 								{gpResults}
-								guestShimeiFC={match?.guestShimeiFC ?? []}
+								guestData={leagueResultExt.matches[i].guestResults}
 								matchID={i}
 							/>
 						{/if}

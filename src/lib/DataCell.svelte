@@ -1,9 +1,11 @@
 <script>
+	import { resultTypes } from './processData';
 	import SubDataRow from './SubDataRow.svelte';
 	let { gpResult, n, detailed } = $props();
 
-	let hasShimei = $derived(gpResult.shimeiNum[n] != null);
-	let hasFC = $derived(gpResult.fcCount[n] != null);
+	// let hasShimei = $derived(gpResult.shimeiNum[n] != null);
+	// let hasFC = $derived(gpResult.fcCount[n] != null);
+	let { hasShimei, hasFC } = $derived(resultTypes(gpResult, n));
 </script>
 
 <div class="dataCell">
@@ -18,7 +20,7 @@
 	{#if detailed}
 		<div class={['subData', hasShimei || hasFC ? 'boxed' : '']}>
 			{#if hasShimei}
-				<SubDataRow label="目当" pt={gpResult.shimeiNum[n]} diff={gpResult.shimeiDiff[n]} />
+				<SubDataRow label="入場" pt={gpResult.shimeiNum[n]} diff={gpResult.shimeiDiff[n]} />
 			{/if}
 			{#if hasFC}
 				<SubDataRow label="ＦＣ" pt={gpResult.fcCount[n]} rank={gpResult.fcRank[n]} />

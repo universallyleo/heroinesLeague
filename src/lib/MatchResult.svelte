@@ -1,6 +1,7 @@
 <script>
-	import { getGroup, groupDisplayShort } from './processData';
-	import { diffFromRanked, numberToKanji, rank } from './util';
+	import MatchTable from './MatchTable.svelte';
+	import { getGroup, groupDisplayShort, resultTypes } from './processData';
+	import { numberToKanji } from './util';
 
 	let {
 		open = $bindable(false),
@@ -11,19 +12,20 @@
 		timetable = [],
 		gpResults,
 		matchID,
-		guestShimeiFC = []
+		guestData
 	} = $props();
 
-	let hasShimei = $derived(gpResults[0].shimeiNum[matchID] != null);
-	let hasFC = $derived(gpResults[0].fcCount[matchID] != null);
+	// let hasShimei = $derived(gpResults[0].shimeiNum[matchID] != null);
+	// let hasFC = $derived(gpResults[0].fcCount[matchID] != null);
+	let { hasShimei, hasFC } = $derived(resultTypes(gpResults[0], matchID));
 	let sortedGps = $derived(
 		gpResults.toSorted((a, b) => a.totalRank[matchID] - b.totalRank[matchID])
 	);
-	let guestShimeiArr = $derived(guestShimeiFC.map((x) => x[1]));
-	let guestShimeiRkData = $derived(rank(guestShimeiArr));
-	let guestShimeiDiff = $derived(
-		diffFromRanked(guestShimeiArr, guestShimeiRkData.rank, guestShimeiRkData.prev)
-	);
+	// let guestShimeiArr = $derived(guestShimeiFC.map((x) => x[1]));
+	// let guestShimeiRkData = $derived(rank(guestShimeiArr));
+	// let guestShimeiDiff = $derived(
+	// 	diffFromRanked(guestShimeiArr, guestShimeiRkData.rank, guestShimeiRkData.prev)
+	// );
 
 	let modal;
 
@@ -36,10 +38,6 @@
 	$effect(() => {
 		if (open) modal.style.display = 'block';
 	});
-
-	function diffFromFranked(guestShimeiArr, rank, prev) {
-		throw new Error('Function not implemented.');
-	}
 </script>
 
 <div
@@ -59,82 +57,14 @@
 			<span style="font-size:small; color: #888;"> {date} @ {venue} </span>
 		</div>
 		<div class="tableContainer">
-			<table class="simpTb">
-				<thead>
-					<tr>
-						<th class="sticky headingRow" style="left:0;width:1em;">順</th>
-						<th class="sticky headingRow" style="left:1.7em;">グループ</th>
-						{#if hasShimei}
-							<th class="headingRow">指名入場数</th>
-						{/if}
-						{#if hasFC}
-							<th class="headingRow">FC投票得点</th>
-						{/if}
-						{#if hasShimei && hasFC}
-							<th class="headingRow">総合得点</th>
-						{/if}
-					</tr>
-				</thead>
-
-				<tbody>
-					{#each sortedGps as gp, i}
-						<tr>
-							<td class="headingCell sticky" style="left:0;">{i + 1}</td>
-							<td class="headingCell sticky gpLogo" style="font-size:smaller;left:1.7em;">
-								<!-- <img
-									src={`.\/gpLogo\/${gpResults[n - 1].group}.jpg`}
-									width={clamp ? '40' : '60'}
-									alt={getGroup(gpResults[n - 1].group).displayName}
-								/> 
-								<br /> -->
-								{clamp ? groupDisplayShort(gp.group) : getGroup(gp.group).displayName}
-							</td>
-							{#if hasShimei}
-								<td class="datacell">
-									<div class="rkDiffCell">
-										<div class="rk">{gp.shimeiRank[matchID]}位</div>
-										<div class="val">
-											{gp.shimeiNum[matchID]}
-										</div>
-										{#if gp.shimeiDiff[matchID] > 0}
-											<div class="diff">差 {gp.shimeiDiff[matchID]}</div>
-										{/if}
-									</div>
-								</td>
-							{/if}
-
-							{#if hasFC}
-								<td class="datacell">
-									<div class="rkDiffCell">
-										<div class="rk">{gp.fcRank[matchID]}位</div>
-										<div class="val">
-											{gp.fcCount[matchID]}
-										</div>
-									</div>
-								</td>
-							{/if}
-							{#if hasShimei && hasFC}
-								<td class="datacell">
-									<div class="rkDiffCell">
-										<div class="val">
-											{gp.shimeiNum[matchID] + gp.fcCount[matchID]}
-										</div>
-										{#if gp.countDiff[matchID] > 0}
-											<div class="diff">差 {gp.countDiff[matchID]}</div>
-										{/if}
-									</div>
-								</td>
-							{/if}
-						</tr>
-					{/each}
-				</tbody>
-			</table>
+			<MatchTable type="inMatch" {clamp} {gpResults} {matchID} />
 		</div>
 
-		{#if guestShimeiFC.length > 0}
+		{#if guestData.length > 0}
 			<div>
 				ゲスト
-				<table class="simpTb">
+				<MatchTable type="guest" {clamp} gpResults={guestData} />
+				<!-- <table class="simpTb">
 					<thead>
 						<tr>
 							<th class="sticky headingRow" style="left:0;width:1em;">順</th>
@@ -152,17 +82,11 @@
 					</thead>
 
 					<tbody>
-						{#each guestShimeiFC as gp, i}
+						{#each guestData as gp, i}
 							<tr>
 								<td class="headingCell sticky" style="left:0;">{i + 1}</td>
 								<td class="headingCell sticky gpLogo" style="font-size:smaller;left:1.7em;">
-									<!-- <img
-									src={`.\/gpLogo\/${gpResults[n - 1].group}.jpg`}
-									width={clamp ? '40' : '60'}
-									alt={getGroup(gpResults[n - 1].group).displayName}
-								/> 
-								<br /> -->
-									{clamp ? groupDisplayShort(gp[0]) : getGroup(gp[0]).displayName}
+									{clamp ? groupDisplayShort(gp.group) : getGroup(gp.group).displayName}
 								</td>
 								{#if hasShimei}
 									<td class="datacell">
@@ -205,7 +129,7 @@
 							</tr>
 						{/each}
 					</tbody>
-				</table>
+				</table> -->
 			</div>
 		{/if}
 	</div>
@@ -310,7 +234,7 @@
 	.modal-content {
 		position: relative;
 		background-color: #fefefe;
-		margin: 15% auto; /* 15% from the top and centered */
+		margin: 5% auto; /* 5% from the top and centered */
 		padding: 0.5em 4em;
 		border: 1px solid #888;
 		width: fit-content;
