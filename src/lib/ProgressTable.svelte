@@ -13,6 +13,7 @@
 	import DataCell from './DataCell.svelte';
 	import OptionsDiv from './OptionsDiv.svelte';
 	import MatchResult from './MatchResult.svelte';
+	import { toPng } from 'html-to-image';
 
 	let { rawdata, clamp } = $props();
 	$inspect('clamp', clamp);
@@ -27,6 +28,7 @@
 	});
 	let openMatchesDetails = $state(rawdata.matches.map((x) => false)); // binding would not work reactively if using $derived
 	// c.f. https://github.com/sveltejs/svelte/issues/12320
+	let tbElt;
 
 	function subCategory(i) {
 		// c.f. https://x.com/Barichy2/status/1921414855908581850/photo/2
@@ -40,15 +42,38 @@
 	function openMatchDetails(i) {
 		openMatchesDetails[i] = true;
 	}
+
+	function savePNG(node, name) {
+		toPng(node, {
+			backgroundColor: '#ffffff'
+		})
+			.then((dataURL) => {
+				const img = new Image();
+				img.src = dataURL;
+				let link = document.createElement('a');
+				link.download = name;
+				link.href = dataURL;
+				link.target = '_blank';
+				link.click();
+			})
+			.catch((err) => {
+				console.error('Save to PNG went wrong', err);
+			});
+	}
 </script>
 
 <!-- #region HTML
 -->
-<div style="margin-top:.5em;">
+<div style="display: flex; flex-direction:row; justify-content: space-evenly; margin-top:.5em;">
 	<OptionsDiv bind:opts />
+	<div>
+		<button onclick={() => savePNG(tbElt, `League${rawdata.league}Result.png`)}>
+			画像ダウンロード
+		</button>
+	</div>
 </div>
 
-<div class="tableContainer">
+<div class="tableContainer" bind:this={tbElt}>
 	<table class="table-bordered">
 		<caption>
 			リーグ戦結果 ( リーグ{rawdata.league} )

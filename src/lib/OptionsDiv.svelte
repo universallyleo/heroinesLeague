@@ -10,8 +10,8 @@
 
 <style>
 	.container {
-		width: max-content;
-		margin: 0 auto;
+		width: fit-content;
+		/* margin: 0 auto; */
 		padding: 2px 6px;
 		border: 1px solid black;
 		display: flex;
