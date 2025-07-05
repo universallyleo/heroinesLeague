@@ -1,0 +1,54 @@
+{
+	"id": "herokenOsaka",
+	"displayName": "ヒロインズ研究生大阪",
+	"displayShort": "ヒロ研大阪",
+	"debut": "2025-06-15",
+	"members": [
+		{
+			"name": "Shiratama Kinako",
+			"display": "白玉きなこ",
+			"joined": "2025-06-15"
+		},
+		{
+			"name": "Shikano Konaho",
+			"display": "鹿野こなほ",
+			"joined": "2025-06-15"
+		},
+		{
+			"name": "Chidori Moe ",
+			"display": "千鳥もえ",
+			"joined": "2025-06-15"
+		},
+		{
+			"name": "Fuwa Fuwari",
+			"display": "不破ふわり",
+			"joined": "2025-06-15"
+		},
+		{
+			"name": "Midosuji Piko",
+			"display": "御堂筋ぴこ",
+			"joined": "2025-06-15"
+		},
+		{
+			"name": "Itomaki Maki",
+			"display": "糸巻まき",
+			"joined": "2025-06-15"
+		},
+		{
+			"name": "Katsuragi Kotoka",
+			"display": "葛城ことか",
+			"joined": "2025-06-15"
+		},
+		{
+			"name": "Izumo Miyabi",
+			"display": "出雲みやび",
+			"joined": "2025-06-15"
+		},
+		{
+			"name": "Ebisu Tarako",
+			"display": "戎たらこ",
+			"joined": "2025-06-15"
+		}
+	],
+	"sns": { "twitter": "Heroines_Osaka" }
+}

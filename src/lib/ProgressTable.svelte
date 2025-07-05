@@ -99,6 +99,7 @@
 								{gpResults}
 								guestData={leagueResultExt.matches[i].guestResults}
 								matchID={i}
+								timetable={match.timetable}
 							/>
 						{/if}
 						{#if opts.detailTable}

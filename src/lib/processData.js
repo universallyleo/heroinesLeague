@@ -1,5 +1,14 @@
 // import aggregate from "$lib/data/aggregate.json";
-import { rank, ShortJPDate, isFuture, palette, rankDiffAssign, diffFromRanked } from './util.js';
+import {
+	rank,
+	ShortJPDate,
+	isFuture,
+	palette,
+	rankDiffAssign,
+	diffFromRanked,
+	deltaTime,
+	padNum
+} from './util.js';
 
 const groupFiles = import.meta.glob('./data/groups/*.json', { eager: true });
 const leagueOneFiles = import.meta.glob('./data/league1/*.json', { eager: true });
@@ -57,12 +66,20 @@ export const groups = [];
  * @return {GroupData}
  */
 export function getGroup(search_id) {
-	return groups.find(({ id }) => id === search_id);
+	return (
+		groups.find(({ id }) => id === search_id) ?? {
+			id: search_id,
+			displayName: search_id,
+			debute: '',
+			sns: {},
+			members: []
+		}
+	);
 }
 
 export function groupDisplayShort(search_id) {
 	let g = getGroup(search_id);
-	return g ? ('displayShort' in g ? g.displayShort : g.displayName) : search_id;
+	return g?.displayShort ?? g.displayName;
 }
 
 /**
@@ -148,6 +165,29 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} accumPtDiff
  * @property {number[]} accumRank
  */
+
+//#region timetable
+/**
+ * @typedef {Object} TTSlot
+ * @property {string} group  i-th entry of each of the remaining properties is the data from i-th match
+ * @property {[string,string]} time
+ * @property {[string,string]} tokuten
+ */
+export function refineTT(tt) {
+	let res = [];
+	for (let i = 1; i < tt.length; i++) {
+		let dt = deltaTime(tt[i - 1].time[1], tt[i].time[0]);
+		if (dt > 0) {
+			res.push({
+				group: 'rest',
+				time: [tt[i - 1].time[1], tt[i].time[0]],
+				tokuten: [padNum(dt), '']
+			});
+		}
+		res.push(tt[i]);
+	}
+	return res;
+}
 
 //#region match data fn
 /**

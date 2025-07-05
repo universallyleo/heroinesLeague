@@ -42,6 +42,14 @@ export function betterObjectFromEntries(entries, source) {
 	return Object.fromEntries(entries.filter((k) => k in source).map((k) => [k, source[k]]));
 }
 
+export function deltaTime(fromTime, toTime) {
+	//return delta time in minutes
+	//assume time string format is "hhmm"
+	let dh = parseInt(toTime.slice(0, 2)) - parseInt(fromTime.slice(0, 2));
+	let shift = 60 * dh;
+	return parseInt(toTime.slice(2)) + shift - parseInt(fromTime.slice(2));
+}
+
 const nowDTObj = new Date();
 export function isFuture(date, shift = 1) {
 	let target = new Date(date);

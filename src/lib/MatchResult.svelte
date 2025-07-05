@@ -1,6 +1,7 @@
 <script>
 	import MatchTable from './MatchTable.svelte';
-	import { getGroup, groupDisplayShort, resultTypes } from './processData';
+	import MatchTimeTable from './MatchTimeTable.svelte';
+	import { resultTypes } from './processData';
 	import { numberToKanji } from './util';
 
 	let {
@@ -14,18 +15,6 @@
 		matchID,
 		guestData
 	} = $props();
-
-	// let hasShimei = $derived(gpResults[0].shimeiNum[matchID] != null);
-	// let hasFC = $derived(gpResults[0].fcCount[matchID] != null);
-	let { hasShimei, hasFC } = $derived(resultTypes(gpResults[0], matchID));
-	let sortedGps = $derived(
-		gpResults.toSorted((a, b) => a.totalRank[matchID] - b.totalRank[matchID])
-	);
-	// let guestShimeiArr = $derived(guestShimeiFC.map((x) => x[1]));
-	// let guestShimeiRkData = $derived(rank(guestShimeiArr));
-	// let guestShimeiDiff = $derived(
-	// 	diffFromRanked(guestShimeiArr, guestShimeiRkData.rank, guestShimeiRkData.prev)
-	// );
 
 	let modal;
 
@@ -52,23 +41,51 @@
 		<button class="close" onclick={closeModal}> &times; </button>
 
 		<div>
-			リーグ{leagueNum} 第{numberToKanji(matchID + 1)}戦 結果
+			<h2>結果</h2>
+			リーグ{leagueNum} 第{numberToKanji(matchID + 1)}戦
 			<br />
 			<span style="font-size:small; color: #888;"> {date} @ {venue} </span>
 
 			<MatchTable type="inMatch" {clamp} {gpResults} {matchID} />
 
 			{#if guestData.length > 0}
-				ゲスト
+				<h2>ゲスト</h2>
 				<MatchTable type="guest" {clamp} gpResults={guestData} />
 			{/if}
 		</div>
+
+		{#if timetable.length > 0}
+			<h2>タイムテーブル</h2>
+			<!-- TODO: replace check with "if has empty schedule" -->
+			<MatchTimeTable {timetable} />
+		{/if}
 	</div>
 </div>
 
-<!-- TODO: Time-table -->
-
 <style>
+	h2 {
+		display: flex;
+		align-items: center;
+		font-size: larger;
+		font-weight: bold;
+	}
+	h2::before,
+	h2::after {
+		flex: auto;
+		min-width: 1em;
+		height: 1px;
+		display: block;
+		content: '';
+		background-color: #444;
+	}
+	h2::before {
+		margin-right: 0.5em;
+	}
+
+	h2::after {
+		margin-left: 0.5em;
+	}
+
 	/* From W3C: https://www.w3schools.com/howto/howto_css_modals.asp */
 	/* The Modal (background) */
 	.modal {
