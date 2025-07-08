@@ -6,19 +6,22 @@
 		partitionResultToSortedGroups,
 		seriesFromResult,
 		groupDisplayShort,
-		hasResult
+		hasResult,
+		hasTT
 	} from '$lib/processData.js';
 	import { ShortJPDate } from '$lib/util.js';
+	import { toPng } from 'html-to-image';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 	import DataCell from './DataCell.svelte';
 	import OptionsDiv from './OptionsDiv.svelte';
 	import MatchResult from './MatchResult.svelte';
-	import { toPng } from 'html-to-image';
+	import Modal from './Modal.svelte';
+	import MatchTimeTable from './MatchTimeTable.svelte';
 
 	let { rawdata, clamp } = $props();
 	$inspect('clamp', clamp);
 	let leagueResultExt = $derived(CalculateLeagueResult(rawdata));
-	$inspect('leagueResultExt', leagueResultExt);
+	// $inspect('leagueResultExt', leagueResultExt);
 	let gpResults = $derived(partitionResultToSortedGroups(leagueResultExt));
 	// $inspect('gpResults', gpResults);
 	let progressData = $derived(seriesFromResult(gpResults, matchDates(rawdata), 'accumPt'));
@@ -28,6 +31,16 @@
 	});
 	let openMatchesDetails = $state(rawdata.matches.map((x) => false)); // binding would not work reactively if using $derived
 	// c.f. https://github.com/sveltejs/svelte/issues/12320
+	let headingRowData = $derived(
+		rawdata.matches.map((m, i) => {
+			return {
+				date: ShortJPDate(m.date, true),
+				venue: m.venue,
+				shimeiTotal: leagueResultExt.matches[i]?.shimeiTotal ?? null,
+				displayType: hasResult(m) ? 'RESULT' : hasTT(m) ? 'TT_ONLY' : 'NONE'
+			};
+		})
+	);
 	let tbElt;
 
 	function subCategory(i) {
@@ -73,7 +86,7 @@
 	</div>
 </div>
 
-<div class="tableContainer" bind:this={tbElt}>
+<article class="tableContainer" bind:this={tbElt}>
 	<table class="table-bordered">
 		<caption>
 			リーグ戦結果 ( リーグ{rawdata.league} )
@@ -82,42 +95,62 @@
 			<tr>
 				<th class="sticky headingRow" style="left:0;width:1em;">順</th>
 				<th class="sticky headingRow" style="left:1.7em;">グループ</th>
-				{#each rawdata.matches as match, i (match.date)}
+				<!-- {#each rawdata.matches as match, i (match.date)} -->
+				{#each headingRowData as match, i}
 					<th class="headingRow" style:width={opts.detailTable ? '7.8em' : '5em'}>
 						<div>
 							<button class="plainBtn" onclick={() => openMatchDetails(i)}>
-								{ShortJPDate(match.date, true)}
+								{match.date}
 							</button>
 						</div>
-						{#if hasResult(match)}
-							<MatchResult
-								bind:open={openMatchesDetails[i]}
-								{clamp}
-								leagueNum={rawdata.league}
-								venue={match.venue}
-								date={match.date}
-								{gpResults}
-								guestData={leagueResultExt.matches[i].guestResults}
-								matchID={i}
-								timetable={match.timetable}
+						<Modal bind:open={openMatchesDetails[i]}>
+							{#if match.displayType === 'RESULT'}
+								<MatchResult
+									{clamp}
+									leagueNum={rawdata.league}
+									venue={match.venue}
+									date={match.date}
+									{gpResults}
+									guestData={leagueResultExt.matches[i].guestResults}
+									matchID={i}
+								/>
+							{/if}
+							<h2>タイムテーブル</h2>
+							<MatchTimeTable
+								timetable={match.displayType != 'NONE' ? rawdata.matches[i].timetable : []}
 							/>
-						{/if}
-						{#if opts.detailTable}
-							<div class="subheading">
-								{match.venue}
-								{#if hasResult(match)}
-									{#if 'shimeiTotal' in leagueResultExt.matches[i]}
-										<br />
-										<span style="font-size:smaller;border-top: dashed 1px #999; padding-top:.2em;">
-											総入場pt: {leagueResultExt.matches[i].shimeiTotal}
-										</span>
-									{/if}
-								{/if}
-							</div>
-						{/if}
+						</Modal>
 					</th>
 				{/each}
 			</tr>
+
+			{#if opts.detailTable}
+				<tr>
+					<th class="sticky"></th>
+					<th class="sticky"></th>
+					{#each headingRowData as match}
+						<th
+							style="font-weight:normal; font-size:.9em; border-top: dashed 1px #999; padding-top:0"
+						>
+							{match.venue}
+						</th>
+					{/each}
+				</tr>
+
+				<tr class="headingRowSubData">
+					<th class="sticky"></th>
+					<th class="sticky"></th>
+					{#each headingRowData as match}
+						<th
+							style="font-weight: normal; font-size:.7em; border-top: dashed 1px #999; padding-top:.2em;"
+						>
+							{#if match.shimeiTotal}
+								総入場pt: {match.shimeiTotal}
+							{/if}
+						</th>
+					{/each}
+				</tr>
+			{/if}
 			<!--
 			{#each headings as lb}
 				<th class="headingRow">{@html lb}</th>
@@ -149,7 +182,7 @@
 			{/each}
 		</tbody>
 	</table>
-</div>
+</article>
 
 <div class="graphContainer">
 	<ProgressGraph title="累計ポイント" {progressData} />
@@ -205,16 +238,6 @@
 		font-family: Arial, Helvetica, sans-serif;
 	}
 
-	.headingRow {
-		border-bottom: 1px solid #ddd;
-		background-color: white;
-		/* width: 7.8em; */
-	}
-	.subheading {
-		font-size: small;
-		font-weight: normal;
-	}
-
 	.sticky {
 		position: sticky;
 		z-index: 2;
@@ -224,12 +247,19 @@
 		border-top: 1px solid #ddd;
 		border-bottom: 1px solid #ddd;
 	}
-
 	@media (min-width: 350px) {
 		.headingCell {
 			padding-left: 0.4em;
 			padding-right: 0.2em;
 		}
+	}
+	tbody > tr {
+		border-top: 1px solid #ddd;
+		border-bottom: 1px solid #ddd;
+	}
+	.headingRow {
+		padding-bottom: 0;
+		background-color: white;
 	}
 
 	.cdInfo {

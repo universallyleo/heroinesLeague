@@ -2,43 +2,50 @@
 	import { getGroup, refineTT } from './processData';
 
 	let { timetable } = $props();
+	let hasTT = $derived(timetable.length > 0);
 	let tt = $derived(refineTT(timetable));
 </script>
 
 <div>
-	<table class="simpTb">
-		<!-- <caption>
+	{#if hasTT}
+		<table class="simpTb">
+			<!-- <caption>
 			{date} @ {venue}
 		</caption> -->
-		<thead>
-			<tr>
-				<th> TIME </th>
-				<th> グループ </th>
-				<th> 特典会 </th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each tt as itm}
+			<thead>
 				<tr>
-					<td> {itm.time[0]} </td>
-					{#if itm.group === 'rest'}
-						<td colspan="2">
-							{parseInt(itm.tokuten[0])} 分休憩
-						</td>
-					{:else}
-						<td> {getGroup(itm.group).displayName} </td>
-						<td>
-							{#if itm.tokuten[0] === 'after'}
-								終演後
-							{:else}
-								{itm.tokuten[0]} ~ {itm.tokuten[1]}
-							{/if}
-						</td>
-					{/if}
+					<th> TIME </th>
+					<th> グループ </th>
+					<th> 特典会 </th>
 				</tr>
-			{/each}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{#each tt as itm}
+					<tr>
+						<td> {itm.time[0]} </td>
+						{#if itm.group === 'rest'}
+							<td colspan="2">
+								{parseInt(itm.tokuten[0])} 分転換
+							</td>
+						{:else}
+							<td> {getGroup(itm.group).displayName} </td>
+							<td>
+								{#if itm.tokuten[0] === 'after'}
+									終演後
+								{:else if itm.tokuten[0] === ''}
+									未定
+								{:else}
+									{itm.tokuten[0]} ~ {itm.tokuten[1]}
+								{/if}
+							</td>
+						{/if}
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	{:else}
+		未公開
+	{/if}
 </div>
 
 <style>
@@ -64,5 +71,9 @@
 	td:last-child,
 	td:first-child {
 		font-weight: normal;
+	}
+
+	tbody tr:nth-child(even) {
+		background-color: #f2f2f2;
 	}
 </style>

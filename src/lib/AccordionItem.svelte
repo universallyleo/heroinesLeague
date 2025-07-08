@@ -19,7 +19,7 @@
 	const handleToggle = () => (open = !open);
 </script>
 
-<h2 class="container">
+<h1 class="container">
 	<button type="button" onclick={handleToggle} aria-expanded={open}>
 		{#if header}
 			{@render header()}
@@ -64,7 +64,7 @@
 			{/if}
 		{/if}
 	</button>
-</h2>
+</h1>
 {#if open}
 	<div class="content" transition:slide={{ duration: 400 }} style={contentCSS}>
 		{@render children()}

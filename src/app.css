@@ -53,7 +53,26 @@ h1 {
 }
 
 h2 {
-	font-size: 1rem;
+	display: flex;
+	align-items: center;
+	font-size: larger;
+	font-weight: bold;
+}
+h2::before,
+h2::after {
+	flex: auto;
+	min-width: 1em;
+	height: 1px;
+	display: block;
+	content: '';
+	background-color: #444;
+}
+h2::before {
+	margin-right: 0.5em;
+}
+
+h2::after {
+	margin-left: 0.5em;
 }
 
 pre {
@@ -105,9 +124,6 @@ td {
 	vertical-align: top;
 	text-align: center;
 	padding: 4px 5px;
-}
-tr {
-	border-bottom: solid 1px #efefef;
 }
 
 tbody tr td {

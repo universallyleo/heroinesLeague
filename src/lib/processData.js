@@ -95,6 +95,8 @@ export function groupDisplayShort(search_id) {
  * @typedef {Object} MatchDataRaw
  * @property {string} date
  * @property {string} venue
+ * @property {string} tweet url to tweet of timetable
+ * @property {Array<string>} [rule] url to tweet of rules
  * @property {Array<StageSchedule>} timetable
  * @property {Array<number>} [rankToPoints] n-th entry = points given to (n+1)st place group
  * @property {Array<number>} [shimeiNum] array of number of 指名入場
@@ -187,6 +189,15 @@ export function refineTT(tt) {
 		res.push(tt[i]);
 	}
 	return res;
+}
+/**
+ * @param  {MatchDataRaw} matchDataRaw
+ * @return {boolean}
+ */
+export function hasTT(matchDataRaw) {
+	return matchDataRaw.timetable.length == 0
+		? false
+		: matchDataRaw.timetable.reduce((accum, { time }) => accum && time[0].length == 4, true);
 }
 
 //#region match data fn
