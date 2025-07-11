@@ -168,66 +168,67 @@
 			"date": "2025-07-14",
 			"venue": "豊洲PIT",
 			"fcRankToCount": [70, 50, 30, 20, 15, 10, 10, 5, 0, 0, 0],
+			"tweet": "https://x.com/heroines_idol/status/1943545159154577604",
 			"timetable": [
 				{
-					"group": "ill",
-					"time": ["", ""],
-					"tokuten": ["", ""]
-				},
-				{
-					"group": "tenrin",
-					"time": ["", ""],
-					"tokuten": ["", ""]
-				},
-				{
-					"group": "megafon",
-					"time": ["", ""],
-					"tokuten": ["", ""]
-				},
-				{
-					"group": "dresscode",
-					"time": ["", ""],
-					"tokuten": ["", ""]
-				},
-				{
 					"group": "tenran",
-					"time": ["", ""],
-					"tokuten": ["", ""]
-				},
-				{
-					"group": "akishibu",
-					"time": ["", ""],
-					"tokuten": ["", ""]
-				},
-				{
-					"group": "ion",
-					"time": ["", ""],
-					"tokuten": ["", ""]
+					"time": ["1400", "1425"],
+					"tokuten": ["1435", "1535"]
 				},
 				{
 					"group": "chula",
-					"time": ["", ""],
-					"tokuten": ["", ""]
+					"time": ["1425", "1450"],
+					"tokuten": ["1500", "1600"]
+				},
+				{
+					"group": "dresscode",
+					"time": ["1450", "1515"],
+					"tokuten": ["1525", "1625"]
+				},
+				{
+					"group": "megafon",
+					"time": ["1515", "1540"],
+					"tokuten": ["1550", "1650"]
+				},
+				{
+					"group": "ion",
+					"time": ["1545", "1610"],
+					"tokuten": ["1620", "1720"]
+				},
+				{
+					"group": "tenrin",
+					"time": ["1610", "1635"],
+					"tokuten": ["1645", "1745"]
 				},
 				{
 					"group": "adamth",
-					"time": ["", ""],
-					"tokuten": ["", ""]
+					"time": ["1635", "1700"],
+					"tokuten": ["1710", "1810"]
+				},
+				{
+					"group": "ill",
+					"time": ["1700", "1725"],
+					"tokuten": ["1735", "1835"]
 				},
 				{
 					"group": "yoruami",
-					"time": ["", ""],
-					"tokuten": ["", ""]
+					"time": ["1730", "1755"],
+					"tokuten": ["1805", "1905"]
 				},
 				{
 					"group": "nonfic",
-					"time": ["", ""],
-					"tokuten": ["", ""]
+					"time": ["1755", "1825"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "akishibu",
+					"time": ["1825", "1855"],
+					"tokuten": ["after", ""]
 				},
 				{
 					"group": "ilife",
-					"time": ["", ""],
-					"tokuten": ["", ""]
+					"time": ["1855", "1925"],
+					"tokuten": ["after", ""]
 				}
 			]
 		}
