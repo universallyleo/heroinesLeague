@@ -200,30 +200,6 @@
 		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 		overflow-x: scroll;
 	}
-	.graphContainer {
-		/* width: max-content; */
-		width: 95%;
-		margin: 0 auto;
-		/* border: 2px black solid; */
-	}
-
-	/* tbody tr:nth-child(odd) {
-		background-color: #efefef;
-	} */
-
-	.gpLogo {
-		vertical-align: middle;
-	}
-
-	.upperGp {
-		background-color: hsl(60, 100%, 70%);
-	}
-	.midGp {
-		background-color: white;
-	}
-	.lowerGp {
-		background-color: pink;
-	}
 
 	.table-bordered {
 		width: fit-content;
@@ -231,9 +207,7 @@
 		border: 1px solid #999 !important;
 		border-spacing: 0 !important;
 		border-collapse: collapse;
-		display: block;
-		/* overflow-x: auto; */
-		/* margin: 0 auto; */
+		/* display: block; */
 		padding: 0.4em;
 		font-family: Arial, Helvetica, sans-serif;
 	}
@@ -275,5 +249,29 @@
 		font: inherit;
 		color: inherit;
 		cursor: pointer;
+	}
+	.graphContainer {
+		/* width: max-content; */
+		width: 95%;
+		margin: 0 auto;
+		/* border: 2px black solid; */
+	}
+
+	/* tbody tr:nth-child(odd) {
+		background-color: #efefef;
+	} */
+
+	.gpLogo {
+		vertical-align: middle;
+	}
+
+	.upperGp {
+		background-color: hsl(60, 100%, 70%);
+	}
+	.midGp {
+		background-color: white;
+	}
+	.lowerGp {
+		background-color: pink;
 	}
 </style>

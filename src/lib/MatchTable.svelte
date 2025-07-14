@@ -11,11 +11,19 @@
 	);
 </script>
 
+{#if !hasShimei}
+	<div style="font-size: smaller; color: #888;">指名データなし</div>
+{/if}
+{#if !hasFC}
+	<div style="font-size: smaller; color: #888;">FC得点データなし</div>
+{/if}
+
 <table class="simpTb">
 	<thead>
 		<tr>
 			<th class="sticky headingRow" style="left:0;width:1em;">順</th>
 			<th class="sticky headingRow" style="left:1.7em;">グループ</th>
+			<!-- TODO: add sorting to each column -->
 			{#if hasShimei}
 				<th class="headingRow">指名入場数</th>
 			{/if}
@@ -58,7 +66,11 @@
 				{#if hasFC}
 					<td class="datacell">
 						<div class="rkDiffCell">
-							<div class="rk">{gp.fcRank[matchID]}位</div>
+							<div class="rk">
+								{#if gp.fcRank[matchID] <= gp.fcRank.length}
+									{gp.fcRank[matchID]}位
+								{/if}
+							</div>
 							<div class="val">
 								{gp.fcCount[matchID]}
 							</div>
@@ -81,6 +93,8 @@
 		{/each}
 	</tbody>
 </table>
+
+<!-- TODO: add FC rank to point info and total rank to point info -->
 
 <style>
 	td:first-child {

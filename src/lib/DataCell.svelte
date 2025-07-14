@@ -17,8 +17,8 @@
 		<span class="desc">Pt差</span><br />
 		{gpResult.accumPtDiff[n] >= 0 ? gpResult.accumPtDiff[n] : '-'}
 	</div>
-	{#if detailed}
-		<div class={['subData', hasShimei || hasFC ? 'boxed' : '']}>
+	<div class={['subData', detailed && (hasShimei || hasFC) ? 'boxed' : '']}>
+		{#if detailed}
 			{#if hasShimei}
 				<SubDataRow label="入場" pt={gpResult.shimeiNum[n]} diff={gpResult.shimeiDiff[n]} />
 			{/if}
@@ -33,14 +33,14 @@
 					addStyle="border-top:1px solid #777;"
 				/>
 			{/if}
-			<SubDataRow
-				label="得点"
-				rank={gpResult.totalRank[n]}
-				pt={gpResult.getPt[n]}
-				border={hasShimei}
-			/>
-		</div>
-	{/if}
+		{/if}
+		<SubDataRow
+			label="得点"
+			rank={gpResult.totalRank[n]}
+			pt={gpResult.getPt[n]}
+			border={detailed && hasShimei}
+		/>
+	</div>
 </div>
 
 <style>
