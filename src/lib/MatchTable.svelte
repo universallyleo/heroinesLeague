@@ -1,15 +1,30 @@
 <script>
-	import { getGroup, groupDisplayShort, resultTypes } from './processData';
+	import { getGroup, groupDisplayShort, ordering, resultTypes } from './processData';
+	import RankNumber from './RankNumber.svelte';
 
 	let { clamp, gpResults, matchID = 0, type } = $props();
+	let sortMethod = $state('totalRank');
 
 	let { hasShimei, hasFC } = $derived(resultTypes(gpResults[0], matchID));
 	let sortedGps = $derived(
 		type === 'inMatch'
-			? gpResults.toSorted((a, b) => a.totalRank[matchID] - b.totalRank[matchID])
+			? gpResults.toSorted((a, b) =>
+					ordering[sortMethod](a[sortMethod][matchID], b[sortMethod][matchID])
+				)
 			: gpResults
 	);
 </script>
+
+{#snippet sortHeader(label, sortKey)}
+	<th class="headingRow">
+		<label class="sortHeader">
+			{label}
+			<!-- {@render sortBtn(sortMethod === 'shimeiNum')} -->
+			<input type="radio" value={sortKey} name="sortMethod" bind:group={sortMethod} />
+			<span class={['icon', sortMethod === sortKey ? 'selected' : 'unselected']}></span>
+		</label>
+	</th>
+{/snippet}
 
 {#if !hasShimei}
 	<div style="font-size: smaller; color: #888;">指名データなし</div>
@@ -21,17 +36,16 @@
 <table class="simpTb">
 	<thead>
 		<tr>
-			<th class="sticky headingRow" style="left:0;width:1em;">順</th>
-			<th class="sticky headingRow" style="left:1.7em;">グループ</th>
-			<!-- TODO: add sorting to each column -->
+			<th class="sticky headingRow" style="left:0;width:2em;">順位</th>
+			<th class="sticky headingRow" style="left:2em;">グループ</th>
 			{#if hasShimei}
-				<th class="headingRow">指名入場数</th>
+				{@render sortHeader('指名入場数', 'shimeiNum')}
 			{/if}
 			{#if hasFC}
-				<th class="headingRow">FC投票得点</th>
+				{@render sortHeader('FC投票得点', 'fcCount')}
 			{/if}
 			{#if hasShimei && hasFC}
-				<th class="headingRow">総合得点</th>
+				{@render sortHeader('総合得点', 'totalRank')}
 			{/if}
 		</tr>
 	</thead>
@@ -39,20 +53,27 @@
 	<tbody>
 		{#each sortedGps as gp, i}
 			<tr>
-				<td class="headingCell sticky" style="left:0;">{i + 1}</td>
-				<td class="headingCell sticky gpLogo" style="font-size:smaller;left:1.7em;">
-					<!-- <img
-									src={`.\/gpLogo\/${gpResults[n - 1].group}.jpg`}
-									width={clamp ? '40' : '60'}
-									alt={getGroup(gpResults[n - 1].group).displayName}
-								/> 
-								<br /> -->
+				<td class="headingCell sticky" style="font-size: small;left:0;">
+					<RankNumber
+						rank={gp.totalRank[matchID]}
+						noNum={type === 'inMatch'}
+						noDecorate={type === 'guest'}
+					/>
+					<!-- {gp.totalRank[matchID]}位 -->
+				</td>
+				<td class="headingCell sticky gpLogo" style="font-size:smaller;left:2em;">
 					{clamp ? groupDisplayShort(gp.group) : getGroup(gp.group).displayName}
 				</td>
 				{#if hasShimei}
 					<td class="datacell">
 						<div class="rkDiffCell">
-							<div class="rk">{gp.shimeiRank[matchID]}位</div>
+							<div class="rk">
+								<RankNumber
+									rank={gp.shimeiRank[matchID]}
+									noNum={type === 'inMatch'}
+									noDecorate={type === 'guest'}
+								/>
+							</div>
 							<div class="val">
 								{gp.shimeiNum[matchID]}
 							</div>
@@ -67,9 +88,11 @@
 					<td class="datacell">
 						<div class="rkDiffCell">
 							<div class="rk">
-								{#if gp.fcRank[matchID] <= gp.fcRank.length}
-									{gp.fcRank[matchID]}位
-								{/if}
+								<RankNumber
+									rank={gp.fcRank[matchID]}
+									noNum={type === 'inMatch'}
+									noDecorate={type === 'guest'}
+								/>
 							</div>
 							<div class="val">
 								{gp.fcCount[matchID]}
@@ -80,6 +103,7 @@
 				{#if hasShimei && hasFC}
 					<td class="datacell">
 						<div class="rkDiffCell">
+							<!-- <div class="rk">{gp.totalRank[matchID]}位</div> -->
 							<div class="val">
 								{gp.shimeiNum[matchID] + gp.fcCount[matchID]}
 							</div>
@@ -97,6 +121,33 @@
 <!-- TODO: add FC rank to point info and total rank to point info -->
 
 <style>
+	.sortHeader {
+		cursor: pointer;
+		/* display: inline-block;
+		position: relative;
+		padding-right: 1.5em; */
+		display: flex;
+		align-items: center;
+		padding-left: 0.6em;
+	}
+	.sortHeader input[type='radio'] {
+		display: none;
+	}
+	.sortHeader .icon {
+		width: 1.1em;
+		height: 1em;
+		background-size: contain;
+		background-repeat: no-repeat;
+		display: inline-block;
+		margin-left: 0.2em;
+	}
+	.sortHeader .unselected {
+		background-image: url('./images/caret-sort.svg');
+	}
+	.sortHeader .selected {
+		background-image: url('./images/caret-down.svg');
+	}
+
 	td:first-child {
 		border-left: 1px solid #ddd;
 	}

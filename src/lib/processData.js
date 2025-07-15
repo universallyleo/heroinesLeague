@@ -201,6 +201,13 @@ export function hasTT(matchDataRaw) {
 }
 
 //#region match data fn
+
+export const ordering = {
+	totalRank: (a, b) => a - b,
+	shimeiNum: (a, b) => b - a,
+	fcCount: (a, b) => b - a
+};
+
 /**
  * @param  {LeagueDataRaw} raw
  * @return {string[]}
@@ -246,7 +253,7 @@ export function CalculateLeagueResult(raw) {
 			.map((k) => [k, raw[k]])
 	);
 	res.matches = [];
-	let numGp = raw.groups.length;
+	// let numGp = raw.groups.length;
 
 	for (const [sn, match] of Object.entries(raw.matches)) {
 		let n = parseInt(sn);
@@ -256,19 +263,22 @@ export function CalculateLeagueResult(raw) {
 
 		// skip calculation if no result record
 		if (['shimeiNum', 'fcRank', 'rank'].reduce((p, c) => p && !(c in match), true)) {
-			mExt.totalRank = Array(numGp).fill(-1);
-			mExt.getPt = Array(numGp).fill(0);
-			mExt.accumPt = Array(numGp).fill(0);
-			mExt.accumDiff = Array(numGp).fill(0);
+			// mExt.totalRank = Array(numGp).fill(-1);
+			// mExt.getPt = Array(numGp).fill(0);
+			// mExt.accumPt = Array(numGp).fill(0);
+			// mExt.accumDiff = Array(numGp).fill(0);
+			// res.matches[n] = mExt;
 			continue;
 		}
 
-		let rkConvert = match?.rankToPoints ?? raw.rankToPoints;
+		mExt.rankToPoints = match?.rankToPoints ?? raw.rankToPoints;
+		let rkConvert = mExt.rankToPoints;
 		// let rkptDiff = rkConvert.reduce(
 		// 	(res, pt, i, o) => ((res[i] = i > 0 ? pt - o[i - 1] : -1), res),
 		// 	[]
 		// );
-		let fcConvert = match?.fcRankToCount ?? raw.fcRankToCount;
+		mExt.fcRankToCount = match?.fcRankToCount ?? raw.fcRankToCount;
+		let fcConvert = mExt.fcRankToCount;
 		let totalCount = [];
 		if ('fcRank' in match) {
 			mExt.fcCount = match.fcRank.map((x) => fcConvert[x - 1]);
@@ -316,10 +326,10 @@ export function CalculateLeagueResult(raw) {
 					shimeiNum: [x[1]],
 					shimeiRank: [shimeiRk.rank[i]],
 					shimeiDiff: [diff[i]],
-					fcRank: [x[2]],
-					fcCount: [x[3]],
+					fcRank: [x[2] == -1 ? null : x[2]],
+					fcCount: [x[3] == -1 ? null : x[3]],
 					totalRank: [i + 1],
-					countDiff: [prevCount - x[1] - x[3]],
+					countDiff: [prevCount - x[1] - Math.max(x[3], 0)],
 					getPt: [-1] // for distinguish guest from match groups
 				};
 			});

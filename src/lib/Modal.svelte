@@ -1,4 +1,5 @@
 <script>
+	import { self } from 'svelte/legacy';
 	let { open = $bindable(false), children } = $props();
 	let modal;
 
@@ -16,7 +17,7 @@
 <div
 	bind:this={modal}
 	class="modal"
-	onclick={closeModal}
+	onclick={self(closeModal)}
 	onkeydown={(e) => (e.key == 'Escape' ? closeModal() : null)}
 	role="dialog"
 	tabindex="0"

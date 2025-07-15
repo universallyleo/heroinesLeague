@@ -84,7 +84,7 @@
 			"date": "2025-06-14",
 			"venue": "品川ステラホール",
 			"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10, 5],
-			"fcRankToCount": [50, 40, 30, 20, 15, 10, 10, 5, 0, 0, 0],
+			"fcRankToCount": [50, 40, 30, 20, 15, 10, 10, 5, 0],
 			"timetable": [
 				{
 					"group": "ill",
@@ -160,9 +160,9 @@
 			"shimeiNum": [306, 241, 176, 188, 104, 129, 104, 103, 85],
 			"fcRank": [1, 9, 2, 3, 6, 5, 6, 4, 8],
 			"guestShimeiFC": [
-				["ion", 48, 13, 0],
-				["chula", 35, 13, 0],
-				["tenran", 12, 13, 0]
+				["ion", 48, -1, -1],
+				["chula", 35, -1, -1],
+				["tenran", 12, -1, -1]
 			],
 			"src": "https://x.com/ks_ecophysi/status/1933842506950815795"
 		},
@@ -238,11 +238,17 @@
 			"shimeiNum": [486, 87, 203, 168, 165, 98, 159, 124, 116],
 			"fcRank": [3, 8, 4, 2, 8, 7, 6, 5, 1],
 			"guestShimeiFC": [
-				["ion", 112, 13, 0],
-				["chula", 63, 13, 0],
-				["tenran", 26, 13, 0]
+				["ion", 112, -1, -1],
+				["chula", 63, -1, -1],
+				["tenran", 26, -1, -1]
 			],
-			"src": "https://x.com/ks_ecophysi/status/1944709929715277952"
+			"src": [
+				"https://x.com/ks_ecophysi/status/1944709929715277952",
+				"https://x.com/ks_ecophysi/status/1944957043103949027"
+			],
+			"comments": [
+				"fcRank and totalRank is only guessed, since guest fcRank is not publicised for the guest groups."
+			]
 		}
 	]
 }

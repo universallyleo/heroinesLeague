@@ -21,7 +21,7 @@
 	let { rawdata, clamp } = $props();
 	$inspect('clamp', clamp);
 	let leagueResultExt = $derived(CalculateLeagueResult(rawdata));
-	// $inspect('leagueResultExt', leagueResultExt);
+	$inspect('leagueResultExt', leagueResultExt);
 	let gpResults = $derived(partitionResultToSortedGroups(leagueResultExt));
 	// $inspect('gpResults', gpResults);
 	let progressData = $derived(seriesFromResult(gpResults, matchDates(rawdata), 'accumPt'));
@@ -36,11 +36,14 @@
 			return {
 				date: ShortJPDate(m.date, true),
 				venue: m.venue,
+				fcRankToCount: m?.fcRankToCount ?? rawdata.fcRankToCount,
+				rankToPoints: m?.rankToPoints ?? rawdata.rankToPoints,
 				shimeiTotal: leagueResultExt.matches[i]?.shimeiTotal ?? null,
 				displayType: hasResult(m) ? 'RESULT' : hasTT(m) ? 'TT_ONLY' : 'NONE'
 			};
 		})
 	);
+	$inspect('headingRow', headingRowData);
 	let tbElt;
 
 	function subCategory(i) {
@@ -86,8 +89,8 @@
 	</div>
 </div>
 
-<article class="tableContainer" bind:this={tbElt}>
-	<table class="table-bordered">
+<article class="tableContainer">
+	<table class="table-bordered" bind:this={tbElt}>
 		<caption>
 			リーグ戦結果 ( リーグ{rawdata.league} )
 		</caption>
@@ -113,6 +116,8 @@
 									{gpResults}
 									guestData={leagueResultExt.matches[i].guestResults}
 									matchID={i}
+									rankToPoints={match.rankToPoints}
+									fcRankToCount={match.fcRankToCount}
 								/>
 							{/if}
 							<h2>タイムテーブル</h2>
