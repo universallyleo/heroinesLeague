@@ -192,6 +192,7 @@
 					"tokuten": ["after", ""]
 				}
 			],
+			"rankToPoints": [100, 80, 65, 50, 40, 30, 20, 15, 10, 5],
 			"shimeiNum": [68, 65, 64, 140, 72, 80, 29, 18],
 			"fcRank": [3, 1, 6, 4, 2, 7, 5, 7],
 			"guestShimeiFC": [["herokenOsaka", 3, -1, -1]],
