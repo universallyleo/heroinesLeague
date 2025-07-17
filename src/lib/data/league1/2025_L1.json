@@ -249,6 +249,90 @@
 			"comments": [
 				"fcRank and totalRank is only guessed, since guest fcRank is not publicised for the guest groups."
 			]
+		},
+		{
+			"date": "2025-08-04",
+			"venue": "恵比寿ガーデンホール",
+			"tweet": "https://x.com/heroines_idol/status/1943545159154577604",
+			"rule": ["https://x.com/heroines_idol/status/1943545159154577604"],
+			"fcRankToCount": [70, 50, 30, 20, 15, 10, 5, 0, 0, 0, 0],
+			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10, 5],
+			"timetable": [
+				{
+					"group": "tenran",
+					"time": ["1400", "1425"],
+					"tokuten": ["1435", "1535"]
+				},
+				{
+					"group": "chula",
+					"time": ["1425", "1450"],
+					"tokuten": ["1500", "1600"]
+				},
+				{
+					"group": "dresscode",
+					"time": ["1450", "1515"],
+					"tokuten": ["1525", "1625"]
+				},
+				{
+					"group": "megafon",
+					"time": ["1515", "1540"],
+					"tokuten": ["1550", "1650"]
+				},
+				{
+					"group": "ion",
+					"time": ["1545", "1610"],
+					"tokuten": ["1620", "1720"]
+				},
+				{
+					"group": "tenrin",
+					"time": ["1610", "1635"],
+					"tokuten": ["1645", "1745"]
+				},
+				{
+					"group": "adamth",
+					"time": ["1635", "1700"],
+					"tokuten": ["1710", "1810"]
+				},
+				{
+					"group": "ill",
+					"time": ["1700", "1725"],
+					"tokuten": ["1735", "1835"]
+				},
+				{
+					"group": "yoruami",
+					"time": ["1730", "1755"],
+					"tokuten": ["1805", "1905"]
+				},
+				{
+					"group": "nonfic",
+					"time": ["1755", "1825"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "akishibu",
+					"time": ["1825", "1855"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "ilife",
+					"time": ["1855", "1925"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"shimeiNum": [486, 87, 203, 168, 165, 98, 159, 124, 116],
+			"fcRank": [3, 8, 4, 2, 8, 7, 6, 5, 1],
+			"guestShimeiFC": [
+				["ion", 112, -1, -1],
+				["chula", 63, -1, -1],
+				["tenran", 26, -1, -1]
+			],
+			"src": [
+				"https://x.com/ks_ecophysi/status/1944709929715277952",
+				"https://x.com/ks_ecophysi/status/1944957043103949027"
+			],
+			"comments": [
+				"fcRank and totalRank is only guessed, since guest fcRank is not publicised for the guest groups."
+			]
 		}
 	]
 }

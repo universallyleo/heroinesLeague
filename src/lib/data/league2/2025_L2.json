@@ -191,7 +191,11 @@
 					"time": ["2005", "2035"],
 					"tokuten": ["after", ""]
 				}
-			]
+			],
+			"shimeiNum": [68, 65, 64, 140, 72, 80, 29, 18],
+			"fcRank": [3, 1, 6, 4, 2, 7, 5, 7],
+			"guestShimeiFC": [["herokenOsaka", 3, -1, -1]],
+			"src": "https://x.com/ks_ecophysi/status/1945812053891154044"
 		},
 		{
 			"date": "2025-07-31",
