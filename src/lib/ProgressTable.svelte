@@ -9,17 +9,19 @@
 		hasResult,
 		hasTT
 	} from '$lib/processData.js';
-	import { ShortJPDate } from '$lib/util.js';
+	import { numberToKanji, ShortJPDate } from '$lib/util.js';
 	import { toPng } from 'html-to-image';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 	import DataCell from './DataCell.svelte';
 	import OptionsDiv from './OptionsDiv.svelte';
-	import MatchResult from './MatchResult.svelte';
 	import Modal from './Modal.svelte';
 	import MatchTimeTable from './MatchTimeTable.svelte';
+	import RankNumber from './RankNumber.svelte';
+	import Rules from './Rules.svelte';
+	import MatchTable from './MatchTable.svelte';
 
 	let { rawdata, clamp } = $props();
-	$inspect('clamp', clamp);
+	// $inspect('clamp', clamp);
 	let leagueResultExt = $derived(CalculateLeagueResult(rawdata));
 	$inspect('leagueResultExt', leagueResultExt);
 	let gpResults = $derived(partitionResultToSortedGroups(leagueResultExt));
@@ -33,13 +35,15 @@
 	// c.f. https://github.com/sveltejs/svelte/issues/12320
 	let headingRowData = $derived(
 		rawdata.matches.map((m, i) => {
+			let hasRes = hasResult(m);
 			return {
 				date: ShortJPDate(m.date, true),
-				venue: m.venue,
 				fcRankToCount: m?.fcRankToCount ?? rawdata.fcRankToCount,
 				rankToPoints: m?.rankToPoints ?? rawdata.rankToPoints,
 				shimeiTotal: leagueResultExt.matches[i]?.shimeiTotal ?? null,
-				displayType: hasResult(m) ? 'RESULT' : hasTT(m) ? 'TT_ONLY' : 'NONE'
+				displayType: hasRes ? 'RESULT' : hasTT(m) ? 'TT_ONLY' : 'NONE',
+				hasFC: hasRes && ('fcRank' in m || 'fcCount' in m),
+				hasShimei: hasRes && 'shimeiNum' in m
 			};
 		})
 	);
@@ -99,6 +103,7 @@
 				<th class="sticky headingRow" style="left:0;width:1em;">順</th>
 				<th class="sticky headingRow" style="left:1.7em;">グループ</th>
 				<!-- {#each rawdata.matches as match, i (match.date)} -->
+				<!-- #region match details -->
 				{#each headingRowData as match, i}
 					<th class="headingRow" style:width={opts.detailTable ? '7.8em' : '5em'}>
 						<div>
@@ -108,21 +113,46 @@
 						</div>
 						<Modal bind:open={openMatchesDetails[i]}>
 							{#if match.displayType === 'RESULT'}
+								<h2>結果</h2>
+								リーグ{rawdata.league} 第{numberToKanji(i + 1)}戦
+								<br />
+								<span style="font-size:small; color: #888;">
+									{match.date} @ {rawdata.matches[i].venue}
+								</span>
+
+								<MatchTable type="inMatch" {clamp} {gpResults} matchID={i} />
+								<!-- 
 								<MatchResult
 									{clamp}
 									leagueNum={rawdata.league}
-									venue={match.venue}
+									venue={rawdata.matches[i].venue}
 									date={match.date}
 									{gpResults}
 									guestData={leagueResultExt.matches[i].guestResults}
 									matchID={i}
-									rankToPoints={match.rankToPoints}
-									fcRankToCount={match.fcRankToCount}
+								/> -->
+							{/if}
+
+							<Rules
+								hasFC={match.hasFC}
+								rankToPoints={match.rankToPoints}
+								fcRankToCount={match.fcRankToCount}
+								rules={rawdata.matches[i].rules}
+							/>
+
+							{#if match.displayType === 'RESULT' && leagueResultExt.matches[i].guestResults.length > 0}
+								<h2>ゲスト</h2>
+								<MatchTable
+									type="guest"
+									{clamp}
+									gpResults={leagueResultExt.matches[i].guestResults}
 								/>
 							{/if}
+
 							<h2>タイムテーブル</h2>
 							<MatchTimeTable
 								timetable={match.displayType != 'NONE' ? rawdata.matches[i].timetable : []}
+								tweet={rawdata.matches[i].tweet}
 							/>
 						</Modal>
 					</th>
@@ -133,7 +163,7 @@
 				<tr>
 					<th class="sticky"></th>
 					<th class="sticky"></th>
-					{#each headingRowData as match}
+					{#each rawdata.matches as match}
 						<th
 							style="font-weight:normal; font-size:.9em; border-top: dashed 1px #999; padding-top:0"
 						>
@@ -150,7 +180,7 @@
 							style="font-weight: normal; font-size:.7em; border-top: dashed 1px #999; padding-top:.2em;"
 						>
 							{#if match.shimeiTotal}
-								総入場pt: {match.shimeiTotal}
+								総入場指名数: {match.shimeiTotal}
 							{/if}
 						</th>
 					{/each}
@@ -162,10 +192,16 @@
 			{/each} -->
 		</thead>
 
+		<!--#region main table -->
 		<tbody>
 			{#each gpResults as gp, i}
 				<tr>
-					<td class={['headingCell', 'sticky', subCategory(i)]} style="left:0;">{i + 1}</td>
+					<td
+						class={['headingCell', 'sticky', subCategory(i)]}
+						style="left:0;width:1.7em;text-wrap:wrap;"
+					>
+						<RankNumber rank={gp.accumRank[gp.accumRank.length - 1]} noDecorate={false} />
+					</td>
 					<td
 						class={['headingCell', 'sticky', 'gpLogo', subCategory(i)]}
 						style="font-size:smaller;left:1.7em;"
@@ -278,5 +314,11 @@
 	}
 	.lowerGp {
 		background-color: pink;
+	}
+
+	.additionalInfo {
+		font-weight: normal;
+		font-size: smaller;
+		color: #777;
 	}
 </style>

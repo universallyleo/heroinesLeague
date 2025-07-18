@@ -1,4 +1,5 @@
 export function padNum(num, maxDigit, positiveOnly = true, by = '&nbsp;') {
+	if (isNaN(num)) return Array(maxDigit).fill('&nbsp;').join('');
 	let s = positiveOnly && num < 0 ? '-' : num.toString();
 	if (by == '&nbsp;') {
 		let d = maxDigit - s.length;

@@ -96,7 +96,7 @@ export function groupDisplayShort(search_id) {
  * @property {string} date
  * @property {string} venue
  * @property {string} tweet url to tweet of timetable
- * @property {Array<string>} [rule] url to tweet of rules
+ * @property {Array<string>} [rules] url to tweet of rules
  * @property {Array<StageSchedule>} timetable
  * @property {Array<number>} [rankToPoints] n-th entry = points given to (n+1)st place group
  * @property {Array<number>} [shimeiNum] array of number of 指名入場
@@ -259,7 +259,7 @@ export function CalculateLeagueResult(raw) {
 		let n = parseInt(sn);
 		// console.log(`************ ${n} ************`);
 		/** @type {MatchDataExt} */
-		let mExt = { ...match }; // faster than structured clone; our data are only array of numbers anyway
+		let mExt = { ...match }; // faster than structured clone; our data are only array of numbers and strings anyway
 
 		// skip calculation if no result record
 		if (['shimeiNum', 'fcRank', 'rank'].reduce((p, c) => p && !(c in match), true)) {
@@ -306,7 +306,7 @@ export function CalculateLeagueResult(raw) {
 		// mExt.getPtDiff = diffFromRanked(mExt.getPt, rankedData.rank, rankedData.prev);
 
 		mExt.accumPt =
-			n > 0 ? mExt.getPt.map((pt, i) => pt + res.matches[n - 1].accumPt[i]) : mExt.getPt;
+			n > 0 ? mExt.getPt.map((pt, i) => pt + (res.matches[n - 1]?.accumPt[i] ?? 0)) : mExt.getPt;
 		// rankedData = rank(mExt.accumPt);
 		// mExt.accumRank = rankedData.rank;
 		// mExt.accumPtDiff = diffFromRanked(mExt.accumPt, rankedData.rank, rankedData.prev);

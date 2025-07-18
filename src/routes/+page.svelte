@@ -33,21 +33,21 @@
 {/snippet}
 
 <section>
-	{#if innerWidth <= 1080}
-		<Accordion>
-			{@render leagueAccord(pageData[0], true)}
-			{@render leagueAccord(pageData[1], true)}
-		</Accordion>
-	{:else}
-		<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1px;">
+	<!-- {#if innerWidth <= 1080} -->
+	<Accordion>
+		{@render leagueAccord(pageData[0], true)}
+		{@render leagueAccord(pageData[1], true)}
+	</Accordion>
+	<!-- {:else} -->
+	<!-- <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1px;">
 			<Accordion>
 				{@render leagueAccord(pageData[0], true)}
 			</Accordion>
 			<Accordion>
 				{@render leagueAccord(pageData[1], true)}
 			</Accordion>
-		</div>
-	{/if}
+		</div> -->
+	<!-- {/if} -->
 </section>
 
 <style>

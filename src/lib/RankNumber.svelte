@@ -3,7 +3,7 @@
 	let { rank, kanji = false, noNum = false, noDecorate = true, addStyle = '' } = $props();
 </script>
 
-{#if !noNum || rank > 3}
+{#if (!noNum || rank > 3) && !isNaN(rank)}
 	<span class={noDecorate ? '' : `rank-${rank}`} style={addStyle}>
 		{kanji ? numberToKanji(rank) : rank}
 	</span>

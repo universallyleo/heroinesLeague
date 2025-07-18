@@ -1,7 +1,7 @@
 <script>
 	import { getGroup, refineTT } from './processData';
 
-	let { timetable } = $props();
+	let { timetable, tweet } = $props();
 	let hasTT = $derived(timetable.length > 0);
 	let tt = $derived(refineTT(timetable));
 </script>
@@ -43,6 +43,7 @@
 				{/each}
 			</tbody>
 		</table>
+		<div class="font-weight:normal">参照リンク: <a href={tweet}> ヒロインズツイート </a></div>
 	{:else}
 		未公開
 	{/if}

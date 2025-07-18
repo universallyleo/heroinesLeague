@@ -1,30 +1,15 @@
 <script>
-	import MatchTable from './MatchTable.svelte';
-	import { resultTypes } from './processData';
 	import RankNumber from './RankNumber.svelte';
-	import { numberToKanji } from './util';
 
-	let {
-		clamp,
-		leagueNum,
-		venue,
-		date,
-		gpResults,
-		matchID,
-		guestData,
-		fcRankToCount = [],
-		rankToPoints = []
-	} = $props();
-
-	let { hasFC } = $derived(resultTypes(gpResults[0], matchID));
+	let { hasFC, fcRankToCount = [], rankToPoints = [], rules = [] } = $props();
 </script>
 
-<h2>結果</h2>
-リーグ{leagueNum} 第{numberToKanji(matchID + 1)}戦
-<br />
-<span style="font-size:small; color: #888;"> {date} @ {venue} </span>
-
-<MatchTable type="inMatch" {clamp} {gpResults} {matchID} />
+<div style="font-weight:normal;">
+	ルール参照：
+	{#each rules as lk, j}
+		[ <a href={lk}> {j + 1} </a> ] &nbsp;
+	{/each}
+</div>
 
 {#if hasFC}
 	<table class="simpTb">
@@ -66,11 +51,6 @@
 			</tr>
 		</tbody>
 	</table>
-{/if}
-
-{#if guestData.length > 0}
-	<h2>ゲスト</h2>
-	<MatchTable type="guest" {clamp} gpResults={guestData} />
 {/if}
 
 <style>

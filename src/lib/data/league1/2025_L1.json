@@ -9,7 +9,8 @@
 		"ill",
 		"megafon",
 		"tenrin",
-		"dresscode"
+		"dresscode",
+		"ion"
 	],
 	"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10, 5],
 	"fcRankToCount": [50, 40, 30, 20, 15, 10, 10, 5, 0, 0, 0],
@@ -18,7 +19,7 @@
 			"date": "2025-05-11",
 			"venue": "KANDA SQUARE HALL",
 			"tweet": "https://x.com/heroines_idol/status/1921158309710528825",
-			"rule": ["https://x.com/heroines_idol/status/1921158309710528825"],
+			"rules": ["https://x.com/heroines_idol/status/1921158309710528825"],
 			"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10, 5],
 			"timetable": [
 				{
@@ -83,6 +84,11 @@
 		{
 			"date": "2025-06-14",
 			"venue": "品川ステラホール",
+			"tweet": "https://x.com/heroines_idol/status/1923694990804517087",
+			"rules": [
+				"https://x.com/heroines_idol/status/1923694990804517087",
+				"https://x.com/heroines_idol/status/1930942763111235609"
+			],
 			"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10, 5],
 			"fcRankToCount": [50, 40, 30, 20, 15, 10, 10, 5, 0],
 			"timetable": [
@@ -170,7 +176,7 @@
 			"date": "2025-07-14",
 			"venue": "豊洲PIT",
 			"tweet": "https://x.com/heroines_idol/status/1943545159154577604",
-			"rule": ["https://x.com/heroines_idol/status/1943545159154577604"],
+			"rules": ["https://x.com/heroines_idol/status/1943545159154577604"],
 			"fcRankToCount": [70, 50, 30, 20, 15, 10, 5, 0, 0, 0, 0],
 			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10, 5],
 			"timetable": [
@@ -245,16 +251,13 @@
 			"src": [
 				"https://x.com/ks_ecophysi/status/1944709929715277952",
 				"https://x.com/ks_ecophysi/status/1944957043103949027"
-			],
-			"comments": [
-				"fcRank and totalRank is only guessed, since guest fcRank is not publicised for the guest groups."
 			]
 		},
 		{
-			"date": "2025-08-04",
+			"date": "2025-07-17",
 			"venue": "恵比寿ガーデンホール",
 			"tweet": "",
-			"rule": [""],
+			"rules": [""],
 			"fcRankToCount": [45, 30, 20, 15, 15, 10, 10, 5, 5, 0],
 			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
 			"timetable": [
@@ -308,9 +311,7 @@
 					"time": ["1910", "1945"],
 					"tokuten": ["after", ""]
 				}
-			],
-			"src": [],
-			"comments": []
+			]
 		}
 	]
 }

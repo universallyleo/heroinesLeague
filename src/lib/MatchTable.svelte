@@ -52,68 +52,70 @@
 
 	<tbody>
 		{#each sortedGps as gp, i}
-			<tr>
-				<td class="headingCell sticky" style="font-size: small;left:0;">
-					<RankNumber
-						rank={gp.totalRank[matchID]}
-						noNum={type === 'inMatch'}
-						noDecorate={type === 'guest'}
-					/>
-					<!-- {gp.totalRank[matchID]}位 -->
-				</td>
-				<td class="headingCell sticky gpLogo" style="font-size:smaller;left:2em;">
-					{clamp ? groupDisplayShort(gp.group) : getGroup(gp.group).displayName}
-				</td>
-				{#if hasShimei}
-					<td class="datacell">
-						<div class="rkDiffCell">
-							<div class="rk">
-								<RankNumber
-									rank={gp.shimeiRank[matchID]}
-									noNum={type === 'inMatch'}
-									noDecorate={type === 'guest'}
-								/>
-							</div>
-							<div class="val">
-								{gp.shimeiNum[matchID]}
-							</div>
-							{#if gp.shimeiDiff[matchID] > 0}
-								<div class="diff">差 {gp.shimeiDiff[matchID]}</div>
-							{/if}
-						</div>
+			{#if gp.totalRank[matchID]}
+				<tr>
+					<td class="headingCell sticky" style="font-size: small;left:0;">
+						<RankNumber
+							rank={gp.totalRank[matchID]}
+							noNum={type === 'inMatch'}
+							noDecorate={type === 'guest'}
+						/>
+						<!-- {gp.totalRank[matchID]}位 -->
 					</td>
-				{/if}
+					<td class="headingCell sticky gpLogo" style="font-size:smaller;left:2em;">
+						{clamp ? groupDisplayShort(gp.group) : getGroup(gp.group).displayName}
+					</td>
+					{#if hasShimei}
+						<td class="datacell">
+							<div class="rkDiffCell">
+								<div class="rk">
+									<RankNumber
+										rank={gp.shimeiRank[matchID]}
+										noNum={type === 'inMatch'}
+										noDecorate={type === 'guest'}
+									/>
+								</div>
+								<div class="val">
+									{gp.shimeiNum[matchID]}
+								</div>
+								{#if gp.shimeiDiff[matchID] > 0}
+									<div class="diff">差 {gp.shimeiDiff[matchID]}</div>
+								{/if}
+							</div>
+						</td>
+					{/if}
 
-				{#if hasFC}
-					<td class="datacell">
-						<div class="rkDiffCell">
-							<div class="rk">
-								<RankNumber
-									rank={gp.fcRank[matchID]}
-									noNum={type === 'inMatch'}
-									noDecorate={type === 'guest'}
-								/>
+					{#if hasFC}
+						<td class="datacell">
+							<div class="rkDiffCell">
+								<div class="rk">
+									<RankNumber
+										rank={gp.fcRank[matchID]}
+										noNum={type === 'inMatch'}
+										noDecorate={type === 'guest'}
+									/>
+								</div>
+								<div class="val">
+									{gp.fcCount[matchID]}
+								</div>
 							</div>
-							<div class="val">
-								{gp.fcCount[matchID]}
+						</td>
+					{/if}
+					{#if hasShimei && hasFC}
+						<td class="datacell">
+							<div class="rkDiffCell">
+								<!-- <div class="rk">{gp.totalRank[matchID]}位</div> -->
+								<div class="val">
+									{gp.shimeiNum[matchID] + gp.fcCount[matchID]}
+								</div>
+								{#if gp.countDiff[matchID] > 0}
+									<div class="diff">差 {gp.countDiff[matchID]}</div>
+								{/if}
 							</div>
-						</div>
-					</td>
-				{/if}
-				{#if hasShimei && hasFC}
-					<td class="datacell">
-						<div class="rkDiffCell">
-							<!-- <div class="rk">{gp.totalRank[matchID]}位</div> -->
-							<div class="val">
-								{gp.shimeiNum[matchID] + gp.fcCount[matchID]}
-							</div>
-							{#if gp.countDiff[matchID] > 0}
-								<div class="diff">差 {gp.countDiff[matchID]}</div>
-							{/if}
-						</div>
-					</td>
-				{/if}
-			</tr>
+						</td>
+					{/if}
+				</tr>
+			{/if}
 		{/each}
 	</tbody>
 </table>
