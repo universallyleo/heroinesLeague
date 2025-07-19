@@ -131,3 +131,17 @@ export const sortMethod = {
 		return b - a;
 	}
 };
+
+export function levelAllArrayEntries(arr, fillEntry = 0) {
+	let len = Math.max(...arr.map((a) => a.length));
+	return arr.map((a) => fillArrayBy(a, len, fillEntry));
+}
+
+export function fillArrayBy(arr, len, fillEntry = 0) {
+	return arr.length == 0
+		? Array(len).fill(fillEntry)
+		: arr.length == len
+			? arr
+			: arr.concat(Array(len - arr.length).fill(fillEntry));
+	// concat is non-destructive
+}

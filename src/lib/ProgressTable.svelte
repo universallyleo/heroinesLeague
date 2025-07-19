@@ -16,6 +16,7 @@
 	import OptionsDiv from './OptionsDiv.svelte';
 	import RankNumber from './RankNumber.svelte';
 	import MatchDetails from './MatchDetails.svelte';
+	import Modal from './Modal.svelte';
 
 	let { rawdata, clamp } = $props();
 	// $inspect('clamp', clamp);
@@ -107,16 +108,17 @@
 								{match.date}
 							</button>
 						</div>
-						<MatchDetails
-							bind:open={openMatchesDetails[i]}
-							{clamp}
-							league={rawdata.legaue}
-							rawMatch={rawdata.matches[i]}
-							matchID={i}
-							{gpResults}
-							{match}
-							guestResults={leagueResultExt.matches[i]?.guestResults ?? []}
-						/>
+						<Modal bind:open={openMatchesDetails[i]}>
+							<MatchDetails
+								{clamp}
+								league={rawdata.legaue}
+								rawMatch={rawdata.matches[i]}
+								matchID={i}
+								{gpResults}
+								{match}
+								guestResults={leagueResultExt.matches[i]?.guestResults ?? []}
+							/>
+						</Modal>
 					</th>
 				{/each}
 			</tr>
@@ -249,6 +251,10 @@
 		color: inherit;
 		cursor: pointer;
 	}
+	.plainBtn:hover {
+		text-decoration: underline;
+	}
+
 	.graphContainer {
 		/* width: max-content; */
 		width: 95%;
