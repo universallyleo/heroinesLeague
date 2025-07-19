@@ -200,7 +200,7 @@
 				}
 			],
 			"rankToPoints": [100, 80, 65, 50, 40, 30, 20, 15, 10, 5],
-			"fcRankToCount": [30, 20, 10, 5, 3, 2, 0, 0, 0, 0, 0],
+			"fcRankToCount": [30, 20, 10, 5, 3, 2, 0, 0, 0],
 			"shimeiNum": [68, 65, 64, 140, 72, 80, 29, 18],
 			"fcRank": [3, 1, 6, 4, 2, 7, 5, 7],
 			"guestShimeiFC": [["herokenOsaka", 3, -1, -1]],
@@ -268,6 +268,79 @@
 			],
 			"rankToPoints": [100, 80, 65, 50, 40, 30, 20, 15, 10, 5],
 			"fcRankToCount": [30, 20, 10, 5, 3, 2, 0, 0, 0, 0, 0]
+		},
+		{
+			"date": "2025-08-06",
+			"venue": "VeatsSHIBUYA",
+			"timetable": [
+				{
+					"group": "herokenOsaka",
+					"time": ["1530", "1555"],
+					"tokuten": ["1605", "1705"]
+				},
+				{
+					"group": "heroken",
+					"time": ["1555", "1620"],
+					"tokuten": ["1625", "1725"]
+				},
+				{
+					"group": "ladybaby",
+					"time": ["1620", "1645"],
+					"tokuten": ["1650", "1750"]
+				},
+				{
+					"group": "calres",
+					"time": ["1645", "1710"],
+					"tokuten": ["1720", "1820"]
+				},
+				{
+					"group": "ponkotu",
+					"time": ["1710", "1735"],
+					"tokuten": ["1740", "1840"]
+				},
+				{
+					"group": "tenran",
+					"time": ["1735", "1800"],
+					"tokuten": ["1810", "1910"]
+				},
+				{
+					"group": "chula",
+					"time": ["1805", "1835"],
+					"tokuten": ["1845", "1945"]
+				},
+				{
+					"group": "zuttomotto",
+					"time": ["1835", "1905"],
+					"tokuten": ["1915", "2015"]
+				},
+				{
+					"group": "parasai",
+					"time": ["1905", "1935"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "nanakoro",
+					"time": ["1935", "2005"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "paradeeq",
+					"time": ["2005", "2035"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"tweet": "https://x.com/heroines_idol/status/1946555660923285863",
+			"rules": ["https://x.com/heroines_idol/status/1946555660923285863"],
+			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10],
+			"fcRankToCount": [45, 30, 20, 15, 15, 10, 10, 5, 5, 0]
+		},
+		{
+			"date": "2025-08-27",
+			"venue": "栄Zephyr Hall",
+			"timetable": [],
+			"tweet": "https://x.com/heroines_idol/status/1946555660923285863",
+			"rules": ["https://x.com/heroines_idol/status/1946555660923285863"],
+			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10]
 		}
 	]
 }

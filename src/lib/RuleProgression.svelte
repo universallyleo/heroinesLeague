@@ -1,5 +1,5 @@
 <script>
-	let { array, title } = $props();
+	let { array, title, headings } = $props();
 
 	let numMatches = $derived([array[0].length, array[1].length]);
 	let numRows = $derived([array[0][0].length, array[1][0].length]);
@@ -15,7 +15,7 @@
 					<tr>
 						<th></th>
 						{#each { length: numMatches[l] }, n}
-							<th> {n + 1} </th>
+							<th> {headings[l][n]} </th>
 						{/each}
 					</tr>
 				</thead>
