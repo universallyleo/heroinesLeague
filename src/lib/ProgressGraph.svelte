@@ -9,11 +9,11 @@
 	// let maxlength = $derived(progressData ? progressData.datasets[0].data.length : 0);
 	// let canvasWidth = $derived(Math.max(maxlength * 80, 1000));
 	let canvasHeight = $derived(Math.min(200 + progressData.datasets.length * 30, 700));
-	$inspect('canvasHeight', canvasHeight);
+	// $inspect('canvasHeight', canvasHeight);
 	let suggestYmax = $derived(
 		Math.max(...progressData.datasets.map(({ data }) => Math.max(...data))) + 10
 	);
-	$inspect('Ymax', suggestYmax);
+	// $inspect('Ymax', suggestYmax);
 
 	/****** Graph related setup ******/
 	let canvasContainer;

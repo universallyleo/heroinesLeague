@@ -43,7 +43,9 @@
 				{/each}
 			</tbody>
 		</table>
-		<div class="font-weight:normal">参照リンク: <a href={tweet}> ヒロインズツイート </a></div>
+		<div style="font-weight:normal;">
+			参照リンク: <a href={tweet}> ヒロインズツイート </a>
+		</div>
 	{:else}
 		未公開
 	{/if}

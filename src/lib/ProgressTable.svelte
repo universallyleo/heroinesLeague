@@ -9,23 +9,20 @@
 		hasResult,
 		hasTT
 	} from '$lib/processData.js';
-	import { numberToKanji, ShortJPDate } from '$lib/util.js';
+	import { ShortJPDate } from '$lib/util.js';
 	import { toPng } from 'html-to-image';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 	import DataCell from './DataCell.svelte';
 	import OptionsDiv from './OptionsDiv.svelte';
-	import Modal from './Modal.svelte';
-	import MatchTimeTable from './MatchTimeTable.svelte';
 	import RankNumber from './RankNumber.svelte';
-	import Rules from './Rules.svelte';
-	import MatchTable from './MatchTable.svelte';
+	import MatchDetails from './MatchDetails.svelte';
 
 	let { rawdata, clamp } = $props();
 	// $inspect('clamp', clamp);
 	let leagueResultExt = $derived(CalculateLeagueResult(rawdata));
-	$inspect('leagueResultExt', leagueResultExt);
+	// $inspect('leagueResultExt', leagueResultExt);
 	let gpResults = $derived(partitionResultToSortedGroups(leagueResultExt));
-	// $inspect('gpResults', gpResults);
+	$inspect('gpResults', gpResults);
 	let progressData = $derived(seriesFromResult(gpResults, matchDates(rawdata), 'accumPt'));
 	// $inspect('progressData', progressData);
 	let opts = $state({
@@ -42,7 +39,7 @@
 				rankToPoints: m?.rankToPoints ?? rawdata.rankToPoints,
 				shimeiTotal: leagueResultExt.matches[i]?.shimeiTotal ?? null,
 				displayType: hasRes ? 'RESULT' : hasTT(m) ? 'TT_ONLY' : 'NONE',
-				hasFC: hasRes && ('fcRank' in m || 'fcCount' in m),
+				hasFC: 'fcRankToCount' in m,
 				hasShimei: hasRes && 'shimeiNum' in m
 			};
 		})
@@ -101,8 +98,7 @@
 		<thead>
 			<tr>
 				<th class="sticky headingRow" style="left:0;width:1em;">順</th>
-				<th class="sticky headingRow" style="left:1.7em;">グループ</th>
-				<!-- {#each rawdata.matches as match, i (match.date)} -->
+				<th class="sticky headingRow" style="left:1.7em;">グループ </th>
 				<!-- #region match details -->
 				{#each headingRowData as match, i}
 					<th class="headingRow" style:width={opts.detailTable ? '7.8em' : '5em'}>
@@ -111,50 +107,16 @@
 								{match.date}
 							</button>
 						</div>
-						<Modal bind:open={openMatchesDetails[i]}>
-							{#if match.displayType === 'RESULT'}
-								<h2>結果</h2>
-								リーグ{rawdata.league} 第{numberToKanji(i + 1)}戦
-								<br />
-								<span style="font-size:small; color: #888;">
-									{match.date} @ {rawdata.matches[i].venue}
-								</span>
-
-								<MatchTable type="inMatch" {clamp} {gpResults} matchID={i} />
-								<!-- 
-								<MatchResult
-									{clamp}
-									leagueNum={rawdata.league}
-									venue={rawdata.matches[i].venue}
-									date={match.date}
-									{gpResults}
-									guestData={leagueResultExt.matches[i].guestResults}
-									matchID={i}
-								/> -->
-							{/if}
-
-							<Rules
-								hasFC={match.hasFC}
-								rankToPoints={match.rankToPoints}
-								fcRankToCount={match.fcRankToCount}
-								rules={rawdata.matches[i].rules}
-							/>
-
-							{#if match.displayType === 'RESULT' && leagueResultExt.matches[i].guestResults.length > 0}
-								<h2>ゲスト</h2>
-								<MatchTable
-									type="guest"
-									{clamp}
-									gpResults={leagueResultExt.matches[i].guestResults}
-								/>
-							{/if}
-
-							<h2>タイムテーブル</h2>
-							<MatchTimeTable
-								timetable={match.displayType != 'NONE' ? rawdata.matches[i].timetable : []}
-								tweet={rawdata.matches[i].tweet}
-							/>
-						</Modal>
+						<MatchDetails
+							bind:open={openMatchesDetails[i]}
+							{clamp}
+							league={rawdata.legaue}
+							rawMatch={rawdata.matches[i]}
+							matchID={i}
+							{gpResults}
+							{match}
+							guestResults={leagueResultExt.matches[i]?.guestResults ?? []}
+						/>
 					</th>
 				{/each}
 			</tr>
@@ -186,10 +148,6 @@
 					{/each}
 				</tr>
 			{/if}
-			<!--
-			{#each headings as lb}
-				<th class="headingRow">{@html lb}</th>
-			{/each} -->
 		</thead>
 
 		<!--#region main table -->

@@ -254,10 +254,10 @@
 			]
 		},
 		{
-			"date": "2025-07-17",
+			"date": "2025-08-04",
 			"venue": "恵比寿ガーデンホール",
-			"tweet": "",
-			"rules": [""],
+			"tweet": "https://x.com/iLiFE_official/status/1945814478731501931",
+			"rules": ["https://x.com/iLiFE_official/status/1945814478731501931"],
 			"fcRankToCount": [45, 30, 20, 15, 15, 10, 10, 5, 5, 0],
 			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
 			"timetable": [

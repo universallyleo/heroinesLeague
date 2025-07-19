@@ -116,3 +116,18 @@ export const palette = [
 	'#f781bf',
 	'#999999'
 ];
+
+export const sortMethod = {
+	incWithNullAtLast: (a, b) => {
+		if (a === null && b === null) return 0; //allow null
+		if (a === null) return 1;
+		if (b === null) return -1;
+		return a - b;
+	},
+	decWithNullAtLast: (a, b) => {
+		if (a === null && b === null) return 0; //allow null
+		if (a === null) return 1;
+		if (b === null) return -1;
+		return b - a;
+	}
+};

@@ -6,9 +6,13 @@
 
 <div style="font-weight:normal;">
 	ルール参照：
-	{#each rules as lk, j}
-		[ <a href={lk}> {j + 1} </a> ] &nbsp;
-	{/each}
+	{#if rules.length == 0}
+		データなし
+	{:else}
+		{#each rules as lk, j}
+			[ <a href={lk}> {j + 1} </a> ] &nbsp;
+		{/each}
+	{/if}
 </div>
 
 {#if hasFC}

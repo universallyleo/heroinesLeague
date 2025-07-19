@@ -7,7 +7,8 @@ import {
 	rankDiffAssign,
 	diffFromRanked,
 	deltaTime,
-	padNum
+	padNum,
+	sortMethod
 } from './util.js';
 
 const groupFiles = import.meta.glob('./data/groups/*.json', { eager: true });
@@ -176,7 +177,7 @@ export function groupDisplayShort(search_id) {
  * @property {[string,string]} tokuten
  */
 export function refineTT(tt) {
-	let res = [];
+	let res = [tt[0]];
 	for (let i = 1; i < tt.length; i++) {
 		let dt = deltaTime(tt[i - 1].time[1], tt[i].time[0]);
 		if (dt > 0) {
@@ -203,9 +204,10 @@ export function hasTT(matchDataRaw) {
 //#region match data fn
 
 export const ordering = {
-	totalRank: (a, b) => a - b,
-	shimeiNum: (a, b) => b - a,
-	fcCount: (a, b) => b - a
+	totalRank: (a, b) => sortMethod.incWithNullAtLast(a, b),
+	shimeiNum: (a, b) => sortMethod.decWithNullAtLast(a, b),
+	fcCount: (a, b) => sortMethod.decWithNullAtLast(a, b),
+	accumRank: (a, b) => sortMethod.incWithNullAtLast(a, b)
 };
 
 /**
@@ -224,7 +226,7 @@ export function futureMatches(raw) {
 }
 
 export function hasResult(matchDataRaw) {
-	return matchDataRaw?.shimeiNum || matchDataRaw?.rank;
+	return 'shimeiNum' in matchDataRaw || 'rank' in matchDataRaw;
 }
 
 /**
@@ -273,11 +275,8 @@ export function CalculateLeagueResult(raw) {
 
 		mExt.rankToPoints = match?.rankToPoints ?? raw.rankToPoints;
 		let rkConvert = mExt.rankToPoints;
-		// let rkptDiff = rkConvert.reduce(
-		// 	(res, pt, i, o) => ((res[i] = i > 0 ? pt - o[i - 1] : -1), res),
-		// 	[]
-		// );
 		mExt.fcRankToCount = match?.fcRankToCount ?? raw.fcRankToCount;
+
 		let fcConvert = mExt.fcRankToCount;
 		let totalCount = [];
 		if ('fcRank' in match) {
@@ -285,9 +284,6 @@ export function CalculateLeagueResult(raw) {
 			totalCount = mExt.fcCount;
 		}
 		if ('shimeiNum' in match) {
-			// let shimeiRk = rank(match.shimeiNum);
-			// mExt.shimeiRank = shimeiRk.rank;
-			// mExt.shimeiDiff = diffFromRanked(match.shimeiNum, shimeiRk.rank, shimeiRk.prev);
 			rankDiffAssign(match.shimeiNum, mExt, 'shimeiRank', 'shimeiDiff');
 			mExt.shimeiTotal = match.shimeiNum.reduce((a, x) => a + x, 0);
 
@@ -307,9 +303,6 @@ export function CalculateLeagueResult(raw) {
 
 		mExt.accumPt =
 			n > 0 ? mExt.getPt.map((pt, i) => pt + (res.matches[n - 1]?.accumPt[i] ?? 0)) : mExt.getPt;
-		// rankedData = rank(mExt.accumPt);
-		// mExt.accumRank = rankedData.rank;
-		// mExt.accumPtDiff = diffFromRanked(mExt.accumPt, rankedData.rank, rankedData.prev);
 		rankDiffAssign(mExt.accumPt, mExt, 'accumRank', 'accumPtDiff');
 
 		// tidy guest data if there is any
@@ -341,13 +334,6 @@ export function CalculateLeagueResult(raw) {
 	// @ts-ignore
 	return res;
 }
-// /**
-//  * @param  {LeagueDataExt} resultdata
-//  * */
-// export function extractSingleMatchFromExtRes(resultdata, matchID){
-// 	// let res = structuredClone( resultdata.matches[matchID] );
-// 	// let res =
-// }
 
 /**
  * @param  {LeagueDataExt} resultdata
@@ -368,18 +354,24 @@ export function partitionResultToSortedGroups(resultdata) {
 		'accumRank'
 	];
 	let gpResultData = [];
+	let n = resultdata.matches.length;
 
 	for (const [si, gp] of Object.entries(resultdata.groups)) {
 		let i = parseInt(si);
 		gpResultData[i] = { group: gp, id: si };
 		for (const key of keys) {
 			// !every data that has no value will be default to null
-			gpResultData[i][key] = resultdata.matches.map((m) => (key in m ? m[key][i] : null));
+			// if(gp == 'ion'){
+			// 	console.log(`i=${i}: key=${key}, in data=${key in m}`)
+			// }
+			gpResultData[i][key] = resultdata.matches.map((m) =>
+				key in m ? (m[key].length > i ? m[key][i] : null) : null
+			);
 		}
 	}
-	let n = resultdata.matches.length;
+
 	// @ts-ignore
-	gpResultData.sort((a, b) => a.accumRank[n - 1] - b.accumRank[n - 1]);
+	gpResultData.sort((a, b) => ordering.accumRank(a.accumRank[n - 1], b.accumRank[n - 1]));
 	// console.log('gpResultData', gpResultData);
 	// @ts-ignore
 	return gpResultData;

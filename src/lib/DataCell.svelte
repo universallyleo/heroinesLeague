@@ -2,14 +2,12 @@
 	import { resultTypes } from './processData';
 	import RankNumber from './RankNumber.svelte';
 	import SubDataCell from './SubDataCell.svelte';
-	import SubDataRow from './SubDataRow.svelte';
-	import { padNum } from './util';
 	let { gpResult, n, detailed } = $props();
 
 	// let hasShimei = $derived(gpResult.shimeiNum[n] != null);
 	// let hasFC = $derived(gpResult.fcCount[n] != null);
 	let { hasShimei, hasFC } = $derived(resultTypes(gpResult, n));
-	let hasResult = $derived(!isNaN(gpResult.accumPt[n]));
+	let hasResult = $derived(gpResult.accumPt[n] > 0);
 </script>
 
 <div class="dataCell">

@@ -18,6 +18,8 @@ let innerWidth = $state(0);
 
 `<enhanced:img src={myImgSrc} />` just fails for me. Eventually arrived at [this github discussion](https://github.com/sveltejs/kit/discussions/11098), which just says that one needs to go through annoying `+page.js` to load ALL images first etc etc. Extremely annoying. Just put all images to static directory and load from there now...
 
-# July result
+# TODO
 
-akishibu rk 12
+- page for easier data input
+- page for showing progression changes in "shimei" and "fcRank"
+- page for showing changes in rules (point conversion)

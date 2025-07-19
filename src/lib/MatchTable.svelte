@@ -6,25 +6,19 @@
 	let sortMethod = $state('totalRank');
 
 	let { hasShimei, hasFC } = $derived(resultTypes(gpResults[0], matchID));
+	// $inspect('matchID: ', matchID, 'sortMethod: ', sortMethod);
 	let sortedGps = $derived(
-		type === 'inMatch'
-			? gpResults.toSorted((a, b) =>
-					ordering[sortMethod](a[sortMethod][matchID], b[sortMethod][matchID])
-				)
-			: gpResults
+		(() => {
+			let sm = sortMethod ?? 'totalRank';
+			// I need this because
+			// bind group values get undesireably refreshed to undefined when used inside an each-block
+			return type === 'inMatch'
+				? gpResults.toSorted((a, b) => ordering[sm](a[sm][matchID], b[sm][matchID]))
+				: gpResults;
+		})()
 	);
+	// $inspect('matchID: ', matchID, 'sortedGps', sortedGps);
 </script>
-
-{#snippet sortHeader(label, sortKey)}
-	<th class="headingRow">
-		<label class="sortHeader">
-			{label}
-			<!-- {@render sortBtn(sortMethod === 'shimeiNum')} -->
-			<input type="radio" value={sortKey} name="sortMethod" bind:group={sortMethod} />
-			<span class={['icon', sortMethod === sortKey ? 'selected' : 'unselected']}></span>
-		</label>
-	</th>
-{/snippet}
 
 {#if !hasShimei}
 	<div style="font-size: smaller; color: #888;">指名データなし</div>
@@ -32,6 +26,16 @@
 {#if !hasFC}
 	<div style="font-size: smaller; color: #888;">FC得点データなし</div>
 {/if}
+
+{#snippet sortHeader(label, sortKey)}
+	<th class="headingRow">
+		<label class="sortHeader">
+			{label}
+			<input type="radio" value={sortKey} name="sortMethod" bind:group={sortMethod} />
+			<span class={['icon', sortMethod === sortKey ? 'selected' : 'unselected']}></span>
+		</label>
+	</th>
+{/snippet}
 
 <table class="simpTb">
 	<thead>
@@ -51,8 +55,8 @@
 	</thead>
 
 	<tbody>
-		{#each sortedGps as gp, i}
-			{#if gp.totalRank[matchID]}
+		{#each sortedGps as gp}
+			{#if gp.totalRank[matchID] != null}
 				<tr>
 					<td class="headingCell sticky" style="font-size: small;left:0;">
 						<RankNumber
@@ -60,7 +64,6 @@
 							noNum={type === 'inMatch'}
 							noDecorate={type === 'guest'}
 						/>
-						<!-- {gp.totalRank[matchID]}位 -->
 					</td>
 					<td class="headingCell sticky gpLogo" style="font-size:smaller;left:2em;">
 						{clamp ? groupDisplayShort(gp.group) : getGroup(gp.group).displayName}
@@ -104,7 +107,7 @@
 					{#if hasShimei && hasFC}
 						<td class="datacell">
 							<div class="rkDiffCell">
-								<!-- <div class="rk">{gp.totalRank[matchID]}位</div> -->
+								<div class="rk">{gp.totalRank[matchID]}位</div>
 								<div class="val">
 									{gp.shimeiNum[matchID] + gp.fcCount[matchID]}
 								</div>
@@ -119,8 +122,6 @@
 		{/each}
 	</tbody>
 </table>
-
-<!-- TODO: add FC rank to point info and total rank to point info -->
 
 <style>
 	.sortHeader {
