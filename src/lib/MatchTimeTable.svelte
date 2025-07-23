@@ -1,9 +1,10 @@
 <script>
 	import { getGroup, refineTT } from './processData';
 
-	let { timetable, tweet } = $props();
+	let { timetable, tweet, guestIdx = [] } = $props();
 	let hasTT = $derived(timetable.length > 0);
-	let tt = $derived(refineTT(timetable));
+	let tt = $derived(refineTT(timetable, guestIdx));
+	$inspect('TT:', tt);
 </script>
 
 <div>
@@ -23,12 +24,17 @@
 				{#each tt as itm}
 					<tr>
 						<td> {itm.time[0]} </td>
-						{#if itm.group === 'rest'}
+						{#if itm.type === 'rest'}
 							<td colspan="2">
 								{parseInt(itm.tokuten[0])} 分転換
 							</td>
 						{:else}
-							<td> {getGroup(itm.group).displayName} </td>
+							<td style:color={itm.type === 'guest' ? '#888' : ''}>
+								{getGroup(itm.group).displayName}
+								{#if itm.type === 'guest'}
+									<span style="font-size:smaller; color:hsl(310, 81%, 81%);"> (ゲスト) </span>
+								{/if}
+							</td>
 							<td>
 								{#if itm.tokuten[0] === 'after'}
 									終演後

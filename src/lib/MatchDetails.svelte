@@ -3,16 +3,15 @@
 	import Rules from './Rules.svelte';
 	import MatchTable from './MatchTable.svelte';
 	import { numberToKanji } from './util';
-	let {
-		open = $bindable(),
-		clamp,
-		league,
-		rawMatch,
-		gpResults,
-		guestResults,
-		match,
-		matchID
-	} = $props();
+	let { clamp, league, rawMatch, gpResults, guestResults, match, matchID } = $props();
+
+	let shimeiStr = $derived(
+		match.shimeiTotal != null
+			? match.shimeiTotal[1] != null
+				? `参戦グループのみ = ${match.shimeiTotal[0]} , ゲスト指名 = ${match.shimeiTotal[1]}  ( 合計： ${match.shimeiTotal[0] + match.shimeiTotal[1]} )`
+				: match?.shimeiTotal[0]
+			: 'データなし'
+	);
 </script>
 
 {#if match.displayType === 'RESULT'}
@@ -21,6 +20,11 @@
 	<br />
 	<span style="font-size:small; color: #888;">
 		{match.date} @ {rawMatch.venue}
+		{#if match.shimeiTotal != null}
+			<br />
+			指名入場総数：
+			{shimeiStr}
+		{/if}
 	</span>
 
 	<MatchTable type="inMatch" {clamp} {gpResults} {matchID} />
@@ -42,4 +46,5 @@
 <MatchTimeTable
 	timetable={match.displayType != 'NONE' ? rawMatch.timetable : []}
 	tweet={rawMatch.tweet}
+	guestIdx={match.guestIdx}
 />

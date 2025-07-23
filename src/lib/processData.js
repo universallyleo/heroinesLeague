@@ -107,6 +107,7 @@ export function groupDisplayShort(search_id) {
  * @property {Array<string>} [src] array of sources of match result data
  * @property {GuestDataRaw} [guestShimeiFC]
  * @property {string[]} [comments]
+ * @property {number[]} guestIdx
  * if have shimei and fcRank
  * 		=> match rank determined by (fcRankToCount + shimeiNum)
  * { league: "1",
@@ -126,9 +127,13 @@ export function groupDisplayShort(search_id) {
  *
  * @typedef {Object} MatchDataExt
  * @extends MatchDataRaw
+ * @property {string} shortdate
+ * @property {boolean} hasFC
+ * @property {boolean} hasShimei
+ * @property {string} displayType one of 'RESULT', 'TT_ONLY', 'NONE'
  * @property {number[]} [shimeiRank]
  * @property {number[]} [shimeiDiff]
- * @property {number} [shimeiTotal]
+ * @property {[number,number]} [shimeiTotal] 1st entry = only match member, 2nd = include guest
  * @property {number[]} [fcCount]
  * @property {number[]} countDiff
  * @property {number[]} totalRank
@@ -172,25 +177,46 @@ export function groupDisplayShort(search_id) {
 //#region timetable
 /**
  * @typedef {Object} TTSlot
+ * @property {string} type one of 'group', 'rest', 'guest'
  * @property {string} group  i-th entry of each of the remaining properties is the data from i-th match
  * @property {[string,string]} time
  * @property {[string,string]} tokuten
  */
-export function refineTT(tt) {
-	let res = [tt[0]];
+export function refineTT(tt, guestIdx = []) {
+	let g = 0;
+	let nextGuestIdx = (i) => (i < guestIdx.length ? guestIdx[i] : -1);
+	console.log('nextGuestIdx: ', nextGuestIdx(g));
+	let res = [{ ...tt[0], type: nextGuestIdx(g) == 0 ? 'guest' : 'group' }];
+	g = nextGuestIdx(g) == 0 ? 1 : g;
+
 	for (let i = 1; i < tt.length; i++) {
 		let dt = deltaTime(tt[i - 1].time[1], tt[i].time[0]);
 		if (dt > 0) {
 			res.push({
+				type: 'rest',
 				group: 'rest',
 				time: [tt[i - 1].time[1], tt[i].time[0]],
 				tokuten: [padNum(dt), '']
 			});
 		}
-		res.push(tt[i]);
+		if (nextGuestIdx(g) == i) {
+			res.push({ ...tt[i], type: 'guest' });
+			g++;
+		} else {
+			res.push({ ...tt[i], type: 'group' });
+		}
 	}
 	return res;
 }
+
+export function getGuestIdx(groups, rawTT, rawMatch) {
+	let knownGuest = new Set(rawMatch?.guestShimeiFC ?? []);
+	// let res = (rawMatch?.guestShimeiFC ?? []).map((x) => rawTT.find(({ group }) => group == x[0]));
+	let gSet = new Set(groups).difference(knownGuest);
+	let res = rawTT.map(({ group }, i) => (gSet.has(group) ? -1 : i)).filter((i) => i !== -1);
+	return [...new Set(res)].sort((a, b) => a - b);
+}
+
 /**
  * @param  {MatchDataRaw} matchDataRaw
  * @return {boolean}
@@ -263,29 +289,24 @@ export function CalculateLeagueResult(raw) {
 		/** @type {MatchDataExt} */
 		let mExt = { ...match }; // faster than structured clone; our data are only array of numbers and strings anyway
 
-		// skip calculation if no result record
-		if (['shimeiNum', 'fcRank', 'rank'].reduce((p, c) => p && !(c in match), true)) {
-			// mExt.totalRank = Array(numGp).fill(-1);
-			// mExt.getPt = Array(numGp).fill(0);
-			// mExt.accumPt = Array(numGp).fill(0);
-			// mExt.accumDiff = Array(numGp).fill(0);
-			// res.matches[n] = mExt;
-			continue;
-		}
-
-		mExt.rankToPoints = match?.rankToPoints ?? raw.rankToPoints;
-		let rkConvert = mExt.rankToPoints;
+		let hasRes = hasResult(match);
+		mExt.shortdate = ShortJPDate(match.date, true);
+		mExt.displayType = hasRes ? 'RESULT' : hasTT(match) ? 'TT_ONLY' : 'NONE';
+		(mExt.hasFC = 'fcRankToCount' in match), (mExt.hasShimei = hasRes && 'shimeiNum' in match);
 		mExt.fcRankToCount = match?.fcRankToCount ?? raw.fcRankToCount;
+		mExt.rankToPoints = match?.rankToPoints ?? raw.rankToPoints;
 
-		let fcConvert = mExt.fcRankToCount;
+		// skip calculation if no result record
+		// if (!hasRes) continue;
+
 		let totalCount = [];
 		if ('fcRank' in match) {
-			mExt.fcCount = match.fcRank.map((x) => fcConvert[x - 1]);
+			mExt.fcCount = match.fcRank.map((x) => mExt.fcRankToCount[x - 1]);
 			totalCount = mExt.fcCount;
 		}
 		if ('shimeiNum' in match) {
 			rankDiffAssign(match.shimeiNum, mExt, 'shimeiRank', 'shimeiDiff');
-			mExt.shimeiTotal = match.shimeiNum.reduce((a, x) => a + x, 0);
+			mExt.shimeiTotal = [match.shimeiNum.reduce((a, x) => a + x, 0), null];
 
 			if ('fcRank' in match) {
 				totalCount = totalCount.map((x, i) => x + match.shimeiNum[i]);
@@ -298,7 +319,7 @@ export function CalculateLeagueResult(raw) {
 
 		let rankedData = match.rank ? rank(match.rank, (a, b) => a - b) : rank(totalCount);
 		mExt.totalRank = rankedData.rank;
-		mExt.getPt = rankedData.rank.map((r) => rkConvert[r - 1]);
+		mExt.getPt = rankedData.rank.map((r) => mExt.rankToPoints[r - 1]);
 		// mExt.getPtDiff = diffFromRanked(mExt.getPt, rankedData.rank, rankedData.prev);
 
 		mExt.accumPt =
@@ -309,6 +330,7 @@ export function CalculateLeagueResult(raw) {
 		mExt.guestResults = [];
 		if ('guestShimeiFC' in match) {
 			let shimei = match.guestShimeiFC.map((x) => x[1]);
+			mExt.shimeiTotal[1] = shimei.reduce((a, x) => a + x);
 			let shimeiRk = rank(shimei);
 			let diff = diffFromRanked(shimei, shimeiRk.rank, shimeiRk.prev);
 			let gd = match.guestShimeiFC.map((x, i) => {
@@ -328,11 +350,40 @@ export function CalculateLeagueResult(raw) {
 			});
 			mExt.guestResults = gd;
 		}
+		// mExt.guestIdx = getGuestIdx(raw.groups, match.timetable, match);
+		// console.log(match.date, 'guestIdx', mExt.guestIdx);
 
 		res.matches[n] = mExt;
 	}
+
 	// @ts-ignore
 	return res;
+}
+
+export function extractSummaryFromLeagueResExt(leagueResExt) {
+	return leagueResExt.matches.map(
+		({
+			shortdate,
+			venue,
+			fcRankToCount,
+			rankToPoints,
+			shimeiTotal,
+			displayType,
+			hasFC,
+			hasShimei,
+			guestIdx
+		}) => ({
+			shortdate,
+			venue,
+			fcRankToCount,
+			rankToPoints,
+			shimeiTotal,
+			displayType,
+			hasFC,
+			hasShimei,
+			guestIdx
+		})
+	);
 }
 
 /**

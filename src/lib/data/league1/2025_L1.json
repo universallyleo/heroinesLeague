@@ -34,8 +34,8 @@
 				},
 				{
 					"group": "megafon",
-					"time": ["1430", "1455"],
-					"tokuten": ["1505", "1605"]
+					"time": ["1520", "1545"],
+					"tokuten": ["1555", "1655"]
 				},
 				{
 					"group": "giltygilty",
@@ -79,7 +79,8 @@
 				}
 			],
 			"shimeiNum": [315, 72, 151, 154, 96, 53, 76, 71, 84],
-			"src": ["https://x.com/tomohei_desu/status/1921521696378441746"]
+			"src": ["https://x.com/tomohei_desu/status/1921521696378441746"],
+			"guestIdx": [3, 4]
 		},
 		{
 			"date": "2025-06-14",
@@ -170,7 +171,8 @@
 				["chula", 35, -1, -1],
 				["tenran", 12, -1, -1]
 			],
-			"src": "https://x.com/ks_ecophysi/status/1933842506950815795"
+			"src": "https://x.com/ks_ecophysi/status/1933842506950815795",
+			"guestIdx": [4, 5, 6, 8, 9]
 		},
 		{
 			"date": "2025-07-14",
@@ -251,7 +253,8 @@
 			"src": [
 				"https://x.com/ks_ecophysi/status/1944709929715277952",
 				"https://x.com/ks_ecophysi/status/1944957043103949027"
-			]
+			],
+			"guestIdx": [0, 1, 4]
 		},
 		{
 			"date": "2025-08-04",
@@ -311,7 +314,8 @@
 					"time": ["1910", "1945"],
 					"tokuten": ["after", ""]
 				}
-			]
+			],
+			"guestIdx": []
 		}
 	]
 }

@@ -61,6 +61,7 @@
 					"tokuten": ["after", ""]
 				}
 			],
+			"guestIdx": [],
 			"rank": [2, 4, 3, 5, 1, 6, 7, 8],
 			"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10]
 		},
@@ -133,6 +134,7 @@
 				["chula", 39, 6, 2],
 				["tenran", 8, 7, 0]
 			],
+			"guestIdx": [2, 4],
 			"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10],
 			"fcRankToCount": [30, 20, 10, 5, 3, 2, 0, 0, 0, 0, 0],
 			"src": "https://x.com/kamekichi_id/status/1938211479972667663"
@@ -203,6 +205,7 @@
 					"tokuten": ["after", ""]
 				}
 			],
+			"guestIdx": [2, 4],
 			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10],
 			"fcRankToCount": [30, 20, 10, 5, 3, 2, 0, 0, 0],
 			"shimeiNum": [68, 65, 64, 140, 72, 80, 29, 18, 3],
@@ -269,6 +272,7 @@
 					"tokuten": ["after", ""]
 				}
 			],
+			"guestIdx": [],
 			"rankToPoints": [100, 80, 65, 50, 40, 30, 20, 15, 10, 5],
 			"fcRankToCount": [30, 20, 10, 5, 3, 2, 0, 0, 0, 0, 0]
 		},
@@ -341,6 +345,7 @@
 			"date": "2025-08-27",
 			"venue": "栄Zephyr Hall",
 			"timetable": [],
+			"guestIdx": [],
 			"tweet": "https://x.com/heroines_idol/status/1946555660923285863",
 			"rules": ["https://x.com/heroines_idol/status/1946555660923285863"],
 			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10]

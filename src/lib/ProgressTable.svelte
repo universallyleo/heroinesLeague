@@ -7,7 +7,8 @@
 		seriesFromResult,
 		groupDisplayShort,
 		hasResult,
-		hasTT
+		hasTT,
+		extractSummaryFromLeagueResExt
 	} from '$lib/processData.js';
 	import { ShortJPDate } from '$lib/util.js';
 	import { toPng } from 'html-to-image';
@@ -31,21 +32,22 @@
 	});
 	let openMatchesDetails = $state(rawdata.matches.map((x) => false)); // binding would not work reactively if using $derived
 	// c.f. https://github.com/sveltejs/svelte/issues/12320
-	let headingRowData = $derived(
-		rawdata.matches.map((m, i) => {
-			let hasRes = hasResult(m);
-			return {
-				date: ShortJPDate(m.date, true),
-				fcRankToCount: m?.fcRankToCount ?? rawdata.fcRankToCount,
-				rankToPoints: m?.rankToPoints ?? rawdata.rankToPoints,
-				shimeiTotal: leagueResultExt.matches[i]?.shimeiTotal ?? null,
-				displayType: hasRes ? 'RESULT' : hasTT(m) ? 'TT_ONLY' : 'NONE',
-				hasFC: 'fcRankToCount' in m,
-				hasShimei: hasRes && 'shimeiNum' in m
-			};
-		})
-	);
-	$inspect('headingRow', headingRowData);
+	let headingRowData = $derived(extractSummaryFromLeagueResExt(leagueResultExt));
+	// let headingRowData = $derived(
+	// 	rawdata.matches.map((m, i) => {
+	// 		let hasRes = hasResult(m);
+	// 		return {
+	// 			date: ShortJPDate(m.date, true),
+	// 			fcRankToCount: m?.fcRankToCount ?? rawdata.fcRankToCount,
+	// 			rankToPoints: m?.rankToPoints ?? rawdata.rankToPoints,
+	// 			shimeiTotal: leagueResultExt.matches[i]?.shimeiTotal ?? null,
+	// 			displayType: hasRes ? 'RESULT' : hasTT(m) ? 'TT_ONLY' : 'NONE',
+	// 			hasFC: 'fcRankToCount' in m,
+	// 			hasShimei: hasRes && 'shimeiNum' in m
+	// 		};
+	// 	})
+	// );
+	// $inspect('headingRow', headingRowData);
 	let tbElt;
 
 	function subCategory(i) {
@@ -105,7 +107,7 @@
 					<th class="headingRow" style:width={opts.detailTable ? '7.8em' : '5em'}>
 						<div>
 							<button class="plainBtn" onclick={() => openMatchDetails(i)}>
-								{match.date}
+								{match.shortdate}
 							</button>
 						</div>
 						<Modal bind:open={openMatchesDetails[i]}>
@@ -127,11 +129,15 @@
 				<tr>
 					<th class="sticky"></th>
 					<th class="sticky"></th>
-					{#each rawdata.matches as match}
+					{#each rawdata.matches as match, i}
 						<th
-							style="font-weight:normal; font-size:.9em; border-top: dashed 1px #999; padding-top:0"
+							style="font-weight:normal; font-size:.9em; border-top: dashed 1px #999; vertical-align:middle;"
 						>
-							{match.venue}
+							<!-- <div style="display:block; vertical-align:center;"> -->
+							<button class="plainBtn" onclick={() => openMatchDetails(i)}>
+								{match.venue}
+							</button>
+							<!-- </div> -->
 						</th>
 					{/each}
 				</tr>
@@ -141,10 +147,10 @@
 					<th class="sticky"></th>
 					{#each headingRowData as match}
 						<th
-							style="font-weight: normal; font-size:.7em; border-top: dashed 1px #999; padding-top:.2em;"
+							style="font-weight: normal; font-size:.7em; border-top: dashed 1px #999; padding-top:.2em; "
 						>
 							{#if match.shimeiTotal}
-								総入場指名数: {match.shimeiTotal}
+								参戦グル総指名数: {match.shimeiTotal}
 							{/if}
 						</th>
 					{/each}
