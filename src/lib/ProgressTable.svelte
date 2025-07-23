@@ -150,7 +150,7 @@
 							style="font-weight: normal; font-size:.7em; border-top: dashed 1px #999; padding-top:.2em; "
 						>
 							{#if match.shimeiTotal}
-								参戦グル総指名数: {match.shimeiTotal}
+								参戦グル総指名数: {match.shimeiTotal[0]}
 							{/if}
 						</th>
 					{/each}
