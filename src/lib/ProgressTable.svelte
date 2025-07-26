@@ -6,11 +6,8 @@
 		partitionResultToSortedGroups,
 		seriesFromResult,
 		groupDisplayShort,
-		hasResult,
-		hasTT,
 		extractSummaryFromLeagueResExt
 	} from '$lib/processData.js';
-	import { ShortJPDate } from '$lib/util.js';
 	import { toPng } from 'html-to-image';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 	import DataCell from './DataCell.svelte';
@@ -18,6 +15,7 @@
 	import RankNumber from './RankNumber.svelte';
 	import MatchDetails from './MatchDetails.svelte';
 	import Modal from './Modal.svelte';
+	import { isFuture } from './util';
 
 	let { rawdata, clamp } = $props();
 	// $inspect('clamp', clamp);
@@ -33,20 +31,6 @@
 	let openMatchesDetails = $state(rawdata.matches.map((x) => false)); // binding would not work reactively if using $derived
 	// c.f. https://github.com/sveltejs/svelte/issues/12320
 	let headingRowData = $derived(extractSummaryFromLeagueResExt(leagueResultExt));
-	// let headingRowData = $derived(
-	// 	rawdata.matches.map((m, i) => {
-	// 		let hasRes = hasResult(m);
-	// 		return {
-	// 			date: ShortJPDate(m.date, true),
-	// 			fcRankToCount: m?.fcRankToCount ?? rawdata.fcRankToCount,
-	// 			rankToPoints: m?.rankToPoints ?? rawdata.rankToPoints,
-	// 			shimeiTotal: leagueResultExt.matches[i]?.shimeiTotal ?? null,
-	// 			displayType: hasRes ? 'RESULT' : hasTT(m) ? 'TT_ONLY' : 'NONE',
-	// 			hasFC: 'fcRankToCount' in m,
-	// 			hasShimei: hasRes && 'shimeiNum' in m
-	// 		};
-	// 	})
-	// );
 	// $inspect('headingRow', headingRowData);
 	let tbElt;
 
@@ -180,7 +164,7 @@
 						<br />
 						{clamp ? groupDisplayShort(gp.group) : getGroup(gp.group).displayName}
 					</td>
-					{#each { length: gp.accumPt.length }, n}
+					{#each { length: gp.accumPt.findLastIndex((x) => x != null) + 1 }, n}
 						<td>
 							<DataCell gpResult={gp} {n} detailed={opts.detailTable}></DataCell>
 						</td>

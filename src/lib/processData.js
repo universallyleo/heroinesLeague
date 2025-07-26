@@ -185,7 +185,6 @@ export function groupDisplayShort(search_id) {
 export function refineTT(tt, guestIdx = []) {
 	let g = 0;
 	let nextGuestIdx = (i) => (i < guestIdx.length ? guestIdx[i] : -1);
-	console.log('nextGuestIdx: ', nextGuestIdx(g));
 	let res = [{ ...tt[0], type: nextGuestIdx(g) == 0 ? 'guest' : 'group' }];
 	g = nextGuestIdx(g) == 0 ? 1 : g;
 
@@ -285,7 +284,7 @@ export function CalculateLeagueResult(raw) {
 
 	for (const [sn, match] of Object.entries(raw.matches)) {
 		let n = parseInt(sn);
-		// console.log(`************ ${n} ************`);
+		// console.log(`************ ${n} ************ (${match.date})`);
 		/** @type {MatchDataExt} */
 		let mExt = { ...match }; // faster than structured clone; our data are only array of numbers and strings anyway
 
@@ -354,6 +353,7 @@ export function CalculateLeagueResult(raw) {
 		// console.log(match.date, 'guestIdx', mExt.guestIdx);
 
 		res.matches[n] = mExt;
+		// console.log(mExt);
 	}
 
 	// @ts-ignore
@@ -404,12 +404,16 @@ export function partitionResultToSortedGroups(resultdata) {
 		'accumPtDiff',
 		'accumRank'
 	];
+	/** @type {GroupResultSeries[]} */
 	let gpResultData = [];
-	let n = resultdata.matches.length;
+	let n = resultdata.matches.findLastIndex(({ accumRank }) => accumRank.length > 0);
+	// console.log('n=', n, ' out of ', resultdata.matches.length, ' matches');
 
 	for (const [si, gp] of Object.entries(resultdata.groups)) {
 		let i = parseInt(si);
-		gpResultData[i] = { group: gp, id: si };
+
+		// @ts-ignore
+		gpResultData[i] = { group: gp, id: i };
 		for (const key of keys) {
 			// !every data that has no value will be default to null
 			// if(gp == 'ion'){
@@ -421,10 +425,8 @@ export function partitionResultToSortedGroups(resultdata) {
 		}
 	}
 
-	// @ts-ignore
-	gpResultData.sort((a, b) => ordering.accumRank(a.accumRank[n - 1], b.accumRank[n - 1]));
+	gpResultData.sort((a, b) => ordering.accumRank(a.accumRank[n], b.accumRank[n]));
 	// console.log('gpResultData', gpResultData);
-	// @ts-ignore
 	return gpResultData;
 }
 

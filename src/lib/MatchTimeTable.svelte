@@ -4,7 +4,7 @@
 	let { timetable, tweet, guestIdx = [] } = $props();
 	let hasTT = $derived(timetable.length > 0);
 	let tt = $derived(refineTT(timetable, guestIdx));
-	$inspect('TT:', tt);
+	// $inspect('TT:', tt);
 </script>
 
 <div>
