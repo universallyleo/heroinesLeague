@@ -161,6 +161,7 @@ export function groupDisplayShort(search_id) {
  * @typedef {Object} GroupResultSeries
  * @property {string} group  i-th entry of each of the remaining properties is the data from i-th match
  * @property {number} id
+ * @property {number} rankNow
  * @property {number[]} shimeiNum
  * @property {number[]} shimeiRank
  * @property {number[]} shimeiDiff difference in shimei number from the group of one rank higher
@@ -413,7 +414,7 @@ export function partitionResultToSortedGroups(resultdata) {
 		let i = parseInt(si);
 
 		// @ts-ignore
-		gpResultData[i] = { group: gp, id: i };
+		gpResultData[i] = { group: gp, id: i, rankNow: resultdata.matches[n].accumRank[i] };
 		for (const key of keys) {
 			// !every data that has no value will be default to null
 			// if(gp == 'ion'){

@@ -39,7 +39,7 @@
 		if (rawdata.league == 1) {
 			return i < 4 ? 'upperGp' : i > 5 ? 'lowerGp' : 'midGp';
 		} else {
-			return i < 2 ? 'upperGp' : 'midGp';
+			return i < 3 ? 'upperGp' : 'midGp';
 		}
 	}
 
@@ -150,7 +150,7 @@
 						class={['headingCell', 'sticky', subCategory(i)]}
 						style="left:0;width:1.7em;text-wrap:wrap;"
 					>
-						<RankNumber rank={gp.accumRank[gp.accumRank.length - 1]} noDecorate={false} />
+						<RankNumber rank={gp.rankNow} noDecorate={false} />
 					</td>
 					<td
 						class={['headingCell', 'sticky', 'gpLogo', subCategory(i)]}
