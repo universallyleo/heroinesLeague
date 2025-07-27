@@ -36,39 +36,62 @@
 <h2>他の事項</h2>
 <!-- <div style="width: 100%;"> -->
 <div style="width: 90%; margin: 0 auto;">
-	本ページでは区別のため、<br />
-	{@render defText('得点')}とは： 入場指名数、または FC投票によって獲得できる点数
-	(最近、運営は後者を{@render defText('FC pt')}と呼んでいる)
-	<br />
-	{@render defText('ポイント')} または {@render defText('pt')} 、 {@render defText('リーグpt')} とは：得点に基づいて決まった順位に応じて付与される点数<br
-	/>
+	<ul>
+		<li>
+			本ページでは、区別のため、以下の用語を使用しています
+			<ul>
+				<li>
+					{@render defText('得点')}： 入場指名数、または FC投票によって獲得できる点数
+					(最近、運営は後者を{@render defText('FC pt')}と呼んでいる)
+				</li>
+				<li>
+					{@render defText('ポイント')} または {@render defText('pt')} 、 {@render defText(
+						'リーグpt'
+					)} ：得点に基づいて決まった順位に応じて付与される点数
+				</li>
+			</ul>
+		</li>
+		<li>
+			各戦で、
+			<ul>
+				<li>
+					<span style="font-weight: bolder;">「入場指名数」＋「FC投票得点」＝「総合得点」</span>
+					(ただし、FC投票が行われない戦もある)
+				</li>
+				<li>
+					総合得点に基づいて順位（マッチ順位）を決定し、その順位に応じて「ポイント（pt）」を付与
+				</li>
+				<li>各リーグ内ランキングは、各戦のポイントの合計により決まります</li>
+			</ul>
+		</li>
+	</ul>
 
-	<p>
-		各戦で、<span style="font-weight: bolder;">「入場指名数」＋「FC投票得点」＝「総合得点」</span>
-		(ただし、FC投票が行われない戦もある) <br />
-		総合得点に基づいて順位（マッチ順位）を決定し、その順位に応じて「ポイント（pt）」を付与<br />
-		各リーグ内ランキングは、各戦のポイントの合計により決まります
-	</p>
+	2025-07の時点で、
+	<ul>
+		<li>
+			{@render defText('上位グループ')}とは：リーグ１の場合は1～4位、リーグ２の場合は1～3位 {@render cautionText()}
+		</li>
+		<li>{@render defText('下位グループ')}とは：リーグ１の場合は最後の3グループ、リーグ２はなし</li>
+		<li>
+			シーズン終了時（期間は半年または1年、未確定）
+			<ul>
+				<li>
+					リーグ１の下位グループ ＋ リーグ２の上位グループ ： {@render defText('入れ替え戦')} へ
+					<br />
+					➡ 入れ替え戦の前半３グループがリーグ１に昇格、後半３グループがリーグ２に
+				</li>
+				<li>
+					リーグ1の上位グループ：何らかの方式で王者ランキングが決定される予定です {@render cautionText()}
+				</li>
+				<li>
+					リーグ１で全バトルにおいて1位を獲得したグループは{@render defText('殿堂入り')}となります
+				</li>
+				<li>殿堂入りグループは今後リーグ戦免除する {@render cautionText()}</li>
+			</ul>
+		</li>
+	</ul>
 
-	<p>
-		2025-07の時点で、<br />
-		{@render defText('上位グループ')}とは：リーグ１の場合は1～4位、リーグ２の場合は1～3位 {@render cautionText()}
-		<br />
-		{@render defText('下位グループ')}とは：リーグ１の場合は最後のグループ、リーグ２はなし<br />
-		シーズン終了時（期間は半年または1年、未確定）、<br />
-		リーグ１の下位グループ ＋ リーグ２の上位グループ ➡ {@render defText('入れ替え戦')}
-		<br />
-		➡ 入れ替え戦の前半３グループがリーグ１に昇格、後半３グループがリーグ２に
-		<br />
-		リーグ1の上位グループによる何らかの方式で王者ランキングが決定される予定です {@render cautionText()}<br
-		/>
-		また、リーグ１で全バトルにおいて1位を獲得したグループは{@render defText(
-			'殿堂入り'
-		)}となります<br />
-		殿堂入りグループは今後リーグ戦免除らしい {@render cautionText()}<br />
-	</p>
-
-	※要確認事項：ソースを教えてください。
+	<p style="font-size: smaller; color: #777;">※要確認事項：ソースを教えてください。</p>
 </div>
 <!-- </div> -->
 
@@ -77,7 +100,7 @@
 {/snippet}
 
 {#snippet cautionText()}
-	&nbsp;<span class="caution">（※要確認！！）</span>&nbsp;
+	&nbsp;<span class="caution">（ ※要確認！）</span>&nbsp;
 {/snippet}
 
 <style>
