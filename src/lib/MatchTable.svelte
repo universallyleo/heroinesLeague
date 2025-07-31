@@ -43,7 +43,7 @@
 			<th class="sticky headingRow" style="left:0;width:2em;">順位</th>
 			<th class="sticky headingRow" style="left:2em;">グループ</th>
 			{#if hasShimei}
-				{@render sortHeader('指名入場数', 'shimeiNum')}
+				{@render sortHeader('入場指名数', 'shimeiNum')}
 			{/if}
 			{#if hasFC}
 				{@render sortHeader('FC投票得点', 'fcCount')}

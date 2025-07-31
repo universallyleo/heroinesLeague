@@ -22,7 +22,7 @@
 	let leagueResultExt = $derived(CalculateLeagueResult(rawdata));
 	// $inspect('leagueResultExt', leagueResultExt);
 	let gpResults = $derived(partitionResultToSortedGroups(leagueResultExt));
-	$inspect('gpResults', gpResults);
+	// $inspect('gpResults', gpResults);
 	let progressData = $derived(seriesFromResult(gpResults, matchDates(rawdata), 'accumPt'));
 	// $inspect('progressData', progressData);
 	let opts = $state({

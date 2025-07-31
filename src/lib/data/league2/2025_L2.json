@@ -261,7 +261,7 @@
 				{
 					"group": "parasai",
 					"time": ["1900", "1930"],
-					"tokuten": ["after", ""]
+					"tokuten": ["1940", "2040"]
 				},
 				{
 					"group": "nanakoro",
@@ -274,7 +274,8 @@
 					"tokuten": ["after", ""]
 				}
 			],
-			"guestIdx": [],
+			"shimeiNum": [56, 236, 75, 108, 53, 45, 37, 5, 49],
+			"guestIdx": [3, 5],
 			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10]
 		},
 		{

@@ -22,7 +22,7 @@
 		{match.date} @ {rawMatch.venue}
 		{#if match.shimeiTotal != null}
 			<br />
-			指名入場総数：
+			入場指名総数：
 			{shimeiStr}
 		{/if}
 	</span>
