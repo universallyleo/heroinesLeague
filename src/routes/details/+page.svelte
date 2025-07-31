@@ -6,15 +6,15 @@
 	import {
 		CalculateLeagueResult,
 		extractSummaryFromLeagueResExt,
-		hasResult,
-		hasTT,
 		leagueOne,
 		leagueTwo,
 		partitionResultToSortedGroups
 	} from '$lib/processData.js';
+	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 
 	let { clamp } = $props();
-	let leagueData = [leagueOne[0], leagueTwo[0]];
+	let leagueData = [leagueOne[0], leagueTwo[0]]; //!!! need to change this if going into season 2 !!!
 	let league = $state(1);
 	let match = $state(0);
 
@@ -24,7 +24,18 @@
 	// $inspect('gpResults', gpResults);
 
 	let headingRowData = $derived(extractSummaryFromLeagueResExt(leagueResultExt));
-	$inspect('headingRowData: ', headingRowData);
+	// $inspect('headingRowData: ', headingRowData);
+
+	onMount(() => {
+		let rawmatchID = page.url.searchParams.get('match');
+		if (rawmatchID != null) {
+			let strs = rawmatchID.match(/L(\d+)M(\d+)/);
+			if (strs) {
+				league = parseInt(strs[1]) - 1;
+				match = parseInt(strs[2]) - 1;
+			}
+		}
+	});
 </script>
 
 <section>

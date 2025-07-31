@@ -27,10 +27,17 @@ export const groups = [];
 		g.push(f[path]);
 	});
 });
-// Object.keys(leagueOneFiles).map((path) => {leagueOne})
 // Object.keys(groupFiles).map((path) => {
 // 	groups.push(groupFiles[path]);
 // });
+//TODO: think about using matchUID and dynamic param to render match details
+// export const matchUID = [leagueOne, leagueTwo]
+// 	.map((data, i) =>
+// 		data.map(({ matches }) =>
+// 			matches.map(({ date }) => `L${i + 1}M${date.replace(/-/g, '').slice(2)}`)
+// 		)
+// 	)
+// 	.flat(2);
 
 /**
  * @typedef {Object} SNSData

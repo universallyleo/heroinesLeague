@@ -22,4 +22,5 @@ let innerWidth = $state(0);
 
 - page for easier data input
 - page for showing progression changes in "shimei" and "fcRank"
-- page for showing changes in rules (point conversion)
+- details page use slide scroll to select match instead of using HTML select
+- it may make more sense to compute all "ext" data and partition to group in `processData.js` first, instead of doing in individual page (?) need more careful consideration...

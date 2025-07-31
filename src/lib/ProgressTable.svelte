@@ -15,7 +15,6 @@
 	import RankNumber from './RankNumber.svelte';
 	import MatchDetails from './MatchDetails.svelte';
 	import Modal from './Modal.svelte';
-	import { isFuture } from './util';
 
 	let { rawdata, clamp } = $props();
 	// $inspect('clamp', clamp);
