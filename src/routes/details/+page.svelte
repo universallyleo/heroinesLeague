@@ -1,30 +1,13 @@
 <script>
 	import MatchDetails from '$lib/MatchDetails.svelte';
-	// import Counter from './Counter.svelte';
-	// import welcome from '$lib/images/svelte-welcome.webp';
-	// import welcomeFallback from '$lib/images/svelte-welcome.png';
-	import {
-		CalculateLeagueResult,
-		extractSummaryFromLeagueResExt,
-		leagueOne,
-		leagueTwo,
-		partitionResultToSortedGroups
-	} from '$lib/processData.js';
+	import { dataCollection } from '$lib/processData.js';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
 	let { clamp } = $props();
-	let leagueData = [leagueOne[0], leagueTwo[0]]; //!!! need to change this if going into season 2 !!!
 	let league = $state(1);
 	let match = $state(0);
-
-	let leagueResultExt = $derived(CalculateLeagueResult(leagueData[league]));
-	// $inspect('leagueResultExt', leagueResultExt);
-	let gpResults = $derived(partitionResultToSortedGroups(leagueResultExt));
-	// $inspect('gpResults', gpResults);
-
-	let headingRowData = $derived(extractSummaryFromLeagueResExt(leagueResultExt));
-	// $inspect('headingRowData: ', headingRowData);
+	let leagueSeasonData = $derived(dataCollection[league][0]); //second index is for "season"
 
 	onMount(() => {
 		let rawmatchID = page.url.searchParams.get('match');
@@ -47,7 +30,7 @@
 
 		マッチ選択：
 		<select bind:value={match}>
-			{#each headingRowData as d, j}
+			{#each leagueSeasonData.summary as d, j}
 				<option value={j}> {d.shortdate} @ {d.venue} </option>
 			{/each}
 		</select>
@@ -56,11 +39,11 @@
 		<MatchDetails
 			{clamp}
 			league={league + 1}
-			rawMatch={leagueData[league].matches[match]}
+			rawMatch={leagueSeasonData.extData.matches[match]}
 			matchID={match}
-			{gpResults}
-			match={headingRowData[match]}
-			guestResults={leagueResultExt.matches[match]?.guestResults ?? []}
+			gpResults={leagueSeasonData.resByGp}
+			match={leagueSeasonData.summary[match]}
+			guestResults={leagueSeasonData.extData.matches[match]?.guestResults ?? []}
 		/>
 	</div>
 </section>

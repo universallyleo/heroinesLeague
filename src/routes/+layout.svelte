@@ -2,6 +2,7 @@
 	import { base } from '$app/paths';
 	import '../app.css';
 	import ghlogo from '$lib/images/github.svg';
+	import xicon from '$lib/images/X_icon.svg';
 
 	/** @type {{children: import('svelte').Snippet}} */
 	let { children } = $props();
@@ -33,7 +34,7 @@
 			<li><a href="{base}/rules">🧾ルール変更一覧</a></li>
 			<li><a href="{base}/progress">📈各データ推移</a></li>
 			<li><a href="{base}/details">⚔️各戦詳細</a></li>
-			<li><a href="{base}/about">ℹ️ページについて</a></li>
+			<!-- <li><a href="{base}/about">ℹ️ページについて</a></li> -->
 		</ul>
 	</nav>
 
@@ -44,6 +45,10 @@
 	<footer>
 		<a href="https://github.com/universallyleo/heroinesLeague">
 			<img width="32" src={ghlogo} alt="Source Code" />
+		</a>
+		&nbsp;&nbsp;
+		<a href="https://x.com/55gohan06">
+			<img width="32" src={xicon} alt="Twitter" />
 		</a>
 	</footer>
 </div>
@@ -129,11 +134,11 @@
 
 	footer {
 		display: flex;
-		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		padding: 12px;
-		margin-top: 1em;
+		margin: 1em;
+		border-top: 1px solid black;
 	}
 	/* 
 	footer a {

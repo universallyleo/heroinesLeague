@@ -1,19 +1,15 @@
 <script>
-	// import Counter from './Counter.svelte';
-	// import welcome from '$lib/images/svelte-welcome.webp';
-	// import welcomeFallback from '$lib/images/svelte-welcome.png';
 	import Accordion from '$lib/Accordion.svelte';
 	import AccordionItem from '$lib/AccordionItem.svelte';
 	import ProgressTable from '$lib/ProgressTable.svelte';
-	import { leagueOne, leagueTwo } from '$lib/processData.js';
+
+	import { dataCollection } from '$lib/processData.js';
 
 	let innerWidth = $state(0);
 	// $inspect('innerWidth: ', innerWidth);
 
-	let pageData = [
-		{ league: 1, data: leagueOne[0], elt: null },
-		{ league: 2, data: leagueTwo[0], elt: null }
-	];
+	let selectedSeason = 1;
+	let leagueData = [dataCollection[0][selectedSeason - 1], dataCollection[1][selectedSeason - 1]];
 </script>
 
 <svelte:head>
@@ -23,6 +19,23 @@
 
 <svelte:window bind:innerWidth />
 
+{#snippet leagueAccord(leagueData, open = false)}
+	<AccordionItem {open}>
+		{#snippet header()}
+			リーグ{leagueData.league} 結果
+		{/snippet}
+		<ProgressTable {leagueData} clamp={innerWidth < 600} />
+	</AccordionItem>
+{/snippet}
+
+<section>
+	<Accordion>
+		{@render leagueAccord(leagueData[0], true)}
+		{@render leagueAccord(leagueData[1], true)}
+	</Accordion>
+</section>
+
+<!-- 
 {#snippet leagueAccord(data, open = false)}
 	<AccordionItem {open}>
 		{#snippet header()}
@@ -30,25 +43,25 @@
 		{/snippet}
 		<ProgressTable rawdata={data.data} clamp={innerWidth < 600} />
 	</AccordionItem>
-{/snippet}
+{/snippet} -->
 
-<section>
-	<!-- {#if innerWidth <= 1080} -->
+<!-- <section>
+	{#if innerWidth <= 1080}
 	<Accordion>
 		{@render leagueAccord(pageData[0], true)}
 		{@render leagueAccord(pageData[1], true)}
 	</Accordion>
-	<!-- {:else} -->
-	<!-- <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1px;">
+	{:else}
+	<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1px;">
 			<Accordion>
 				{@render leagueAccord(pageData[0], true)}
 			</Accordion>
 			<Accordion>
 				{@render leagueAccord(pageData[1], true)}
 			</Accordion>
-		</div> -->
-	<!-- {/if} -->
-</section>
+		</div>
+	{/if}
+	</section> -->
 
 <style>
 </style>

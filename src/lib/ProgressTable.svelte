@@ -1,13 +1,5 @@
 <script>
-	import {
-		matchDates,
-		getGroup,
-		CalculateLeagueResult,
-		partitionResultToSortedGroups,
-		seriesFromResult,
-		groupDisplayShort,
-		extractSummaryFromLeagueResExt
-	} from '$lib/processData.js';
+	import { matchDates, getGroup, seriesFromResult, groupDisplayShort } from '$lib/processData.js';
 	import { toPng } from 'html-to-image';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 	import DataCell from './DataCell.svelte';
@@ -16,26 +8,24 @@
 	import MatchDetails from './MatchDetails.svelte';
 	import Modal from './Modal.svelte';
 
-	let { rawdata, clamp } = $props();
+	let { leagueData, clamp } = $props();
 	// $inspect('clamp', clamp);
-	let leagueResultExt = $derived(CalculateLeagueResult(rawdata));
-	// $inspect('leagueResultExt', leagueResultExt);
-	let gpResults = $derived(partitionResultToSortedGroups(leagueResultExt));
-	// $inspect('gpResults', gpResults);
-	let progressData = $derived(seriesFromResult(gpResults, matchDates(rawdata), 'accumPt'));
+	let progressData = $derived(
+		seriesFromResult(leagueData.resByGp, matchDates(leagueData.extData), 'accumPt')
+	);
 	// $inspect('progressData', progressData);
 	let opts = $state({
 		detailTable: true
 	});
-	let openMatchesDetails = $state(rawdata.matches.map((x) => false)); // binding would not work reactively if using $derived
+	let openMatchesDetails = $state(leagueData.summary.map((_) => false)); // binding would not work reactively if using $derived
 	// c.f. https://github.com/sveltejs/svelte/issues/12320
-	let headingRowData = $derived(extractSummaryFromLeagueResExt(leagueResultExt));
+	let headingRowData = $derived(leagueData.summary);
 	// $inspect('headingRow', headingRowData);
 	let tbElt;
 
 	function subCategory(i) {
 		// c.f. https://x.com/Barichy2/status/1921414855908581850/photo/2
-		if (rawdata.league == 1) {
+		if (leagueData.league == 1) {
 			return i < 4 ? 'upperGp' : i > 5 ? 'lowerGp' : 'midGp';
 		} else {
 			return i < 3 ? 'upperGp' : 'midGp';
@@ -70,7 +60,7 @@
 <div style="display: flex; flex-direction:row; justify-content: space-evenly; margin-top:.5em;">
 	<OptionsDiv bind:opts />
 	<div>
-		<button onclick={() => savePNG(tbElt, `League${rawdata.league}Result.png`)}>
+		<button onclick={() => savePNG(tbElt, `League${leagueData.league}Result.png`)}>
 			画像ダウンロード
 		</button>
 	</div>
@@ -79,7 +69,7 @@
 <article class="tableContainer">
 	<table class="table-bordered" bind:this={tbElt}>
 		<caption>
-			リーグ戦結果 ( リーグ{rawdata.league} )
+			リーグ戦結果 ( リーグ{leagueData.league} )
 		</caption>
 		<thead>
 			<tr>
@@ -96,12 +86,12 @@
 						<Modal bind:open={openMatchesDetails[i]}>
 							<MatchDetails
 								{clamp}
-								league={rawdata.league}
-								rawMatch={rawdata.matches[i]}
+								league={leagueData.league}
+								rawMatch={leagueData.extData.matches[i]}
 								matchID={i}
-								{gpResults}
+								gpResults={leagueData.resByGp}
 								{match}
-								guestResults={leagueResultExt.matches[i]?.guestResults ?? []}
+								guestResults={leagueData.extData.matches[i]?.guestResults ?? []}
 							/>
 						</Modal>
 					</th>
@@ -112,7 +102,7 @@
 				<tr>
 					<th class="sticky"></th>
 					<th class="sticky"></th>
-					{#each rawdata.matches as match, i}
+					{#each leagueData.extData.matches as match, i}
 						<th
 							style="font-weight:normal; font-size:.9em; border-top: dashed 1px #999; vertical-align:middle;"
 						>
@@ -143,7 +133,7 @@
 
 		<!--#region main table -->
 		<tbody>
-			{#each gpResults as gp, i}
+			{#each leagueData.resByGp as gp, i}
 				<tr>
 					<td
 						class={['headingCell', 'sticky', subCategory(i)]}

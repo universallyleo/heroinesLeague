@@ -105,16 +105,20 @@ export function numberToKanji(num) {
 	return result;
 }
 
+// cf: https://colorbrewer2.org/#type=qualitative&scheme=Paired&n=12
 export const palette = [
 	'#e41a1c',
 	'#377eb8',
 	'#4daf4a',
 	'#984ea3',
 	'#ff7f00',
-	'#8dd3c7',
+	'#a6cee3',
 	'#a65628',
 	'#f781bf',
-	'#999999'
+	'#b2df8a',
+	'#cab2d6',
+	'#999999',
+	'#ffff99'
 ];
 
 export const sortMethod = {

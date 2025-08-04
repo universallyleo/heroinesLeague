@@ -14,7 +14,9 @@ import {
 const groupFiles = import.meta.glob('./data/groups/*.json', { eager: true });
 const leagueOneFiles = import.meta.glob('./data/league1/*.json', { eager: true });
 const leagueTwoFiles = import.meta.glob('./data/league2/*.json', { eager: true });
+/** @type {LeagueDataRaw[]} */
 export const leagueOne = [];
+/** @type {LeagueDataRaw[]} */
 export const leagueTwo = [];
 export const groups = [];
 [
@@ -27,6 +29,7 @@ export const groups = [];
 		g.push(f[path]);
 	});
 });
+
 // Object.keys(groupFiles).map((path) => {
 // 	groups.push(groupFiles[path]);
 // });
@@ -368,6 +371,23 @@ export function CalculateLeagueResult(raw) {
 	return res;
 }
 
+/**
+ * @typedef {Object} MatchSummary
+ * @property {string} shortdate
+ * @property {string} venue
+ * @property {number[]} fcRankToCount
+ * @property {number[]} rankToPoints
+ * @property {number} shimeiTotal
+ * @property {string} displayType
+ * @property {boolean} hasFC
+ * @property {boolean} hasShimei
+ * @property {number[]} guestIdx
+ */
+
+/**
+ * @param {LeagueDataExt} leagueResExt
+ * @returns {MatchSummary[]}
+ */
 export function extractSummaryFromLeagueResExt(leagueResExt) {
 	return leagueResExt.matches.map(
 		({
@@ -441,18 +461,62 @@ export function partitionResultToSortedGroups(resultdata) {
 /**
  * @param  {GroupResultSeries[]} gpresultdata
  * @param  {string[]} labels
- * @param  {'accumPt'|'shimeiNum'|'fc'|'totalRank'} series
+ * @param  {'accumPt'|'accumRank'|'totalRank'|'shimeiNum'|'shimeiPercent'|'fcRank'} series
  */
-export function seriesFromResult(gpresultdata, labels, series) {
+export function seriesFromResult(gpresultdata, labels, series, shimeiTotal = []) {
 	return {
 		labels,
 		datasets: gpresultdata.map((gr, i) => {
 			return {
 				label: groupDisplayShort(gr.group),
-				data: gr[series],
+				data:
+					series !== 'shimeiPercent'
+						? gr[series]
+						: gr['shimeiNum'].map((n, j) =>
+								shimeiTotal[j] ? ((n * 100) / shimeiTotal[j][0]).toFixed(2) : null
+							),
 				borderColor: `${palette[i]}`,
 				backgroundColor: `${palette[i]}`
 			};
 		})
 	};
 }
+
+/**
+ * @param  {string} strID
+ * @param {string} pattern  a key of matchPattern to tell which pattern to match
+ * return any subarray of [s,l,m], where s=season number, l=league number, m=match number; depneding on match pattern
+ */
+export function getIndexFromID(strID, pattern) {
+	let strs = strID.match(matchPattern[pattern]);
+	return strs ? strs.slice(1).map((d) => parseInt(d) - 1) : [];
+}
+
+const matchPattern = {
+	seasonLeague: /S(\d+)L(\d+)/,
+	seasonLeagueMatch: /S(\d+)L(\d+)M(\d+)/,
+	leagueMatch: /L(\d+)M(\d+)/
+};
+
+/**
+ * @typedef {Object} SeasonLeagueData
+ * @property {number} season
+ * @property {number} league
+ * @property {LeagueDataExt} extData
+ * @property {GroupResultSeries[]} resByGp
+ * @property {MatchSummary[]} summary
+ */
+/** @type {SeasonLeagueData[][]} */
+export const dataCollection = [leagueOne, leagueTwo].map((leagueSeasonData, i) => {
+	let LS = [];
+	for (let j = 0; j < leagueSeasonData.length; j++) {
+		/** @type {SeasonLeagueData} */
+		// @ts-ignore
+		let res = { league: i + 1, season: j + 1, extData: CalculateLeagueResult(leagueSeasonData[j]) };
+		res.resByGp = partitionResultToSortedGroups(res.extData);
+		res.summary = extractSummaryFromLeagueResExt(res.extData);
+		LS.push(res);
+	}
+	return LS;
+});
+// console.log(dataCollection);
