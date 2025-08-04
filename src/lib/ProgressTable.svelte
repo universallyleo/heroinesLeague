@@ -96,7 +96,7 @@
 						<Modal bind:open={openMatchesDetails[i]}>
 							<MatchDetails
 								{clamp}
-								league={rawdata.legaue}
+								league={rawdata.league}
 								rawMatch={rawdata.matches[i]}
 								matchID={i}
 								{gpResults}

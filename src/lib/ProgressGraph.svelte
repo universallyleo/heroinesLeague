@@ -8,12 +8,11 @@
 	let { progressData, title } = $props();
 	// let maxlength = $derived(progressData ? progressData.datasets[0].data.length : 0);
 	// let canvasWidth = $derived(Math.max(maxlength * 80, 1000));
-	let canvasHeight = $derived(Math.min(200 + progressData.datasets.length * 30, 700));
+	let maxData = $derived(Math.max(...progressData.datasets.map(({ data }) => Math.max(...data))));
+	// let canvasHeight = $derived(Math.min(200 + progressData.datasets.length * 50, 800));
+	let canvasHeight = $derived(Math.min(200 + maxData * 10, 800));
 	// $inspect('canvasHeight', canvasHeight);
-	let suggestYmax = $derived(
-		Math.max(...progressData.datasets.map(({ data }) => Math.max(...data))) + 10
-	);
-	// $inspect('Ymax', suggestYmax);
+	let suggestYmax = $derived(maxData + 10);
 
 	/****** Graph related setup ******/
 	let canvasContainer;
