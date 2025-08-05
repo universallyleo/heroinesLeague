@@ -290,12 +290,12 @@
 				{
 					"group": "heroken",
 					"time": ["1555", "1620"],
-					"tokuten": ["1625", "1725"]
+					"tokuten": ["1630", "1730"]
 				},
 				{
 					"group": "ladybaby",
 					"time": ["1620", "1645"],
-					"tokuten": ["1650", "1750"]
+					"tokuten": ["1655", "1755"]
 				},
 				{
 					"group": "calres",
@@ -305,7 +305,7 @@
 				{
 					"group": "ponkotu",
 					"time": ["1710", "1735"],
-					"tokuten": ["1740", "1840"]
+					"tokuten": ["1745", "1845"]
 				},
 				{
 					"group": "tenran",
@@ -338,8 +338,8 @@
 					"tokuten": ["after", ""]
 				}
 			],
-			"tweet": "https://x.com/heroines_idol/status/1946555660923285863",
-			"rules": ["https://x.com/heroines_idol/status/1946555660923285863"],
+			"tweet": "https://x.com/heroines_idol/status/1952202884264960105",
+			"rules": ["https://x.com/heroines_idol/status/1952202884264960105"],
 			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10],
 			"fcRankToCount": [45, 30, 20, 15, 15, 10, 10, 5, 5, 0]
 		},

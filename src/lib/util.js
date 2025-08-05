@@ -33,6 +33,14 @@ export function diffFromRanked(arr, rank, prev) {
 	return arr.map((x, i) => (rank[i] > 1 ? arr[prev[i]] - x : -1));
 }
 
+/**
+ *
+ * @param {number[]} arr arr to rank
+ * @param {Object} obj object to store the results
+ * @param {string} rkKey store rankings in obj[rkKey]
+ * @param {string} diffKey store difference in obj[diffKey]
+ * @param {(a:number,b:number)=>number} f  compare function
+ */
 export function rankDiffAssign(arr, obj, rkKey, diffKey, f = (a, b) => b - a) {
 	let ranked = rank(arr, f);
 	if (rkKey !== '') obj[rkKey] = ranked.rank;

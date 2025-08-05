@@ -93,13 +93,13 @@ export function groupDisplayShort(search_id) {
 	return g?.displayShort ?? g.displayName;
 }
 
+//#region object def
 /**
  *
  * @typedef {Object} StageSchedule
  * @property {string} group group ID
  * @property {Array<string>} time starts and ends time
  * @property {Array<string>} tokuten starts and ends time of buppan
- *
  *
  * @typedef {[string, number, number, number]} GuestDataRaw [codename, shimeiNum, FCrank, FCpt]
  *
@@ -412,6 +412,22 @@ export function extractSummaryFromLeagueResExt(leagueResExt) {
 			guestIdx
 		})
 	);
+}
+
+export function extractLastMatchDataByGroups(extData) {
+	let n = extData.matches.length;
+	let lastMatch = extData.matches[n];
+	// let rankToPoints = lastMatch.rankToPoints;
+	return extData.groups
+		.map((gp, i) => {
+			return {
+				group: gp,
+				accumPt: lastMatch.accumPt[i],
+				accumPtDiff: lastMatch.accumPtDiff[i],
+				accumRank: lastMatch.accumRank[i]
+			};
+		})
+		.toSorted((a, b) => ordering.accumRank(a.accumRank[n], b.accumRank[n]));
 }
 
 /**
