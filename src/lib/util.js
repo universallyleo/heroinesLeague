@@ -125,7 +125,7 @@ export const palette = [
 	'#f781bf',
 	'#b2df8a',
 	'#cab2d6',
-	'#999999',
+	'#555555',
 	'#ffff99'
 ];
 
@@ -157,3 +157,6 @@ export function fillArrayBy(arr, len, fillEntry = 0) {
 			: arr.concat(Array(len - arr.length).fill(fillEntry));
 	// concat is non-destructive
 }
+
+export const findAllIndices = (arr, val) =>
+	arr.reduce((acc, el, i) => (el === val ? [...acc, i] : acc), []);

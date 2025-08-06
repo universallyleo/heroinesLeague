@@ -26,7 +26,7 @@
 	function subCategory(i) {
 		// c.f. https://x.com/Barichy2/status/1921414855908581850/photo/2
 		if (leagueData.league == 1) {
-			return i < 4 ? 'upperGp' : i > 5 ? 'lowerGp' : 'midGp';
+			return i < 4 ? 'upperGp' : i >= leagueData.extData.groups.length - 3 ? 'lowerGp' : 'midGp';
 		} else {
 			return i < 3 ? 'upperGp' : 'midGp';
 		}

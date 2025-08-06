@@ -414,20 +414,44 @@ export function extractSummaryFromLeagueResExt(leagueResExt) {
 	);
 }
 
+/**
+ * @typedef {Object} GroupLastData
+ * @property {string} group
+ * @property {number} accumPt
+ * @property {number} accumPtDiff
+ * @property {number} accumRank
+ *
+ * @typedef {Object} LastData
+ * @property {number} matchID index of the last match in season
+ * @property {number[]} rankToPoints
+ * @property {GroupLastData[]} rankedGps
+ */
+
+/**
+ * @param {LeagueDataExt} extData
+ * @returns {LastData}
+ */
 export function extractLastMatchDataByGroups(extData) {
-	let n = extData.matches.length;
+	let n = extData.matches.reduceRight(
+		(foundIdx, m, idx) => (foundIdx !== -1 ? foundIdx : m.accumPt[0] !== undefined ? idx : -1),
+		-1
+	); //index of last match with record
 	let lastMatch = extData.matches[n];
-	// let rankToPoints = lastMatch.rankToPoints;
-	return extData.groups
-		.map((gp, i) => {
-			return {
-				group: gp,
-				accumPt: lastMatch.accumPt[i],
-				accumPtDiff: lastMatch.accumPtDiff[i],
-				accumRank: lastMatch.accumRank[i]
-			};
-		})
-		.toSorted((a, b) => ordering.accumRank(a.accumRank[n], b.accumRank[n]));
+	// console.log(lastMatch.rankToPoints);
+	return {
+		matchID: n,
+		rankToPoints: lastMatch.rankToPoints,
+		rankedGps: extData.groups
+			.map((gp, i) => {
+				return {
+					group: gp,
+					accumPt: lastMatch.accumPt[i],
+					accumPtDiff: lastMatch.accumPtDiff[i],
+					accumRank: lastMatch.accumRank[i]
+				};
+			})
+			.toSorted((a, b) => ordering.accumRank(a.accumRank, b.accumRank))
+	};
 }
 
 /**

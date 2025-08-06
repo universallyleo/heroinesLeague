@@ -210,6 +210,7 @@
 	}
 
 	.sticky {
+		background-color: white;
 		position: sticky;
 		z-index: 2;
 	}
