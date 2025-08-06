@@ -243,6 +243,7 @@ export const ordering = {
 	totalRank: (a, b) => sortMethod.incWithNullAtLast(a, b),
 	shimeiNum: (a, b) => sortMethod.decWithNullAtLast(a, b),
 	fcCount: (a, b) => sortMethod.decWithNullAtLast(a, b),
+	accumPt: (a, b) => sortMethod.decWithNullAtLast(a, b),
 	accumRank: (a, b) => sortMethod.incWithNullAtLast(a, b)
 };
 
