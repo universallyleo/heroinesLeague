@@ -41,6 +41,7 @@
 		"@sveltejs/adapter-static": "^3.0.8",
 		"chart.js": "^4.4.9",
 		"chartjs-plugin-datalabels": "^2.2.0",
+		"chartjs-plugin-dragdata": "^2.3.1",
 		"html-to-image": "^1.11.13"
 	}
 }

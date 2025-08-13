@@ -1,7 +1,8 @@
 {
 	"id": "ion",
 	"displayName": "iON!",
-	"displayShort": "アイオン",
+	"displayNameAlt": ["アイオン"],
+	"displayShort": "iON!",
 	"debut": "2025-05-22",
 
 	"members": [

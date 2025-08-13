@@ -103,6 +103,12 @@ export function groupDisplayShort(search_id) {
  *
  * @typedef {[string, number, number, number]} GuestDataRaw [codename, shimeiNum, FCrank, FCpt]
  *
+ * @typedef {Object} AssignMatchLPt
+ * @property {string} group
+ * @property {string} lp league pt get at the this match.  In reality this is a function ((getLPts:number[])=>number)
+ * storing function is now allowed in JSON, so store as string and evaluates later
+ * (this is unsafe, but we are in a closed system so acceptable)
+ *
  * @typedef {Object} MatchDataRaw
  * @property {string} date
  * @property {string} venue
@@ -117,7 +123,8 @@ export function groupDisplayShort(search_id) {
  * @property {Array<string>} [src] array of sources of match result data
  * @property {GuestDataRaw} [guestShimeiFC]
  * @property {string[]} [comments]
- * @property {number[]} guestIdx
+ * @property {number[]} [guestIdx]
+ * @property {AssignMatchLPt[]} [lpFormulae]
  * if have shimei and fcRank
  * 		=> match rank determined by (fcRankToCount + shimeiNum)
  * { league: "1",
@@ -133,7 +140,7 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} [fcCount]
  * @property {number[]} [countDiff]
  * @property {number[]} totalRank
- * @property {number[]} [getPt]
+ * @property {number[]} [getLPt]
  *
  * @typedef {Object} MatchDataExt
  * @extends MatchDataRaw
@@ -147,11 +154,13 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} [fcCount]
  * @property {number[]} countDiff
  * @property {number[]} totalRank
- * @property {number[]} getPt
+ * @property {number[]} getLPt
+ * @property {number[]} assignedPt calculate from LPFormula
  * @property {number[]} accumPt
  * @property {number[]} accumPtDiff
  * @property {number[]} accumRank
  * @property {GuestMatchData[]} guestResults
+ * @property {number[]} [assignedLP] calculated based on rawdata's lpFormula, only for later joined group
  *
  * @typedef {Object} LeagueDataRaw
  * @property {string} league
@@ -166,23 +175,6 @@ export function groupDisplayShort(search_id) {
  * @property {Array<number>} [rankToPoints] n-th entry = points given to (n+1)st place group
  * @property {Array<number>} [fcRankToCount] n-th entry = counts given to (n+1)st placed group
  * @property {Array<MatchDataExt>} matches array of all matches data
- *
- *
- * @typedef {Object} GroupResultSeries
- * @property {string} group  i-th entry of each of the remaining properties is the data from i-th match
- * @property {number} id
- * @property {number} rankNow
- * @property {number[]} shimeiNum
- * @property {number[]} shimeiRank
- * @property {number[]} shimeiDiff difference in shimei number from the group of one rank higher
- * @property {number[]} fcRank
- * @property {number[]} fcCount calculated using fcRankToCount
- * @property {number[]} totalRank determined by fcCount+shimeiNum
- * @property {number[]} countDiff
- * @property {number[]} getPt = rankToPoints[totalRank]
- * @property {number[]} accumPt
- * @property {number[]} accumPtDiff
- * @property {number[]} accumRank
  */
 
 //#region timetable
@@ -281,6 +273,7 @@ export function resultTypes(gpResult, matchID = 0) {
 	return { hasShimei, hasFC };
 }
 
+//#region main calculation
 /**
  * @param  {LeagueDataRaw} raw
  * @return {LeagueDataExt}
@@ -306,9 +299,9 @@ export function CalculateLeagueResult(raw) {
 		(mExt.hasFC = 'fcRankToCount' in match), (mExt.hasShimei = hasRes && 'shimeiNum' in match);
 		mExt.fcRankToCount = match?.fcRankToCount ?? raw.fcRankToCount;
 		mExt.rankToPoints = match?.rankToPoints ?? raw.rankToPoints;
-
-		// skip calculation if no result record
-		// if (!hasRes) continue;
+		if (!('guestIdx' in match)) {
+			mExt.guestIdx = [];
+		}
 
 		let totalCount = [];
 		if ('fcRank' in match) {
@@ -330,12 +323,16 @@ export function CalculateLeagueResult(raw) {
 
 		let rankedData = match.rank ? rank(match.rank, (a, b) => a - b) : rank(totalCount);
 		mExt.totalRank = rankedData.rank;
-		mExt.getPt = rankedData.rank.map((r) => mExt.rankToPoints[r - 1]);
-		// mExt.getPtDiff = diffFromRanked(mExt.getPt, rankedData.rank, rankedData.prev);
+		mExt.getLPt = rankedData.rank.map((r) => mExt.rankToPoints[r - 1]);
+		// mExt.getLPtDiff = diffFromRanked(mExt.getLPt, rankedData.rank, rankedData.prev);
 
-		mExt.accumPt =
-			n > 0 ? mExt.getPt.map((pt, i) => pt + (res.matches[n - 1]?.accumPt[i] ?? 0)) : mExt.getPt;
-		rankDiffAssign(mExt.accumPt, mExt, 'accumRank', 'accumPtDiff');
+		mExt.assignedLP = new Array(res.groups.length).fill(0).map((_, i) =>
+			// just return the index to apply formula
+			// do not calculate now, calculate after processed all match data
+			i >= mExt.getLPt.length && 'lpFormulae' in match
+				? match.lpFormulae.findIndex(({ group }) => group === res.groups[i])
+				: null
+		);
 
 		// tidy guest data if there is any
 		mExt.guestResults = [];
@@ -356,18 +353,57 @@ export function CalculateLeagueResult(raw) {
 					fcCount: [x[3] == -1 ? null : x[3]],
 					totalRank: [i + 1],
 					countDiff: [prevCount - x[1] - Math.max(x[3], 0)],
-					getPt: [-1] // for distinguish guest from match groups
+					getLPt: [-1] // for distinguish guest from match groups
 				};
 			});
 			mExt.guestResults = gd;
 		}
-		// mExt.guestIdx = getGuestIdx(raw.groups, match.timetable, match);
-		// console.log(match.date, 'guestIdx', mExt.guestIdx);
-
 		res.matches[n] = mExt;
 		// console.log(mExt);
 	}
 
+	// if (res.league == 1) {
+	// 	console.log(
+	// 		'first loop finished.',
+	// 		res.matches.map(({ totalRank }) => totalRank)
+	// 	);
+	// }
+
+	// loop again to process advanced data
+	for (const [sn, match] of Object.entries(res.matches)) {
+		if (match.totalRank.length > 0) {
+			let n = parseInt(sn);
+
+			match.assignedLP = match.assignedLP.map((lpfIdx, i) => {
+				if (lpfIdx != null) {
+					let gpLPts = res.matches.map(({ getLPt }) => (i < getLPt.length ? getLPt[i] : 0));
+					let f = eval(raw.matches[n].lpFormulae[lpfIdx].lp);
+					return lpfIdx >= 0 ? f(gpLPts) : 0;
+				} else {
+					return 0;
+				}
+			});
+			// console.log(`${n} (${match.date})`, 'assingedLP: ', match.assignedLP);
+			match.accumPt = match.assignedLP.map(
+				(pt, i) =>
+					((x) => (x > 0 ? x : null))(
+						Math.floor(
+							//! not sure whether they use round down or round up or normal rounding...
+							pt +
+								(i < match.getLPt.length ? match.getLPt[i] : 0) +
+								(n > 0 ? res.matches[n - 1].accumPt[i] : 0)
+						)
+					) // accum pt = assigned point + league pt from battle + previous accum. pt
+			);
+
+			// console.log(`${n} (${match.date})`, 'accumPt: ', match.accumPt);
+			rankDiffAssign(match.accumPt, match, 'accumRank', 'accumPtDiff');
+			// remove from league ranking until the group joins league battle formally.
+			match.accumRank = match.accumRank.slice(0, match.totalRank.length);
+		}
+	}
+
+	// console.log(res);
 	// @ts-ignore
 	return res;
 }
@@ -421,24 +457,34 @@ export function extractSummaryFromLeagueResExt(leagueResExt) {
  * @property {number} accumPt
  * @property {number} accumPtDiff
  * @property {number} accumRank
+ * @property {number} totalRank
  *
  * @typedef {Object} LastData
  * @property {number} matchID index of the last match in season
  * @property {number[]} rankToPoints
  * @property {GroupLastData[]} rankedGps
  */
+/**
+ * @param  {MatchDataExt[]} extMatches
+ * @returns {number} index of last match with record
+ */
+export function lastFinishedMatchID(extMatches) {
+	return extMatches.findLastIndex(({ totalRank }) => totalRank.length > 0);
+	// return extMatches.reduceRight(
+	// 	(foundIdx, m, idx) => (foundIdx !== -1 ? foundIdx : m.accumPt[0] !== undefined ? idx : -1),
+	// 	-1
+	// );
+}
 
 /**
  * @param {LeagueDataExt} extData
  * @returns {LastData}
  */
 export function extractLastMatchDataByGroups(extData) {
-	let n = extData.matches.reduceRight(
-		(foundIdx, m, idx) => (foundIdx !== -1 ? foundIdx : m.accumPt[0] !== undefined ? idx : -1),
-		-1
-	); //index of last match with record
+	let n = lastFinishedMatchID(extData.matches);
 	let lastMatch = extData.matches[n];
 	// console.log(lastMatch.rankToPoints);
+	//! does not yet handle the case when there is special assigned league pt.
 	return {
 		matchID: n,
 		rankToPoints: lastMatch.rankToPoints,
@@ -448,12 +494,34 @@ export function extractLastMatchDataByGroups(extData) {
 					group: gp,
 					accumPt: lastMatch.accumPt[i],
 					accumPtDiff: lastMatch.accumPtDiff[i],
-					accumRank: lastMatch.accumRank[i]
+					accumRank: lastMatch.accumRank[i],
+					totalRank: lastMatch.totalRank[i]
 				};
 			})
 			.toSorted((a, b) => ordering.accumRank(a.accumRank, b.accumRank))
 	};
 }
+
+//#region Series handling
+/**
+ * @typedef {Object} GroupResultSeries
+ * @property {string} group  i-th entry of each of the remaining properties is the data from i-th match
+ * @property {number} id
+ * @property {number} rankNow
+ * @property {"upperGp"|"lowerGp"|""} category 上位・下位グループ
+ * @property {number[]} shimeiNum
+ * @property {number[]} shimeiRank
+ * @property {number[]} shimeiDiff difference in shimei number from the group of one rank higher
+ * @property {number[]} fcRank
+ * @property {number[]} fcCount calculated using fcRankToCount
+ * @property {number[]} totalRank determined by fcCount+shimeiNum
+ * @property {number[]} countDiff
+ * @property {number[]} getLPt = rankToPoints[totalRank]
+ * @property {number[]} [assignedLP] = calculated from LPFormula, different from points get from battle
+ * @property {number[]} accumPt
+ * @property {number[]} accumPtDiff
+ * @property {number[]} accumRank
+ */
 
 /**
  * @param  {LeagueDataExt} resultdata
@@ -468,14 +536,16 @@ export function partitionResultToSortedGroups(resultdata) {
 		'fcCount',
 		'totalRank',
 		'countDiff',
-		'getPt',
+		'getLPt',
+		'assignedLP',
 		'accumPt',
 		'accumPtDiff',
 		'accumRank'
 	];
 	/** @type {GroupResultSeries[]} */
 	let gpResultData = [];
-	let n = resultdata.matches.findLastIndex(({ accumRank }) => accumRank.length > 0);
+	// let n = resultdata.matches.findLastIndex(({ accumRank }) => accumRank.length > 0);
+	let n = lastFinishedMatchID(resultdata.matches);
 	// console.log('n=', n, ' out of ', resultdata.matches.length, ' matches');
 
 	for (const [si, gp] of Object.entries(resultdata.groups)) {
@@ -492,6 +562,17 @@ export function partitionResultToSortedGroups(resultdata) {
 				key in m ? (m[key].length > i ? m[key][i] : null) : null
 			);
 		}
+		//! hardcoded category criteria (for now...)
+		if (resultdata.league == '1') {
+			gpResultData[i].category =
+				gpResultData[i].rankNow <= 4
+					? 'upperGp'
+					: gpResultData[i].rankNow > resultdata.groups.length - 4
+						? 'lowerGp'
+						: '';
+		} else if (resultdata.league == '2') {
+			gpResultData[i].category = gpResultData[i].rankNow <= 3 ? 'upperGp' : '';
+		}
 	}
 
 	gpResultData.sort((a, b) => ordering.accumRank(a.accumRank[n], b.accumRank[n]));
@@ -499,8 +580,11 @@ export function partitionResultToSortedGroups(resultdata) {
 	return gpResultData;
 }
 
+// dashed segment for data gap in series
+// see: https://www.chartjs.org/docs/latest/samples/line/segments.html
+const skipped = (ctx, value) => (ctx.p0.skip || ctx.p1.skip ? value : undefined);
 /**
- * @param  {GroupResultSeries[]} gpresultdata
+ * @param  {GroupResultSeries[]|GroupLastData[]} gpresultdata
  * @param  {string[]} labels
  * @param  {'accumPt'|'accumRank'|'totalRank'|'shimeiNum'|'shimeiPercent'|'fcRank'} series
  */
@@ -517,7 +601,13 @@ export function seriesFromResult(gpresultdata, labels, series, shimeiTotal = [])
 								shimeiTotal[j] ? ((n * 100) / shimeiTotal[j][0]).toFixed(2) : null
 							),
 				borderColor: `${palette[i]}`,
-				backgroundColor: `${palette[i]}`
+				backgroundColor: `${palette[i]}`,
+				pointHitRadius: 20, // larger area for intersect detection
+				segment: {
+					borderColor: (ctx) => skipped(ctx, 'rgb(0,0,0,0.5)'),
+					borderDash: (ctx) => skipped(ctx, [6, 6])
+				},
+				spanGaps: true
 			};
 		})
 	};
@@ -532,6 +622,8 @@ export function getIndexFromID(strID, pattern) {
 	let strs = strID.match(matchPattern[pattern]);
 	return strs ? strs.slice(1).map((d) => parseInt(d) - 1) : [];
 }
+
+//#region season handling
 
 const matchPattern = {
 	seasonLeague: /S(\d+)L(\d+)/,

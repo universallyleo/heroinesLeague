@@ -14,6 +14,7 @@
 			progressType === 'shimeiPercent' ? selectedData.summary.map((s) => s.shimeiTotal) : []
 		)
 	);
+	// $inspect(progressType === 'shimeiPercent' ? progressData : null);
 	let revertY = $derived(['accumRank', 'totalRank', 'fcRank'].includes(progressType));
 
 	let labels = {
@@ -21,7 +22,7 @@
 		accumRank: 'リーグ順位',
 		totalRank: '戦順位',
 		shimeiNum: '入場指名数',
-		shimeiPercent: '入場指名数/総入場数（パーセント）',
+		shimeiPercent: '入場指名数：総入場数（%）',
 		fcRank: 'FC投票順位'
 	};
 
@@ -54,7 +55,12 @@
 </div>
 
 <div class="graphContainer">
-	<ProgressGraph title={labels[progressType] + '推移'} {progressData} {revertY} />
+	<ProgressGraph
+		title={labels[progressType] + '推移'}
+		{progressData}
+		{revertY}
+		suggestedHeight={progressType == 'shimeiPercent' ? 800 : 0}
+	/>
 </div>
 
 <style>

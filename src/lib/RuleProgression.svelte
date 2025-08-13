@@ -51,6 +51,7 @@
 		/* max-width: 90%; */
 		margin: 0 auto;
 		display: grid;
+		gap: 1em;
 		grid-template-columns: 1fr 1fr;
 		justify-items: center;
 	}

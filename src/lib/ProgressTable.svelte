@@ -136,13 +136,13 @@
 			{#each leagueData.resByGp as gp, i}
 				<tr>
 					<td
-						class={['headingCell', 'sticky', subCategory(i)]}
+						class={['headingCell', 'sticky', gp.category]}
 						style="left:0;width:1.7em;text-wrap:wrap;"
 					>
 						<RankNumber rank={gp.rankNow} noDecorate={false} />
 					</td>
 					<td
-						class={['headingCell', 'sticky', 'gpLogo', subCategory(i)]}
+						class={['headingCell', 'sticky', 'gpLogo', gp.category]}
 						style="font-size:smaller;left:1.7em;"
 					>
 						<img

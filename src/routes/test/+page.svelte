@@ -1,16 +1,20 @@
 <script>
 	import { dataCollection, extractLastMatchDataByGroups, ordering } from '$lib/processData.js';
+	import { rankDiffAssign } from '$lib/util';
 	import GroupButton from '$lib/GroupButton.svelte';
 	import { onMount } from 'svelte';
-	import { rankDiffAssign } from '$lib/util';
+	import { fly } from 'svelte/transition';
 	// import Carousel from '$lib/Carousel.svelte';
 
 	let { clamp = false } = $props();
 	// let dataset = ['09/11', '10/01', '11/12'];
 	let showIcon = $state(true);
-	let league = $state(1);
-	let lastLeague = 1;
+	let league = $state(0);
+	let lastLeague = 0;
 	let rec = $derived(extractLastMatchDataByGroups(dataCollection[league][0].extData));
+	let lastMatchGpsRanked = $derived(
+		rec.rankedGps.toSorted((a, b) => ordering.totalRank(a.totalRank, b.totalRank))
+	);
 	// $inspect('rec', rec);
 	let cols = $state(1);
 	let selectedRow = $state(-1);
@@ -35,6 +39,22 @@
 			});
 			return obj;
 		}, res);
+		//!!! adhoc special handling for late joiners
+		if (league == 0 && newRanks.length > 0) {
+			let ionLPs = newRanks[0].map((_, j) =>
+				j < 2 ? rec.rankToPoints[newRanks.findIndex((row) => row[j] === 'ion')] : 0
+			);
+			ionLPs.unshift(dataCollection[league][0].extData.matches[3].getLPt[3]);
+			console.log(ionLPs);
+			let ionTotalgetLP = ionLPs.reduce((p, c, i) => p + c);
+			console.log(
+				'ion ap each battle: ',
+				((ionTotalgetLP / 3) * 0.7).toFixed(3),
+				', 3 match total: ',
+				(ionTotalgetLP * 0.7).toFixed(3)
+			);
+			res['ion'] = Math.floor(ionTotalgetLP * 0.7) + ionTotalgetLP;
+		}
 		console.log('res: ', res);
 		let res2 = Object.entries(res).reduce(
 			(obj, [key, val]) => {
@@ -80,7 +100,13 @@
 
 	function copyPrevRanks(col) {
 		for (let i = 0; i < numRows; i++) {
-			newRanks[i][col] = col > 0 ? newRanks[i][col - 1] : rec.rankedGps[i].group;
+			newRanks[i][col] = col > 0 ? newRanks[i][col - 1] : lastMatchGpsRanked[i].group;
+		}
+	}
+
+	function resetRanks(col) {
+		for (let i = 0; i < numRows; i++) {
+			newRanks[i][col] = '';
 		}
 	}
 
@@ -101,7 +127,7 @@
 	}
 
 	function swapGroup(i, j) {
-		console.log('swap called, state=', selectState);
+		// console.log('swap called, state=', selectState);
 		if (selectState == 'selecting') {
 			[selectedRow, selectedCol] = [i, j];
 		} else if (selectedCol == j) {
@@ -135,22 +161,24 @@
 		{/each}
 		<button onclick={addCol}> Add battle </button>
 	</div>
-	<div style="margin-bottom: 1em;">
+	<!-- <div style="margin-bottom: 1em;">
 		使い方： <span style="font-weight:bold;">
 			{selectState == 'selecting' ? 'Select cell' : 'Select group to assign or swap'}
 		</span>
-	</div>
+	</div> -->
 
 	<table>
 		<thead>
 			<tr>
-				<th style="vertical-align:bottom;"> {rec.matchID + 1}戦目までの順位 <br /> （リーグpt）</th>
+				<th style="vertical-align:bottom;"> 現総合順位 <br /> （リーグpt）</th>
 				<th></th>
+				<th style="vertical-align:bottom;">{rec.matchID + 1} 戦目順位</th>
 				{#each { length: cols }, i}
 					<th>
 						{rec.matchID + i + 2} 戦目<br /> 順位予想
 						<br />
-						<button class="btnCopyPrev" onclick={() => copyPrevRanks(i)}> 前戦からコピペ </button>
+						<button class="btn" onclick={() => copyPrevRanks(i)}> 前戦からコピペ </button>
+						<button class="btn" onclick={() => resetRanks(i)}> リセット </button>
 					</th>
 				{/each}
 				<th></th>
@@ -169,7 +197,14 @@
 					</td>
 
 					<td class="arrowBox"> ➡ </td>
-
+					<td onclick={() => selectGroup(lastMatchGpsRanked[i].group)}>
+						<GroupButton
+							group={lastMatchGpsRanked[i].group}
+							{clamp}
+							{showIcon}
+							addStyle={'margin: .2em auto;'}
+						/>
+					</td>
 					{#each { length: cols }, j}
 						<td
 							class={[
@@ -179,20 +214,22 @@
 							onclick={() => swapGroup(i, j)}
 						>
 							{#if newRanks.length > 0 && newRanks[i].length > 0 && newRanks[i][j] !== ''}
-								<GroupButton
-									group={newRanks[i][j]}
-									{clamp}
-									{showIcon}
-									addStyle={'margin: .2em auto;'}
-								/>
-								<button> x </button>
+								<div in:fly={{ x: -100, duration: 500 }} out:fly={{ x: 100, duration: 500 }}>
+									<GroupButton
+										group={newRanks[i][j]}
+										{clamp}
+										{showIcon}
+										addStyle={'margin: .2em auto;'}
+									/>
+								</div>
+								<!-- <button> x </button> -->
 							{/if}
-							<br />
-							+{rec.rankToPoints[i]}
+							<!-- <br /> -->
+							[ +{rec.rankToPoints[i]} ]
 						</td>
 					{/each}
 					<td class="arrowBox"> ➡ </td>
-					<td>
+					<td class="headingCell">
 						<GroupButton
 							group={finalRes[i].group}
 							{clamp}
@@ -251,7 +288,7 @@
 		background-color: hsl(62, 100%, 50%);
 		border: red 3px dotted !important;
 	}
-	.btnCopyPrev {
+	.btn {
 		background-color: #f2f7fa;
 		padding: 0.2em;
 		border: 1px black solid;

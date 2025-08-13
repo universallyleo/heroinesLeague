@@ -5,12 +5,15 @@
 	import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 	//to be made export
-	let { progressData, title, revertY = false } = $props();
+	let { progressData, title, revertY = false, suggestedHeight = 0 } = $props();
 	// let maxlength = $derived(progressData ? progressData.datasets[0].data.length : 0);
 	// let canvasWidth = $derived(Math.max(maxlength * 80, 1000));
 	let maxData = $derived(Math.max(...progressData.datasets.map(({ data }) => Math.max(...data))));
+	$inspect(maxData);
 	// let canvasHeight = $derived(Math.min(200 + progressData.datasets.length * 50, 800));
-	let canvasHeight = $derived(Math.min(200 + maxData * (maxData < 20 ? 80 : 10), 800));
+	let canvasHeight = $derived(
+		suggestedHeight != 0 ? suggestedHeight : Math.min(200 + maxData * (maxData < 20 ? 80 : 10), 800)
+	);
 	// $inspect('canvasHeight', canvasHeight);
 
 	/****** Graph related setup ******/
@@ -120,7 +123,7 @@
 		config.data = progressData;
 		config.options.plugins.title.text = title;
 		config.options.scales.y.reverse = revertY;
-		config.options.scales.y.suggestedMax = maxData + (maxData < 15 ? 1 : 10);
+		config.options.scales.y.suggestedMax = maxData + (maxData < 15 ? 1 : 5);
 		if (revertY) {
 			config.options.scales.y.suggestedMin = 0;
 		}

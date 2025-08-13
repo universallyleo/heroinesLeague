@@ -7,16 +7,22 @@
 	// let hasShimei = $derived(gpResult.shimeiNum[n] != null);
 	// let hasFC = $derived(gpResult.fcCount[n] != null);
 	let { hasShimei, hasFC } = $derived(resultTypes(gpResult, n));
-	let hasResult = $derived(gpResult.accumPt[n] > 0);
+	let hasResult = $derived(gpResult.totalRank[n] > 0);
 </script>
 
 <div class="dataCell">
 	<!-- style:grid-template-columns={detailed ? `auto 2em` : `2em 1.5em`} -->
 	{#if hasResult}
-		<div class="mainData">
+		{@render mainAndDiff(
+			gpResult.getLPt[n],
+			gpResult.accumPt[n],
+			gpResult.accumPtDiff[n],
+			n > 0 && detailed
+		)}
+		<!-- <div class="mainData">
 			{#if n > 0 && detailed}
 				<span style="font-weight:normal;font-size: .65em;color: #777;">
-					(+{gpResult.getPt[n]})
+					(+{gpResult.getLPt[n]})
 				</span>
 			{/if}
 			{gpResult.accumPt[n]}
@@ -24,30 +30,6 @@
 		<div class="mainDiff">
 			<span class="desc">Pt差</span><br />
 			{gpResult.accumPtDiff[n] >= 0 ? gpResult.accumPtDiff[n] : '-'}
-		</div>
-		<!-- <div class={['subData', detailed && (hasShimei || hasFC) ? 'boxed' : '']}>
-			{#if detailed}
-				{#if hasShimei}
-					<SubDataRow label="入場" pt={gpResult.shimeiNum[n]} diff={gpResult.shimeiDiff[n]} />
-				{/if}
-				{#if hasFC}
-					<SubDataRow label="ＦＣ" pt={gpResult.fcCount[n]} rank={gpResult.fcRank[n]} />
-				{/if}
-				{#if hasShimei && hasFC}
-					<SubDataRow
-						label="合計"
-						pt={gpResult.shimeiNum[n] + gpResult.fcCount[n]}
-						diff={gpResult.countDiff[n]}
-						addStyle="border-top:1px solid #777;"
-					/>
-				{/if}
-			{/if}
-			<SubDataRow
-				label="得点"
-				rank={gpResult.totalRank[n]}
-				pt={gpResult.getPt[n]}
-				border={detailed && hasShimei}
-			/>
 		</div> -->
 
 		<div class="subData">
@@ -66,7 +48,7 @@
 			{:else}
 				<div class="desc" style="display:flex; justify-content: space-between; width: 100%;">
 					<div>
-						+{gpResult.getPt[n]} pt
+						+{gpResult.getLPt[n]} pt
 					</div>
 					<div>
 						( <RankNumber rank={gpResult.totalRank[n]} /> )
@@ -74,10 +56,33 @@
 				</div>
 			{/if}
 		</div>
+	{:else if gpResult.assignedLP[n] > 0}
+		{@render mainAndDiff(
+			gpResult.assignedLP[n],
+			gpResult.accumPt[n],
+			gpResult.accumPtDiff[n],
+			n > 0 && detailed
+		)}
+		<div class="sub">リーグ戦未参加</div>
 	{:else}
 		未参加
 	{/if}
 </div>
+
+{#snippet mainAndDiff(matchpt, accumpt, diffpt, withAddition)}
+	<div class="mainData">
+		{#if withAddition}
+			<span style="font-weight:normal;font-size: .65em;color: #777;">
+				(+{matchpt})
+			</span>
+		{/if}
+		{accumpt}
+	</div>
+	<div class="mainDiff">
+		<span class="desc">Pt差</span><br />
+		{diffpt >= 0 ? diffpt : '-'}
+	</div>
+{/snippet}
 
 <style>
 	.dataCell {
