@@ -385,13 +385,6 @@ export function CalculateLeagueResult(raw) {
 		// console.log(mExt);
 	}
 
-	// if (res.league == 1) {
-	// 	console.log(
-	// 		'first loop finished.',
-	// 		res.matches.map(({ totalRank }) => totalRank)
-	// 	);
-	// }
-
 	// loop again to process advanced data
 	for (const [sn, match] of Object.entries(res.matches)) {
 		if (match.totalRank.length > 0) {
@@ -399,6 +392,7 @@ export function CalculateLeagueResult(raw) {
 
 			match.assignedLP = match.assignedLP.map((lpfIdx, i) => {
 				if (lpfIdx != null) {
+					// i-th group not yet joined battle <=> i<getLPt.length
 					let gpLPts = res.matches.map(({ getLPt }) => (i < getLPt.length ? getLPt[i] : 0));
 					if (lpfIdx > 0) {
 						const f = eval(raw.matches[n].lpFormulae[lpfIdx].lp);
@@ -419,13 +413,9 @@ export function CalculateLeagueResult(raw) {
 			match.accumPt = match.assignedLP.map(
 				(pt, i) =>
 					((x) => (x > 0 ? x : null))(
-						//! guess: they round to nearest 0.5
-						Math.round(
-							(pt +
-								(i < match.getLPt.length ? match.getLPt[i] : 0) +
-								(n > 0 ? res.matches[n - 1].accumPt[i] : 0)) *
-								2
-						) / 2
+						pt +
+							(i < match.getLPt.length ? match.getLPt[i] : 0) +
+							(n > 0 ? res.matches[n - 1].accumPt[i] : 0)
 					) // accum pt = assigned point + league pt from battle + previous accum. pt
 			);
 

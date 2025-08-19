@@ -1,5 +1,5 @@
 <script>
-	let { array, title, headings } = $props();
+	let { array, title, headings, subheadings = [] } = $props();
 
 	let numMatches = $derived([array[0].length, array[1].length]);
 	let numRows = $derived([array[0][0].length, array[1][0].length]);
@@ -18,6 +18,16 @@
 							<th> {headings[l][n]} </th>
 						{/each}
 					</tr>
+					{#if subheadings.length > 0}
+						<tr>
+							<th></th>
+							{#each { length: numMatches[l] }, n}
+								<th style="font-weight:normal; font-size: smaller;">
+									{array[l][n][0] >= 0 ? subheadings[l][n] : ''}
+								</th>
+							{/each}
+						</tr>
+					{/if}
 				</thead>
 				<tbody>
 					{#each { length: numRows[l] }, rk}

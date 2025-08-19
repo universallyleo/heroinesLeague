@@ -14,8 +14,8 @@
 	{#if hasResult}
 		{@render mainAndDiff(
 			gpResult.getLPt[n],
-			gpResult.accumPt[n],
-			gpResult.accumPtDiff[n],
+			parseFloat(gpResult.accumPt[n].toFixed(2)),
+			parseFloat(gpResult.accumPtDiff[n].toFixed(2)),
 			n > 0 && detailed
 		)}
 
@@ -45,9 +45,9 @@
 		</div>
 	{:else if gpResult.assignedLP[n] > 0}
 		{@render mainAndDiff(
-			parseFloat(gpResult.assignedLP[n].toFixed(1)),
-			parseFloat(gpResult.accumPt[n].toFixed(1)),
-			parseFloat(gpResult.accumPtDiff[n].toFixed(1)),
+			parseFloat(gpResult.assignedLP[n].toFixed(2)),
+			parseFloat(gpResult.accumPt[n].toFixed(2)),
+			'-',
 			n > 0 && detailed
 		)}
 		<div class="sub" style="font-size:smaller;">リーグ戦未参加</div>
@@ -76,7 +76,7 @@
 		width: 100%;
 		display: grid;
 		gap: 2px;
-		grid-template-columns: auto 2em;
+		grid-template-columns: auto 2.2em;
 		grid-template-areas:
 			'main diff'
 			'sub sub';
