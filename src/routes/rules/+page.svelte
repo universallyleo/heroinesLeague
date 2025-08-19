@@ -80,6 +80,13 @@
 		</li>
 		<li>総合得点に基づいて順位（戦順位）を決定し、その順位に応じて「ポイント」を付与</li>
 		<li>各リーグ内ランキングは、各戦のポイントの合計により決まります</li>
+		<li>
+			ゲストも得点が集計されるため、他のグループの獲得リーグptに影響します {@render confirmed(
+				'2025-08',
+				'1957373881947435427',
+				'例：2025-07 League 2 大阪戦'
+			)}
+		</li>
 	</ul>
 
 	シーズン終了に関する事項
@@ -93,10 +100,10 @@
 			)}
 		</li>
 		<li>
-			{@render defText('上位グループ')}：リーグ１の場合は最終ランキングの1～4位 ({@render confirmed(
+			{@render defText('上位グループ')}：リーグ１の場合は最終ランキングの1～4位 {@render confirmed(
 				'2025-08',
 				'1955555152917930171'
-			)} )、リーグ２の場合は1～3位 {@render cautionText()}
+			)}、リーグ２の場合は1～4位 {@render confirmed('2025-08', '1957373881947435427')}
 		</li>
 		<li>
 			{@render defText('下位グループ')}：リーグ１の場合はランキングの下位4グループ 、リーグ２はなし
@@ -126,7 +133,7 @@
 		<!-- <li>殿堂入りグループは今後リーグ戦免除する {@render cautionText()}</li> -->
 	</ul>
 
-	<p style="font-size: smaller; color: #777;">※要確認事項：ソースを教えてください。</p>
+	<!-- <p style="font-size: smaller; color: #777;">※要確認事項：ソースを教えてください。</p> -->
 </div>
 <!-- </div> -->
 
@@ -138,15 +145,15 @@
 	&nbsp;<span class="caution">（ ※要確認！）</span>&nbsp;
 {/snippet}
 
-{#snippet confirmed(date, src)}
-	&nbsp;<span class="confirmed"
-		>（ <a href={`https://x.com/heroines_idol/status/${src}`}>{date}で確認済み</a>）</span
-	>&nbsp;
+{#snippet confirmed(date, src, comment = '')}
+	&nbsp; <span class="confirmed"
+		>（ <a href={`https://x.com/heroines_idol/status/${src}`}>{date}で確認済み</a> &nbsp; {comment}）
+	</span> &nbsp;
 {/snippet}
 
 <style>
 	.confirmed {
-		color: var(--color-bg-2);
+		color: var(--color-theme-1);
 		font-size: small;
 	}
 

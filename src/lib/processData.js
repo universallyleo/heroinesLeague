@@ -108,6 +108,13 @@ export function groupDisplayShort(search_id) {
  * @property {string} lp league pt get at the this match.  In reality this is a function ((getLPts:number[])=>number)
  * storing function is now allowed in JSON, so store as string and evaluates later
  * (this is unsafe, but we are in a closed system so acceptable)
+ * example:
+			"lpFormulae": [
+				{
+					"group": "ion",
+					"lp": "(pts)=>Math.floor((pts[3]+pts[4]+pts[5])/3*0.7)"
+				}
+			]
  *
  * @typedef {Object} MatchDataRaw
  * @property {string} date
@@ -163,18 +170,20 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} [assignedLP] calculated based on rawdata's lpFormula, only for later joined group
  *
  * @typedef {Object} LeagueDataRaw
- * @property {string} league
+ * @property {number} league
  * @property {Array<string>} groups
  * @property {Array<number>} [rankToPoints] n-th entry = points given to (n+1)st place group
  * @property {Array<number>} [fcRankToCount] n-th entry = counts given to (n+1)st placed group
  * @property {Array<MatchDataRaw>} matches array of all matches data
+ * @property {number} assignLPWeight weighting on league pts assigned to groups in match they have not yet participated (league assigned in each match = WEIGHTED average of partcipated matches)
  *
  * @typedef {Object} LeagueDataExt
- * @property {string} league
+ * @property {number} league
  * @property {Array<string>} groups
  * @property {Array<number>} [rankToPoints] n-th entry = points given to (n+1)st place group
  * @property {Array<number>} [fcRankToCount] n-th entry = counts given to (n+1)st placed group
  * @property {Array<MatchDataExt>} matches array of all matches data
+ * @property {number} assignLPWeight weighting on league pts assigned to groups in match they have not yet participated (league assigned in each match = average of league pts in all particpated matches * weight)
  */
 
 //#region timetable
@@ -321,18 +330,32 @@ export function CalculateLeagueResult(raw) {
 			}
 		}
 
-		let rankedData = match.rank ? rank(match.rank, (a, b) => a - b) : rank(totalCount);
-		mExt.totalRank = rankedData.rank;
-		mExt.getLPt = rankedData.rank.map((r) => mExt.rankToPoints[r - 1]);
+		// having rank in match allows over-riding ranking determined by counts;
+		// e.g. when there is guest who can changes ranking but without publicised shimei/FC data.
+		let rankedData = 'rank' in match ? rank(match.rank, (a, b) => a - b) : rank(totalCount);
+		mExt.totalRank = 'rank' in match ? match.rank : rankedData.rank;
+		mExt.getLPt = mExt.totalRank.map((r) => mExt.rankToPoints[r - 1]);
 		// mExt.getLPtDiff = diffFromRanked(mExt.getLPt, rankedData.rank, rankedData.prev);
+		// if (raw.league == 2) {
+		// 	console.log(`** L${raw.league} ***** ${n} **** (${match.date})`);
+		// 	console.log(`totalRank: `, mExt.totalRank);
+		// 	console.log(`getLPt: `, mExt.getLPt);
+		// }
 
-		mExt.assignedLP = new Array(res.groups.length).fill(0).map((_, i) =>
-			// just return the index to apply formula
-			// do not calculate now, calculate after processed all match data
-			i >= mExt.getLPt.length && 'lpFormulae' in match
-				? match.lpFormulae.findIndex(({ group }) => group === res.groups[i])
-				: null
-		);
+		mExt.assignedLP = new Array(res.groups.length).fill(0).map((_, i) => {
+			if (i >= mExt.getLPt.length) {
+				// do not calculate now, calculate after processed all match data
+				// so just return the index to apply formula (if there exists custom formula),
+				//    or just return 0 as a 'flag' to trigger backward calculation using weighted average
+				return 'lpFormulae' in match
+					? match.lpFormulae.findIndex(({ group }) => group === res.groups[i])
+					: 0;
+			} else {
+				return null;
+			}
+		});
+		// console.log(`** L${raw.league} ***** ${n} **** (${match.date})`);
+		// console.log(`assignLP idx: `, mExt.assignedLP);
 
 		// tidy guest data if there is any
 		mExt.guestResults = [];
@@ -377,8 +400,17 @@ export function CalculateLeagueResult(raw) {
 			match.assignedLP = match.assignedLP.map((lpfIdx, i) => {
 				if (lpfIdx != null) {
 					let gpLPts = res.matches.map(({ getLPt }) => (i < getLPt.length ? getLPt[i] : 0));
-					let f = eval(raw.matches[n].lpFormulae[lpfIdx].lp);
-					return lpfIdx >= 0 ? f(gpLPts) : 0;
+					if (lpfIdx > 0) {
+						const f = eval(raw.matches[n].lpFormulae[lpfIdx].lp);
+						// console.log(
+						// 	`assingedLP calculated for ${res.groups[i]} = ${f(gpLPts)} evaluated on [${gpLPts}]`
+						// );
+						return f(gpLPts);
+					} else {
+						const sum = gpLPts.reduce((p, c) => p + c);
+						const divBy = gpLPts.length - gpLPts.findIndex((x) => x > 0);
+						return divBy > 0 ? (sum / divBy) * raw.assignLPWeight : 0;
+					}
 				} else {
 					return 0;
 				}
@@ -387,12 +419,13 @@ export function CalculateLeagueResult(raw) {
 			match.accumPt = match.assignedLP.map(
 				(pt, i) =>
 					((x) => (x > 0 ? x : null))(
-						Math.floor(
-							//! not sure whether they use round down or round up or normal rounding...
-							pt +
+						//! guess: they round to nearest 0.5
+						Math.round(
+							(pt +
 								(i < match.getLPt.length ? match.getLPt[i] : 0) +
-								(n > 0 ? res.matches[n - 1].accumPt[i] : 0)
-						)
+								(n > 0 ? res.matches[n - 1].accumPt[i] : 0)) *
+								2
+						) / 2
 					) // accum pt = assigned point + league pt from battle + previous accum. pt
 			);
 
@@ -563,15 +596,15 @@ export function partitionResultToSortedGroups(resultdata) {
 			);
 		}
 		//! hardcoded category criteria (for now...)
-		if (resultdata.league == '1') {
+		if (resultdata.league == 1) {
 			gpResultData[i].category =
 				gpResultData[i].rankNow <= 4
 					? 'upperGp'
 					: gpResultData[i].rankNow > resultdata.groups.length - 4
 						? 'lowerGp'
 						: '';
-		} else if (resultdata.league == '2') {
-			gpResultData[i].category = gpResultData[i].rankNow <= 3 ? 'upperGp' : '';
+		} else if (resultdata.league == 2) {
+			gpResultData[i].category = gpResultData[i].rankNow <= 4 ? 'upperGp' : '';
 		}
 	}
 

@@ -11,7 +11,6 @@
 </script>
 
 <div class="dataCell">
-	<!-- style:grid-template-columns={detailed ? `auto 2em` : `2em 1.5em`} -->
 	{#if hasResult}
 		{@render mainAndDiff(
 			gpResult.getLPt[n],
@@ -19,18 +18,6 @@
 			gpResult.accumPtDiff[n],
 			n > 0 && detailed
 		)}
-		<!-- <div class="mainData">
-			{#if n > 0 && detailed}
-				<span style="font-weight:normal;font-size: .65em;color: #777;">
-					(+{gpResult.getLPt[n]})
-				</span>
-			{/if}
-			{gpResult.accumPt[n]}
-		</div>
-		<div class="mainDiff">
-			<span class="desc">Pt差</span><br />
-			{gpResult.accumPtDiff[n] >= 0 ? gpResult.accumPtDiff[n] : '-'}
-		</div> -->
 
 		<div class="subData">
 			{#if detailed}
@@ -58,12 +45,12 @@
 		</div>
 	{:else if gpResult.assignedLP[n] > 0}
 		{@render mainAndDiff(
-			gpResult.assignedLP[n],
-			gpResult.accumPt[n],
-			gpResult.accumPtDiff[n],
+			parseFloat(gpResult.assignedLP[n].toFixed(1)),
+			parseFloat(gpResult.accumPt[n].toFixed(1)),
+			parseFloat(gpResult.accumPtDiff[n].toFixed(1)),
 			n > 0 && detailed
 		)}
-		<div class="sub">リーグ戦未参加</div>
+		<div class="sub" style="font-size:smaller;">リーグ戦未参加</div>
 	{:else}
 		未参加
 	{/if}
