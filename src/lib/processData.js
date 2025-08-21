@@ -289,7 +289,7 @@ export function resultTypes(gpResult, matchID = 0) {
  */
 export function CalculateLeagueResult(raw) {
 	const res = Object.fromEntries(
-		['league', 'groups', 'rankToPoints', 'fcRankToCount']
+		['league', 'groups', 'rankToPoints', 'fcRankToCount', 'assignLPWeight']
 			.filter((k) => k in raw)
 			.map((k) => [k, raw[k]])
 	);

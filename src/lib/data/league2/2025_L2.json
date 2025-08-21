@@ -351,7 +351,7 @@
 			"src": ["https://x.com/ks_ecophysi/status/1953060096029933867"]
 		},
 		{
-			"date": "2025-08-27",
+			"date": "2025-08-21",
 			"venue": "栄Zephyr Hall",
 			"timetable": [
 				{
@@ -432,6 +432,7 @@
 			"guestIdx": [],
 			"tweet": "https://x.com/heroines_idol/status/1957373881947435427",
 			"rules": ["https://x.com/heroines_idol/status/1957373881947435427"],
+			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5, 5],
 			"fcRankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5, 5]
 		}
 	]

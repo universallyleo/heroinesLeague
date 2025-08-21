@@ -1,5 +1,10 @@
 <script>
-	import { dataCollection, extractLastMatchDataByGroups, ordering } from '$lib/processData.js';
+	import {
+		dataCollection,
+		extractLastMatchDataByGroups,
+		lastFinishedMatchID,
+		ordering
+	} from '$lib/processData.js';
 	import { rankDiffAssign } from '$lib/util';
 	import GroupButton from '$lib/GroupButton.svelte';
 	import { onMount } from 'svelte';
@@ -9,61 +14,98 @@
 	let { clamp = false } = $props();
 	// let dataset = ['09/11', '10/01', '11/12'];
 	let showIcon = $state(true);
-	let league = $state(0);
+	let league = $state(1);
 	let lastLeague = 0;
-	let rec = $derived(extractLastMatchDataByGroups(dataCollection[league][0].extData));
-	let lastMatchGpsRanked = $derived(
-		rec.rankedGps.toSorted((a, b) => ordering.totalRank(a.totalRank, b.totalRank))
-	);
+	let lastMatchID = $derived(lastFinishedMatchID(dataCollection[league][0].extData.matches));
+	let lastMatch = $derived(dataCollection[league][0].extData.matches[lastMatchID]);
+	// let rec = $derived(extractLastMatchDataByGroups(dataCollection[league][0].extData));
+	let resByGps = $derived(dataCollection[league][0].resByGp);
+	// let gpIDs = $derived(
+	// 	dataCollection[league][0].extData.groups.reduce((obj, gp, i) => {
+	// 		obj[gp] = i;
+	// 		return obj;
+	// 	}, {})
+	// );
 	// $inspect('rec', rec);
-	let cols = $state(1);
 	let selectedRow = $state(-1);
 	let selectedCol = $state(-1);
 	let selectState = $derived(selectedRow != -1 && selectedCol != -1 ? 'selected' : 'selecting');
 	let selectedGroup = $state('');
-	let numRows = $derived(rec.rankedGps.length);
+	let numFutureMatch = $derived(dataCollection[league][0].extData.matches.length - lastMatchID - 1);
+	let cols = $derived(Math.max(numFutureMatch, 1));
+	let numRows = $derived(resByGps.length);
 	// let gpToIdx = $derived(rec.rankedGps.reduce( (res,{group},i) => res[group]=i, {}));
-	let newRanks = $state([]);
+	let newRanks = $state([]); // (i,j)-entry = name of group at i-th rank in the j-th future mach
 	$inspect('newRanks', newRanks);
 	let finalRes = $derived.by(() => {
-		let res = rec.rankedGps.reduce((res, { group, accumPt }) => {
-			res[group] = accumPt;
+		let lateJoiners = [];
+		let accumPts = resByGps.reduce((res, { group, assignedLP, accumPt }) => {
+			// determine if we can just copy accumPt or need to recalculate assignedLP
+			if (assignedLP.some((x) => x !== 0)) {
+				const i = dataCollection[league][0].extData.groups.indexOf(group);
+				const getPts = dataCollection[league][0].extData.matches.map(({ getLPt }) =>
+					i < getLPt.length ? getLPt[i] : 0
+				);
+				res[group] = getPts.reduce((p, c) => p + c);
+				lateJoiners.push({
+					group: group,
+					id: i,
+					numMatchesToAssign: getPts.findIndex((p) => p > 0)
+				});
+			} else {
+				res[group] = accumPt[lastMatchID];
+			}
 			return res;
 		}, {});
-		res = newRanks.reduce((obj, rks, i) => {
-			rks.forEach((gp) => {
+		console.log('lateJoiners', lateJoiners);
+		accumPts = newRanks.reduce((obj, rks, i) => {
+			rks.forEach((gp, j) => {
 				if (gp !== '') {
 					// console.log(`added ${rec.rankToPoints[i]} to ${gp}`);
-					obj[gp] += rec.rankToPoints[i];
+					obj[gp] +=
+						numFutureMatch > 0
+							? dataCollection[league][0].extData.matches[lastMatchID + j + 1].rankToPoints[i]
+							: lastMatch.rankToPoints[i];
 				}
 			});
 			return obj;
-		}, res);
-		//!!! adhoc special handling for late joiners
-		if (league == 0 && newRanks.length > 0) {
-			let ionLPs = newRanks[0].map((_, j) =>
-				j < 2 ? rec.rankToPoints[newRanks.findIndex((row) => row[j] === 'ion')] : 0
-			);
-			ionLPs.unshift(dataCollection[league][0].extData.matches[3].getLPt[3]);
-			console.log(ionLPs);
-			let ionTotalgetLP = ionLPs.reduce((p, c, i) => p + c);
-			console.log(
-				'ion ap each battle: ',
-				((ionTotalgetLP / 3) * 0.7).toFixed(3),
-				', 3 match total: ',
-				(ionTotalgetLP * 0.7).toFixed(3)
-			);
-			res['ion'] = Math.floor(ionTotalgetLP * 0.7) + ionTotalgetLP;
-		}
-		console.log('res: ', res);
-		let res2 = Object.entries(res).reduce(
-			(obj, [key, val]) => {
-				obj.groups.push(key);
-				obj.accumPt.push(val);
+		}, accumPts);
+		let res2 = Object.entries(accumPts).reduce(
+			(obj, [gp, pt]) => {
+				obj.groups.push(gp);
+				obj.accumPt.push(pt);
+				let i = lateJoiners.findIndex(({ group }) => group === gp);
+				// obj.numMatchesToAssign.push(i >= 0 ? lateJoiners[i].numMatchesToAssign : 0);
+				if (i >= 0) {
+					const ap =
+						pt /
+						(dataCollection[league][0].extData.matches.length - lateJoiners[i].numMatchesToAssign);
+					obj.assignPt.push(ap * dataCollection[league][0].extData.assignLPWeight);
+					const a = obj.accumPt.pop();
+					// console.log(
+					// 	'a=',
+					// 	a,
+					// 	' | ap=',
+					// 	ap,
+					// 	' | wt=',
+					// 	dataCollection[league][0].extData.assignLPWeight,
+					// 	' | numAssign=',
+					// 	lateJoiners[i].numMatchesToAssign
+					// );
+					obj.accumPt.push(
+						a +
+							ap *
+								dataCollection[league][0].extData.assignLPWeight *
+								lateJoiners[i].numMatchesToAssign
+					);
+				} else {
+					obj.assignPt.push(null);
+				}
 				return obj;
 			},
-			{ groups: [], accumPt: [] }
+			{ groups: [], accumPt: [], assignPt: [] }
 		);
+		console.log('res2', res2);
 		rankDiffAssign(res2.accumPt, res2, 'accumRank', 'accumPtDiff', ordering.accumPt);
 		// console.log('res2: ', res2);
 
@@ -74,7 +116,8 @@
 				// @ts-ignore
 				accumPtDiff: res2.accumPtDiff[i],
 				// @ts-ignore
-				accumRank: res2.accumRank[i]
+				accumRank: res2.accumRank[i],
+				assignPt: res2.assignPt[i] ?? 0
 			};
 		});
 		return res3.toSorted((a, b) => ordering.accumRank(a.accumRank, b.accumRank));
@@ -84,8 +127,7 @@
 	// const toggleCell = (i, j) =>
 	// 	([selectedRow, selectedCol] = selectState == 'selecting' ? [i, j] : [-1, -1]);
 	const resetCalculation = () => {
-		cols = 1;
-		newRanks = new Array(numRows).fill(['']);
+		newRanks = new Array(numRows).fill().map(() => new Array(cols).fill().map(() => ''));
 	};
 	const resetSelection = () => {
 		[selectState, selectedCol, selectedRow] = ['selecting', -1, -1];
@@ -98,6 +140,11 @@
 		}
 	}
 
+	let lastMatchGpsRanked = $derived(
+		resByGps.toSorted((a, b) =>
+			ordering.totalRank(a.totalRank[lastMatchID], b.totalRank[lastMatchID])
+		)
+	);
 	function copyPrevRanks(col) {
 		for (let i = 0; i < numRows; i++) {
 			newRanks[i][col] = col > 0 ? newRanks[i][col - 1] : lastMatchGpsRanked[i].group;
@@ -172,10 +219,10 @@
 			<tr>
 				<th style="vertical-align:bottom;"> 現総合順位 <br /> （リーグpt）</th>
 				<th></th>
-				<th style="vertical-align:bottom;">{rec.matchID + 1} 戦目順位</th>
+				<th style="vertical-align:bottom;">{lastMatchID + 1} 戦目順位</th>
 				{#each { length: cols }, i}
 					<th>
-						{rec.matchID + i + 2} 戦目<br /> 順位予想
+						{lastMatchID + i + 2} 戦目<br /> 順位予想
 						<br />
 						<button class="btn" onclick={() => copyPrevRanks(i)}> 前戦からコピペ </button>
 						<button class="btn" onclick={() => resetRanks(i)}> リセット </button>
@@ -186,13 +233,21 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each rec.rankedGps as gp, i (gp.group)}
+			{#each resByGps as resgp, i (resgp.group)}
 				<tr>
-					<td class="headingCell sticky" onclick={() => selectGroup(gp.group)}>
-						<GroupButton group={gp.group} {clamp} {showIcon} addStyle={'margin: .2em auto;'} />
-						<span class="mainData"> {gp.accumPt} </span> &nbsp;&nbsp;
+					<td class="headingCell sticky" onclick={() => selectGroup(resgp.group)}>
+						<GroupButton group={resgp.group} {clamp} {showIcon} addStyle={'margin: .2em auto;'} />
+						{resgp.accumPt
+							.slice(0, lastMatchID)
+							.map((p, i) => parseFloat((p - (i == 0 ? 0 : resgp.accumPt[i - 1])).toFixed(2)))
+							.join('+')}
+						<br />
+						<span class="mainData"> {parseFloat(resgp.accumPt[lastMatchID].toFixed(2))} </span>
+						&nbsp;&nbsp;
 						<span style="font-size:small; color:#555;">
-							{@html gp.accumPtDiff >= 0 ? `差&nbsp;${gp.accumPtDiff}` : ''}
+							{@html resgp.accumPtDiff[lastMatchID] >= 0
+								? `差&nbsp;${parseFloat(resgp.accumPtDiff[lastMatchID].toFixed(2))}`
+								: ''}
 						</span>
 					</td>
 
@@ -225,7 +280,9 @@
 								<!-- <button> x </button> -->
 							{/if}
 							<!-- <br /> -->
-							[ +{rec.rankToPoints[i]} ]
+							[ +{numFutureMatch > 0
+								? dataCollection[league][0].extData.matches[lastMatchID + j + 1].rankToPoints[i]
+								: lastMatch.rankToPoints[i]} ]
 						</td>
 					{/each}
 					<td class="arrowBox"> ➡ </td>
@@ -233,12 +290,26 @@
 						<GroupButton
 							group={finalRes[i].group}
 							{clamp}
-							showIcon={true}
+							{showIcon}
 							addStyle={'margin: .2em auto;'}
 						/>
-						<span class="mainData"> {finalRes[i].accumPt} </span> &nbsp;&nbsp;
+						{#if finalRes[i].assignPt > 0}
+							<span style="background: hsl(328, 88%, 70%);">
+								{parseFloat(
+									resByGps.find(({ group }) => group === finalRes[i].group).accumPt[0].toFixed(2)
+								)} → {parseFloat(finalRes[i].assignPt.toFixed(2))}
+							</span>
+							<br />
+						{/if}
+						<!-- {resgp.accumPt
+							.slice(0, lastMatchID)
+							.map((p, i) => parseFloat((p - (i == 0 ? 0 : resgp.accumPt[i - 1])).toFixed(2)))
+							.join('+')}
+						<br /> -->
+						<span class="mainData"> {parseFloat(finalRes[i].accumPt.toFixed(2))} </span>
+						&nbsp;&nbsp;
 						<span style="font-size:small; color:#555;">
-							{@html i > 0 ? `差&nbsp;${finalRes[i].accumPtDiff}` : ''}
+							{@html i > 0 ? `差&nbsp;${parseFloat(finalRes[i].accumPtDiff.toFixed(2))}` : ''}
 						</span>
 					</td>
 				</tr>
@@ -270,7 +341,8 @@
 	}
 	.mainData {
 		background: rgb(214, 236, 248);
-		padding: 0.2em 0.4em;
+		padding: 0.1em 0.4em;
+		margin: 0.1em 0;
 		font-size: larger;
 		font-weight: bold;
 	}
