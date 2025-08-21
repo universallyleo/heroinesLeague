@@ -412,7 +412,9 @@
 			],
 			"tweet": "https://x.com/heroines_idol/status/1957791565080064162",
 			"rules": ["https://x.com/heroines_idol/status/1946555660923285863"],
-			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10]
+			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10],
+			"shimeiNum": [40, 98, 58, 56, 25, 29, 31, 15, 27, 150, 132],
+			"src": "https://x.com/yuki_kyo2ya/status/1958488722074374396"
 		},
 		{
 			"date": "2025-09-22",

@@ -48,7 +48,8 @@
 			parseFloat(gpResult.assignedLP[n].toFixed(2)),
 			parseFloat(gpResult.accumPt[n].toFixed(2)),
 			'-',
-			n > 0 && detailed
+			n > 0 && detailed,
+			['assigned']
 		)}
 		<div class="sub" style="font-size:smaller;">リーグ戦未参加</div>
 	{:else}
@@ -56,8 +57,8 @@
 	{/if}
 </div>
 
-{#snippet mainAndDiff(matchpt, accumpt, diffpt, withAddition)}
-	<div class="mainData">
+{#snippet mainAndDiff(matchpt, accumpt, diffpt, withAddition, addClass = [])}
+	<div class={['mainData'].concat(addClass)}>
 		{#if withAddition}
 			<span style="font-weight:normal;font-size: .65em;color: #777;">
 				(+{matchpt})
@@ -90,6 +91,10 @@
 		align-self: center;
 		padding: 0.3em 0;
 		background: rgb(214, 236, 248);
+	}
+
+	.assigned {
+		color: var(--color-theme-1);
 	}
 
 	.mainDiff {
