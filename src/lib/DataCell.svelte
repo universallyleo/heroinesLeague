@@ -43,15 +43,15 @@
 				</div>
 			{/if}
 		</div>
-	{:else if gpResult.assignedLP[n] > 0}
+	{:else if gpResult.assignedLP[n] === 0}
 		{@render mainAndDiff(
-			parseFloat(gpResult.assignedLP[n].toFixed(2)),
+			parseFloat(gpResult.accumPt[0].toFixed(2)),
 			parseFloat(gpResult.accumPt[n].toFixed(2)),
 			'-',
 			n > 0 && detailed,
 			['assigned']
 		)}
-		<div class="sub" style="font-size:smaller;">リーグ戦未参加</div>
+		<div class="sub" style="font-size:smaller;">リーグ未参加</div>
 	{:else}
 		未参加
 	{/if}

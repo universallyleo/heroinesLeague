@@ -296,9 +296,10 @@ export function CalculateLeagueResult(raw) {
 	res.matches = [];
 	// let numGp = raw.groups.length;
 
+	let firstJoinAt = new Array(raw.groups.length);
 	for (const [sn, match] of Object.entries(raw.matches)) {
 		let n = parseInt(sn);
-		// console.log(`************ ${n} ************ (${match.date})`);
+		console.log(`************ ${n} ************ (${match.date})`);
 		/** @type {MatchDataExt} */
 		let mExt = { ...match }; // faster than structured clone; our data are only array of numbers and strings anyway
 
@@ -342,20 +343,31 @@ export function CalculateLeagueResult(raw) {
 		// 	console.log(`getLPt: `, mExt.getLPt);
 		// }
 
-		mExt.assignedLP = new Array(res.groups.length).fill(0).map((_, i) => {
+		mExt.assignedLP = new Array(res.groups.length).fill().map((_, i) => {
 			if (i >= mExt.getLPt.length) {
 				// do not calculate now, calculate after processed all match data
-				// so just return the index to apply formula (if there exists custom formula),
-				//    or just return 0 as a 'flag' to trigger backward calculation using weighted average
-				return 'lpFormulae' in match
-					? match.lpFormulae.findIndex(({ group }) => group === res.groups[i])
-					: 0;
+				// // so just return the index to apply formula (if there exists custom formula), or
+				//    just return 0 as a 'flag' to trigger backward calculation using weighted average
+				// // return 'lpFormulae' in match
+				// // ? match.lpFormulae.findIndex(({ group }) => group === res.groups[i])
+				// // : 0;
+				return mExt.totalRank.length > 0 ? 0 : null;
 			} else {
-				return null;
+				if (n > 0 && res.matches[0].assignedLP[i] === 0) {
+					if (!firstJoinAt[i]) firstJoinAt[i] = n;
+					// assemble all LP's obtained from previous and current matches
+					let lpts = res.matches.map(({ getLPt }) => (i < getLPt.length ? getLPt[i] : 0));
+					lpts.push(mExt.getLPt[i]);
+					let firstIdx = lpts.findIndex((v) => v > 0);
+					let divBy = raw.matches.length - firstIdx;
+					return (lpts.reduce((p, c) => p + c) / divBy) * raw.assignLPWeight;
+				} else {
+					return null;
+				}
 			}
 		});
 		// console.log(`** L${raw.league} ***** ${n} **** (${match.date})`);
-		// console.log(`assignLP idx: `, mExt.assignedLP);
+		// console.log(`assignLP: `, mExt.assignedLP);
 
 		// tidy guest data if there is any
 		mExt.guestResults = [];
@@ -385,44 +397,44 @@ export function CalculateLeagueResult(raw) {
 		// console.log(mExt);
 	}
 
+	let finalMatchWithResult = res.matches.findLastIndex(({ totalRank }) => totalRank.length > 0);
+	let finalAssignedLP = firstJoinAt.map((v, i) =>
+		v ? res.matches[finalMatchWithResult].assignedLP[i] : null
+	);
+
 	// loop again to process advanced data
 	for (const [sn, match] of Object.entries(res.matches)) {
 		if (match.totalRank.length > 0) {
 			let n = parseInt(sn);
 
-			match.assignedLP = match.assignedLP.map((lpfIdx, i) => {
-				if (lpfIdx != null) {
-					// i-th group not yet joined battle <=> i<getLPt.length
-					let gpLPts = res.matches.map(({ getLPt }) => (i < getLPt.length ? getLPt[i] : 0));
-					if (lpfIdx > 0) {
-						const f = eval(raw.matches[n].lpFormulae[lpfIdx].lp);
-						// console.log(
-						// 	`assingedLP calculated for ${res.groups[i]} = ${f(gpLPts)} evaluated on [${gpLPts}]`
-						// );
-						return f(gpLPts);
-					} else {
-						const sum = gpLPts.reduce((p, c) => p + c);
-						const divBy = gpLPts.length - gpLPts.findIndex((x) => x > 0);
-						return divBy > 0 ? (sum / divBy) * raw.assignLPWeight : 0;
-					}
-				} else {
-					return 0;
-				}
-			});
-			// console.log(`${n} (${match.date})`, 'assingedLP: ', match.assignedLP);
-			match.accumPt = match.assignedLP.map(
-				(pt, i) =>
-					((x) => (x > 0 ? x : null))(
-						pt +
-							(i < match.getLPt.length ? match.getLPt[i] : 0) +
-							(n > 0 ? res.matches[n - 1].accumPt[i] : 0)
-					) // accum pt = assigned point + league pt from battle + previous accum. pt
-			);
+			let realLPs = match.assignedLP.map((v, i) => (v == 0 ? finalAssignedLP[i] : match.getLPt[i]));
+			match.accumPt = realLPs.map((p, i) => p + (n == 0 ? 0 : res.matches[n - 1].accumPt[i]));
 
-			// console.log(`${n} (${match.date})`, 'accumPt: ', match.accumPt);
-			rankDiffAssign(match.accumPt, match, 'accumRank', 'accumPtDiff');
+			if (n < finalMatchWithResult) {
+				// use the assignedLP calclated at k-th match to get accumRank of k-th match
+				// instead of using final assignedLP
+				let adjusted = match.assignedLP.map((v, i) => {
+					if (v == null) return match.accumPt[i]; // join from start
+					if (v == 0) return 0;
+					if (v > 0) {
+						return (
+							v * firstJoinAt[i] +
+							new Array(n - firstJoinAt[i] + 1)
+								.fill()
+								.map((_, j) => j + firstJoinAt[i])
+								.map((x) => res.matches[x].getLPt[i])
+								.reduce((p, c) => p + c)
+						);
+					}
+				});
+				rankDiffAssign(adjusted, match, 'accumRank', 'accumPtDiff');
+			} else {
+				rankDiffAssign(match.accumPt, match, 'accumRank', 'accumPtDiff');
+			}
+
 			// remove from league ranking until the group joins league battle formally.
 			match.accumRank = match.accumRank.slice(0, match.totalRank.length);
+			// adjust accumRank for later joined group to account for assigned pt changes
 		}
 	}
 

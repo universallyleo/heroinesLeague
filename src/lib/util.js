@@ -161,3 +161,11 @@ export function fillArrayBy(arr, len, fillEntry = 0) {
 
 export const findAllIndices = (arr, val) =>
 	arr.reduce((acc, el, i) => (el === val ? [...acc, i] : acc), []);
+
+export function slicedAverage(arr, s, t = -1) {
+	const tt = t == -1 ? arr.length : t;
+	if (tt <= s) return NaN;
+	const sum = arr.reduce((p, c, i) => (p + i >= s && i < tt ? c : 0));
+	// const divBy = gpLPts.length - gpLPts.findIndex((x) => x > 0);
+	return sum / t - s;
+}
