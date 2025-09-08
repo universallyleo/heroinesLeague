@@ -423,7 +423,64 @@
 			"tweet": "https://x.com/heroines_idol/status/1957373881947435427",
 			"rules": ["https://x.com/heroines_idol/status/1957373881947435427"],
 			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5, 5],
-			"fcRankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5, 5]
+			"fcRankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5, 5],
+			"timetable": [
+				{
+					"group": "heroken",
+					"time": ["1430", "1500"],
+					"tokuten": ["1510", "1610"]
+				},
+				{
+					"group": "parasai",
+					"time": ["1500", "1530"],
+					"tokuten": ["1540", "1640"]
+				},
+				{
+					"group": "herokenOsaka",
+					"time": ["1530", "1600"],
+					"tokuten": ["1610", "1710"]
+				},
+				{
+					"group": "zuttomotto",
+					"time": ["1600", "1630"],
+					"tokuten": ["1640", "1740"]
+				},
+				{
+					"group": "ladybaby",
+					"time": ["1630", "1700"],
+					"tokuten": ["1710", "1810"]
+				},
+				{
+					"group": "ponkotu",
+					"time": ["1700", "1730"],
+					"tokuten": ["1740", "1840"]
+				},
+				{
+					"group": "calres",
+					"time": ["1735", "1805"],
+					"tokuten": ["1815", "1915"]
+				},
+				{
+					"group": "paradeeq",
+					"time": ["1805", "1835"],
+					"tokuten": ["1845", "1945"]
+				},
+				{
+					"group": "nanakoro",
+					"time": ["1835", "1905"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "tenran",
+					"time": ["1905", "1935"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "chula",
+					"time": ["1935", "2005"],
+					"tokuten": ["after", ""]
+				}
+			]
 		},
 		{
 			"date": "2025-09-25",
