@@ -413,17 +413,23 @@
 			"tweet": "https://x.com/heroines_idol/status/1957791565080064162",
 			"rules": ["https://x.com/heroines_idol/status/1946555660923285863"],
 			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10],
-			"shimeiNum": [40, 98, 58, 56, 25, 29, 31, 15, 27, 150, 132],
-			"src": "https://x.com/yuki_kyo2ya/status/1958488722074374396"
+			"shimeiNum": [40, 98, 56, 58, 25, 29, 31, 15, 27, 150, 132],
+			"src": "https://x.com/yuki_kyo2ya/status/1958488722074374396",
+			"comments": [
+				"both sources (my own listening at stage + twitter) says CALRES 58 and Paradeeq 56, but heroines official seems to rank paradeeq before calres"
+			]
 		},
 		{
 			"date": "2025-09-22",
 			"venue": "VeatsSHIBUYA",
-			"timetable": [],
-			"tweet": "https://x.com/heroines_idol/status/1957373881947435427",
-			"rules": ["https://x.com/heroines_idol/status/1957373881947435427"],
+			"tweet": "https://x.com/heroines_idol/status/1965030540572262819",
+			"rules": [
+				"https://x.com/heroines_idol/status/1957373881947435427",
+				"https://x.com/heroines_idol/status/1965030540572262819"
+			],
 			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5, 5],
 			"fcRankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5, 5],
+			"fcRank": [4, 3, 6, 8, 2, 8, 6, 8, 8, 1, 5],
 			"timetable": [
 				{
 					"group": "heroken",
@@ -480,7 +486,9 @@
 					"time": ["1935", "2005"],
 					"tokuten": ["after", ""]
 				}
-			]
+			],
+			"shimeiNum": [50, 56, 56, 89, 87, 29, 25, 30, 6, 179, 32],
+			"src": "https://x.com/ks_ecophysi/status/1970084391524450776"
 		},
 		{
 			"date": "2025-09-25",
