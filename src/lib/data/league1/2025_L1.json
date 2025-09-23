@@ -319,7 +319,6 @@
 					"tokuten": ["after", ""]
 				}
 			],
-			"guestIdx": [],
 			"shimeiNum": [303, 56, 153, 220, 111, 72, 215, 54, 143, 82],
 			"fcRank": [4, 10, 5, 1, 2, 7, 6, 8, 3, 9]
 		},
@@ -328,8 +327,6 @@
 			"venue": "KANDA SQUARE HALL",
 			"tweet": "https://x.com/heroines_idol/status/1968993482552299782",
 			"rules": ["https://x.com/heroines_idol/status/1955555152917930171"],
-			"fcRankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5],
-			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
 			"timetable": [
 				{
 					"group": "akishibu",
@@ -381,7 +378,11 @@
 					"time": ["1910", "1945"],
 					"tokuten": ["after", ""]
 				}
-			]
+			],
+			"fcRankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5],
+			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
+			"shimeiNum": [213, 106, 117, 140, 168, 63, 150, 71, 216, 162],
+			"fcRank": [3, 8, 4, 2, 1, 8, 5, 8, 6, 6]
 		},
 		{
 			"date": "2025-09-24",
@@ -392,17 +393,17 @@
 			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
 			"timetable": [
 				{
-					"group": "0923順位10位",
+					"group": "ill",
 					"time": ["1500", "1525"],
 					"tokuten": ["1535", "1635"]
 				},
 				{
-					"group": "0923順位9位",
+					"group": "tenrin",
 					"time": ["1525", "1550"],
 					"tokuten": ["1600", "1700"]
 				},
 				{
-					"group": "0923順位8位",
+					"group": "akishibu",
 					"time": ["1550", "1615"],
 					"tokuten": ["1625", "1725"]
 				},
@@ -412,37 +413,37 @@
 					"tokuten": ["1650", "1750"]
 				},
 				{
-					"group": "0923順位7位",
+					"group": "yoruami",
 					"time": ["1645", "1710"],
 					"tokuten": ["1720", "1820"]
 				},
 				{
-					"group": "0923順位6位",
+					"group": "megafon",
 					"time": ["1710", "1735"],
 					"tokuten": ["1745", "1845"]
 				},
 				{
-					"group": "0923順位5位",
+					"group": "nonfic",
 					"time": ["1735", "1800"],
 					"tokuten": ["1810", "1910"]
 				},
 				{
-					"group": "0923順位4位",
+					"group": "ion",
 					"time": ["1800", "1825"],
 					"tokuten": ["1835", "1935"]
 				},
 				{
-					"group": "0923順位3位",
+					"group": "adamth",
 					"time": ["1830", "1900"],
 					"tokuten": ["after", ""]
 				},
 				{
-					"group": "0923順位2位",
+					"group": "dresscode",
 					"time": ["1900", "1930"],
 					"tokuten": ["after", ""]
 				},
 				{
-					"group": "0923順位1位",
+					"group": "ilife",
 					"time": ["1930", "2000"],
 					"tokuten": ["after", ""]
 				}
