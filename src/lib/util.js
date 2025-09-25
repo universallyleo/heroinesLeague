@@ -48,6 +48,19 @@ export function rankDiffAssign(arr, obj, rkKey, diffKey, f = (a, b) => b - a) {
 	return obj;
 }
 
+// export function findRepeatedValuesFromSortedArr(arr) {
+// 	return arr.filter((x, i) => i > 0 && x === arr[i - 1]).filter((x, i, self) => x !== self[i - 1]);
+// }
+
+// export function findRepeatedValues(arr) {
+// 	const counts = arr.reduce((map, x) => {
+// 		map.set(x, (map.get(x) || 0) + 1);
+// 		return map;
+// 	}, new Map());
+
+// 	return [...counts].filter(([, l]) => l > 1).map(([x]) => x);
+// }
+
 export function betterObjectFromEntries(entries, source) {
 	return Object.fromEntries(entries.filter((k) => k in source).map((k) => [k, source[k]]));
 }

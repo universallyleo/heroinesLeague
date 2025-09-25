@@ -114,21 +114,21 @@
 						</th>
 					{/each}
 				</tr>
-
-				<tr class="headingRowSubData">
-					<th class="sticky"></th>
-					<th class="sticky"></th>
-					{#each headingRowData as match}
-						<th
-							style="font-weight: normal; font-size:.7em; border-top: dashed 1px #999; padding-top:.2em; "
-						>
-							{#if match.shimeiTotal}
-								参戦グル総指名数: {match.shimeiTotal[0]}
-							{/if}
-						</th>
-					{/each}
-				</tr>
 			{/if}
+
+			<tr class="headingRowSubData">
+				<th class="sticky"></th>
+				<th class="sticky" style="font-weight: normal; font-size:.7em;">（全戦合計指名数）</th>
+				{#each headingRowData as match}
+					<th
+						style="font-weight: normal; font-size:.7em; border-top: dashed 1px #999; padding-top:.2em; "
+					>
+						{#if match.shimeiTotal}
+							合計指名数: {match.shimeiTotal[0]}
+						{/if}
+					</th>
+				{/each}
+			</tr>
 		</thead>
 
 		<!--#region main table -->
@@ -152,6 +152,8 @@
 						/>
 						<br />
 						{clamp ? groupDisplayShort(gp.group) : getGroup(gp.group).displayName}
+						<br />
+						（ <span style="font-weight: bold; font-size:.9em;">{gp.accumShimei}</span> ）
 					</td>
 					{#each { length: gp.accumPt.findLastIndex((x) => x != null) + 1 }, n}
 						<td>
@@ -184,7 +186,7 @@
 	.table-bordered {
 		width: fit-content;
 		/* max-width: 100%; */
-		border: 1px solid #999 !important;
+		border: 1px solid var(--color-border) !important;
 		border-spacing: 0 !important;
 		border-collapse: collapse;
 		/* display: block; */
@@ -197,6 +199,7 @@
 		z-index: 2;
 	}
 	.headingCell {
+		background: var(--color-bg-2);
 		border-right: 1px solid black;
 		border-top: 1px solid #ddd;
 		border-bottom: 1px solid #ddd;

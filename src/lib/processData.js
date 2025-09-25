@@ -163,6 +163,7 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} totalRank
  * @property {number[]} getLPt
  * @property {number[]} assignedPt calculate from LPFormula
+ * @property {number[]} accumShimei
  * @property {number[]} accumPt
  * @property {number[]} accumPtDiff
  * @property {number[]} accumRank
@@ -306,9 +307,15 @@ export function CalculateLeagueResult(raw) {
 		let hasRes = hasResult(match);
 		mExt.shortdate = ShortJPDate(match.date, true);
 		mExt.displayType = hasRes ? 'RESULT' : hasTT(match) ? 'TT_ONLY' : 'NONE';
-		(mExt.hasFC = 'fcRankToCount' in match), (mExt.hasShimei = hasRes && 'shimeiNum' in match);
+		mExt.hasFC = 'fcRankToCount' in match;
+		mExt.hasShimei = hasRes && 'shimeiNum' in match;
 		mExt.fcRankToCount = match?.fcRankToCount ?? raw.fcRankToCount;
 		mExt.rankToPoints = match?.rankToPoints ?? raw.rankToPoints;
+		mExt.accumShimei = hasRes
+			? n > 0
+				? res.matches[n - 1].accumShimei
+				: (match?.shimeiNum ?? new Array(match.rank))
+			: [];
 		if (!('guestIdx' in match)) {
 			mExt.guestIdx = [];
 		}
@@ -321,6 +328,14 @@ export function CalculateLeagueResult(raw) {
 		if ('shimeiNum' in match) {
 			rankDiffAssign(match.shimeiNum, mExt, 'shimeiRank', 'shimeiDiff');
 			mExt.shimeiTotal = [match.shimeiNum.reduce((a, x) => a + x, 0), null];
+			mExt.accumShimei =
+				n == 0
+					? mExt.accumShimei
+					: match.shimeiNum.map(
+							(x, i) =>
+								x +
+								(i < res.matches[n - 1].accumShimei.length ? res.matches[n - 1].accumShimei[i] : 0)
+						);
 
 			if ('fcRank' in match) {
 				totalCount = totalCount.map((x, i) => x + match.shimeiNum[i]);
@@ -430,11 +445,30 @@ export function CalculateLeagueResult(raw) {
 				rankDiffAssign(adjusted, match, 'accumRank', 'accumPtDiff');
 			} else {
 				rankDiffAssign(match.accumPt, match, 'accumRank', 'accumPtDiff');
+
+				// for final match, refine ranking using accumulated shimei num
+				let sortedRanks = match.accumRank.toSorted((a, b) => a - b);
+				// console.log(sortedRanks);
+				for (let i = 0; i < sortedRanks.length - 1; i++) {
+					if (sortedRanks[i] == sortedRanks[i + 1]) {
+						// find all entries with the same rank
+						let indices = match.accumRank
+							.map((x, j) => (x == sortedRanks[i] ? j : -1))
+							.filter((x) => x > -1);
+						// refine ranking by accumulative shimei num
+						let sortedShimei = indices
+							.map((j) => [j, match.accumShimei[j]])
+							.toSorted((a, b) => b[1] - a[1]);
+						for (let k = 0; k < sortedShimei.length; k++) {
+							match.accumRank[sortedShimei[k][0]] += k;
+						}
+					}
+				}
+				// console.log(match.accumRank);
 			}
 
 			// remove from league ranking until the group joins league battle formally.
 			match.accumRank = match.accumRank.slice(0, match.totalRank.length);
-			// adjust accumRank for later joined group to account for assigned pt changes
 		}
 	}
 
@@ -492,6 +526,7 @@ export function extractSummaryFromLeagueResExt(leagueResExt) {
  * @property {number} accumPt
  * @property {number} accumPtDiff
  * @property {number} accumRank
+ * @property {number} accumShimei
  * @property {number} totalRank
  *
  * @typedef {Object} LastData
@@ -530,6 +565,7 @@ export function extractLastMatchDataByGroups(extData) {
 					accumPt: lastMatch.accumPt[i],
 					accumPtDiff: lastMatch.accumPtDiff[i],
 					accumRank: lastMatch.accumRank[i],
+					accumShimei: lastMatch.accumShimei[i],
 					totalRank: lastMatch.totalRank[i]
 				};
 			})
@@ -556,6 +592,7 @@ export function extractLastMatchDataByGroups(extData) {
  * @property {number[]} accumPt
  * @property {number[]} accumPtDiff
  * @property {number[]} accumRank
+ * @property {number} accumShimei
  */
 
 /**
@@ -587,7 +624,12 @@ export function partitionResultToSortedGroups(resultdata) {
 		let i = parseInt(si);
 
 		// @ts-ignore
-		gpResultData[i] = { group: gp, id: i, rankNow: resultdata.matches[n].accumRank[i] };
+		gpResultData[i] = {
+			group: gp,
+			id: i,
+			rankNow: resultdata.matches[n].accumRank[i],
+			accumShimei: resultdata.matches[n].accumShimei[i]
+		};
 		for (const key of keys) {
 			// !every data that has no value will be default to null
 			// if(gp == 'ion'){

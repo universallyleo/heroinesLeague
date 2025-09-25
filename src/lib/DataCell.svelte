@@ -51,7 +51,7 @@
 			n > 0 && detailed,
 			['assigned']
 		)}
-		<div class="sub" style="font-size:smaller;">リーグ未参加</div>
+		<div class="sub" style="font-size:smaller;">リーグ <br /> 未参加</div>
 	{:else}
 		未参加
 	{/if}
