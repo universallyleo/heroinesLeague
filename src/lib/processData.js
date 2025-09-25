@@ -314,7 +314,7 @@ export function CalculateLeagueResult(raw) {
 		mExt.accumShimei = hasRes
 			? n > 0
 				? res.matches[n - 1].accumShimei
-				: (match?.shimeiNum ?? new Array(match.rank))
+				: (match?.shimeiNum ?? new Array(match.rank.length).fill(0))
 			: [];
 		if (!('guestIdx' in match)) {
 			mExt.guestIdx = [];
@@ -472,7 +472,7 @@ export function CalculateLeagueResult(raw) {
 		}
 	}
 
-	// console.log(res);
+	console.log(res);
 	// @ts-ignore
 	return res;
 }

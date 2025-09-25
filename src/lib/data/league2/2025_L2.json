@@ -553,7 +553,9 @@
 			"tweet": "https://x.com/heroines_idol/status/1970118856271393141",
 			"rules": ["https://x.com/heroines_idol/status/1957373881947435427"],
 			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5, 5],
-			"fcRankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5, 5]
+			"fcRankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5, 5],
+			"shimeiNum": [25, 62, 82, 39, 69, 31, 23, 42, 8, 150, 16],
+			"fcRank": [4, 2, 6, 8, 3, 8, 6, 8, 8, 1, 5]
 		}
 	]
 }
