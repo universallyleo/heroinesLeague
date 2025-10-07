@@ -1,0 +1,39 @@
+{
+	"league": 0,
+	"groups": ["nonfic", "dresscode", "yoruami", "adamth"],
+	"rankToPoints": [100, 70, 50, 40],
+	"fcRankToCount": [65, 50, 40, 30],
+	"matches": [
+		{
+			"date": "2025-10-08",
+			"venue": "Zepp Haneda",
+			"tweet": "https://x.com/Yoruamiofficial/status/1975514372064879010",
+			"rules": [
+				"https://x.com/heroines_idol/status/1971534335481446731",
+				"https://x.com/Yoruamiofficial/status/1975514372064879010"
+			],
+			"timetable": [
+				{
+					"group": "adamth",
+					"time": ["1800", "1830"],
+					"tokuten": ["1840", "1940"]
+				},
+				{
+					"group": "yoruami",
+					"time": ["1830", "1900"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "dresscode",
+					"time": ["1900", "1930"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "nonfic",
+					"time": ["1930", "2000"],
+					"tokuten": ["after", ""]
+				}
+			]
+		}
+	]
+}

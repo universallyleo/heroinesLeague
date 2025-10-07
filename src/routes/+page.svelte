@@ -9,7 +9,9 @@
 	// $inspect('innerWidth: ', innerWidth);
 
 	let selectedSeason = 1;
-	let leagueData = [dataCollection[0][selectedSeason - 1], dataCollection[1][selectedSeason - 1]];
+	let leagueData = [dataCollection[1][selectedSeason - 1], dataCollection[2][selectedSeason - 1]];
+	let playoffsData = [dataCollection[3][0]];
+	let champLeagueData = [dataCollection[0][0]];
 </script>
 
 <svelte:head>
@@ -19,10 +21,10 @@
 
 <svelte:window bind:innerWidth />
 
-{#snippet leagueAccord(leagueData, open = false)}
+{#snippet leagueAccord(leagueData, title, open = false)}
 	<AccordionItem {open}>
 		{#snippet header()}
-			リーグ{leagueData.league} 結果
+			{title} 結果
 		{/snippet}
 		<ProgressTable {leagueData} clamp={innerWidth < 600} />
 	</AccordionItem>
@@ -30,8 +32,10 @@
 
 <section>
 	<Accordion>
-		{@render leagueAccord(leagueData[0], true)}
-		{@render leagueAccord(leagueData[1], true)}
+		{@render leagueAccord(champLeagueData[0], '決勝リーグ', true)}
+		{@render leagueAccord(playoffsData[0], '入れ替え戦', true)}
+		{@render leagueAccord(leagueData[0], 'リーグ1', false)}
+		{@render leagueAccord(leagueData[1], 'リーグ2', false)}
 	</Accordion>
 </section>
 

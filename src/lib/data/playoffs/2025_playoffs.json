@@ -1,0 +1,59 @@
+{
+	"league": 3,
+	"groups": ["akishibu", "ion", "tenrin", "ill", "chula", "nanakoro", "parasai", "paradeeq"],
+	"rankToPoints": [100, 80, 65, 50, 40, 30, 20, 10],
+	"fcRankToCount": [55, 40, 30, 20, 15, 10, 5, 0],
+	"matches": [
+		{
+			"date": "2025-10-08",
+			"venue": "Zepp Haneda",
+			"tweet": "https://x.com/TENRIN_official/status/1975508935596511393",
+			"rules": [
+				"https://x.com/heroines_idol/status/1971534335481446731",
+				"https://x.com/TENRIN_official/status/1975508935596511393"
+			],
+			"timetable": [
+				{
+					"group": "paradeeq",
+					"time": ["1130", "1155"],
+					"tokuten": ["1205", "1305"]
+				},
+				{
+					"group": "parasai",
+					"time": ["1155", "1220"],
+					"tokuten": ["1230", "1330"]
+				},
+				{
+					"group": "nanakoro",
+					"time": ["1220", "1245"],
+					"tokuten": ["1255", "1355"]
+				},
+				{
+					"group": "chula",
+					"time": ["1245", "1310"],
+					"tokuten": ["1320", "1420"]
+				},
+				{
+					"group": "ill",
+					"time": ["1315", "1340"],
+					"tokuten": ["1350", "1450"]
+				},
+				{
+					"group": "tenrin",
+					"time": ["1340", "1405"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "ion",
+					"time": ["1405", "1430"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "akishibu",
+					"time": ["1430", "1455"],
+					"tokuten": ["after", ""]
+				}
+			]
+		}
+	]
+}
