@@ -3,7 +3,7 @@
 	import Rules from './Rules.svelte';
 	import MatchTable from './MatchTable.svelte';
 	import { numberToKanji } from './util';
-	let { clamp, league, rawMatch, gpResults, guestResults, match, matchID } = $props();
+	let { clamp, leagueTitle, rawMatch, gpResults, guestResults, match, matchID } = $props();
 
 	let shimeiStr = $derived(
 		match.shimeiTotal != null
@@ -16,7 +16,7 @@
 
 {#if match.displayType === 'RESULT'}
 	<h2>結果</h2>
-	リーグ{league} 第{numberToKanji(matchID + 1)}戦
+	{leagueTitle} 第{numberToKanji(matchID + 1)}戦
 	<br />
 	<span style="font-size:small; color: #888;">
 		{match.date} @ {rawMatch.venue}

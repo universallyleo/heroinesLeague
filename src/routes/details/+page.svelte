@@ -5,7 +5,7 @@
 	import { onMount } from 'svelte';
 
 	let { clamp } = $props();
-	let league = $state(1);
+	let league = $state(3);
 	let match = $state(0);
 	let leagueSeasonData = $derived(dataCollection[league][0]); //second index is for "season"
 
@@ -17,6 +17,8 @@
 				league = parseInt(strs[1]) - 1;
 				match = parseInt(strs[2]) - 1;
 			}
+		} else {
+			match = leagueSeasonData.extData.matches.length - 1;
 		}
 	});
 </script>
@@ -45,7 +47,7 @@
 	<div class="pageContainer">
 		<MatchDetails
 			{clamp}
-			league={league + 1}
+			leagueTitle={leagueSeasonData.title}
 			rawMatch={leagueSeasonData.extData.matches[match]}
 			matchID={match}
 			gpResults={leagueSeasonData.resByGp}
