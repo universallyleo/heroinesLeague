@@ -514,7 +514,7 @@ export function CalculateLeagueResult(raw) {
 		}
 	}
 
-	console.log(res);
+	// console.log(res);
 	// @ts-ignore
 	return res;
 }
@@ -649,7 +649,7 @@ export function partitionResultToSortedGroups(resultdata) {
 	let gpResultData = [];
 	// let n = resultdata.matches.findLastIndex(({ accumRank }) => accumRank.length > 0);
 	let n = lastFinishedMatchID(resultdata.matches);
-	console.log('n=', n, ' out of ', resultdata.matches.length, ' matches');
+	// console.log('n=', n, ' out of ', resultdata.matches.length, ' matches');
 
 	for (const [si, gp] of Object.entries(resultdata.groups)) {
 		let i = parseInt(si);
@@ -755,19 +755,20 @@ export const dataCollection = [champLeague, leagueOne, leagueTwo, playoffs].map(
 	(leagueSeasonData, i) => {
 		let LS = [];
 		for (let j = 0; j < leagueSeasonData.length; j++) {
+			let extData = CalculateLeagueResult(leagueSeasonData[j]);
 			/** @type {SeasonLeagueData} */
-			// @ts-ignore
 			let res = {
 				league: i + 1,
 				title: leagueSeasonData[j].title,
 				season: j + 1,
-				extData: CalculateLeagueResult(leagueSeasonData[j])
+				extData: extData,
+				resByGp: partitionResultToSortedGroups(extData),
+				summary: extractSummaryFromLeagueResExt(extData)
 			};
-			res.resByGp = partitionResultToSortedGroups(res.extData);
-			res.summary = extractSummaryFromLeagueResExt(res.extData);
 			LS.push(res);
 		}
 		return LS;
 	}
 );
 // console.log(dataCollection);
+console.log(dataCollection[2][0].resByGp[2]);

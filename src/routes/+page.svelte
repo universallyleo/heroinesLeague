@@ -21,12 +21,12 @@
 
 <svelte:window bind:innerWidth />
 
-{#snippet leagueAccord(leagueData, open = false)}
+{#snippet leagueAccord(lsData, open = false)}
 	<AccordionItem {open}>
 		{#snippet header()}
-			{leagueData.title} 結果
+			{lsData.title} 結果
 		{/snippet}
-		<ProgressTable {leagueData} clamp={innerWidth < 600} />
+		<ProgressTable leagueSeasonData={lsData} clamp={innerWidth < 600} />
 	</AccordionItem>
 {/snippet}
 

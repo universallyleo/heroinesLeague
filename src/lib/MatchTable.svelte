@@ -1,12 +1,10 @@
 <script>
-	import { getGroup, groupDisplayShort, ordering, resultTypes } from './processData';
+	import { getGroup, groupDisplayShort, ordering } from './processData';
 	import RankNumber from './RankNumber.svelte';
 
-	let { clamp, gpResults, matchID = 0, type } = $props();
+	let { clamp, gpResults, matchID = 0, resultType, type } = $props();
 	let sortMethod = $state('totalRank');
 
-	let { hasShimei, hasFC } = $derived(resultTypes(gpResults[0], matchID));
-	// $inspect('matchID: ', matchID, 'sortMethod: ', sortMethod);
 	let sortedGps = $derived(
 		(() => {
 			let sm = sortMethod ?? 'totalRank';
@@ -20,10 +18,10 @@
 	// $inspect('matchID: ', matchID, 'sortedGps', sortedGps);
 </script>
 
-{#if !hasShimei}
+{#if !resultType.hasShimei}
 	<div style="font-size: smaller; color: #888;">指名データなし</div>
 {/if}
-{#if !hasFC}
+{#if !resultType.hasFC}
 	<div style="font-size: smaller; color: #888;">FC得点データなし</div>
 {/if}
 
@@ -42,13 +40,13 @@
 		<tr>
 			<th class="sticky headingRow" style="left:0;width:2em;">順位</th>
 			<th class="sticky headingRow" style="left:2em;">グループ</th>
-			{#if hasShimei}
+			{#if resultType.hasShimei}
 				{@render sortHeader('入場指名数', 'shimeiNum')}
 			{/if}
-			{#if hasFC}
+			{#if resultType.hasFC}
 				{@render sortHeader('FC投票得点', 'fcCount')}
 			{/if}
-			{#if hasShimei && hasFC}
+			{#if resultType.hasShimei && resultType.hasFC}
 				{@render sortHeader('総合得点', 'totalRank')}
 			{/if}
 		</tr>
@@ -68,7 +66,7 @@
 					<td class="headingCell sticky gpLogo" style="font-size:smaller;left:2em;">
 						{clamp ? groupDisplayShort(gp.group) : getGroup(gp.group).displayName}
 					</td>
-					{#if hasShimei}
+					{#if resultType.hasShimei}
 						<td class="datacell">
 							<div class="rkDiffCell">
 								<div class="rk">
@@ -88,7 +86,7 @@
 						</td>
 					{/if}
 
-					{#if hasFC}
+					{#if resultType.hasFC}
 						<td class="datacell">
 							<div class="rkDiffCell">
 								<div class="rk">
@@ -104,7 +102,7 @@
 							</div>
 						</td>
 					{/if}
-					{#if hasShimei && hasFC}
+					{#if resultType.hasShimei && resultType.hasFC}
 						<td class="datacell">
 							<div class="rkDiffCell">
 								<div class="rk">{gp.totalRank[matchID]}位</div>
