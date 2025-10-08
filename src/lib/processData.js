@@ -179,6 +179,7 @@ export function groupDisplayShort(search_id) {
  *
  * @typedef {Object} LeagueDataRaw
  * @property {number} league
+ * @property {string} title
  * @property {Array<string>} groups
  * @property {Array<number>} [rankToPoints] n-th entry = points given to (n+1)st place group
  * @property {Array<number>} [fcRankToCount] n-th entry = counts given to (n+1)st placed group
@@ -187,6 +188,7 @@ export function groupDisplayShort(search_id) {
  *
  * @typedef {Object} LeagueDataExt
  * @property {number} league
+ * @property {string} title
  * @property {Array<string>} groups
  * @property {Array<number>} [rankToPoints] n-th entry = points given to (n+1)st place group
  * @property {Array<number>} [fcRankToCount] n-th entry = counts given to (n+1)st placed group
@@ -743,6 +745,7 @@ const matchPattern = {
  * @typedef {Object} SeasonLeagueData
  * @property {number} season
  * @property {number} league  1=1, 2=2, 3=playoffs, 0=champion
+ * @property {string} title  1=1, 2=2, 3=playoffs, 0=champion
  * @property {LeagueDataExt} extData
  * @property {GroupResultSeries[]} resByGp
  * @property {MatchSummary[]} summary
@@ -756,6 +759,7 @@ export const dataCollection = [champLeague, leagueOne, leagueTwo, playoffs].map(
 			// @ts-ignore
 			let res = {
 				league: i + 1,
+				title: leagueSeasonData[j].title,
 				season: j + 1,
 				extData: CalculateLeagueResult(leagueSeasonData[j])
 			};

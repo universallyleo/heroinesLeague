@@ -36,7 +36,7 @@
 	<div>
 		リーグ：
 		{#each { length: 2 }, i}
-			<label><input type="radio" name="league" value={i} bind:group={league} /> {i + 1} </label>
+			<label><input type="radio" name="league" value={i + 1} bind:group={league} /> {i + 1} </label>
 		{/each}
 		<!-- https://svelte.dev/docs/svelte/each#Keyed-each-blocks -->
 	</div>

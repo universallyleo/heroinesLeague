@@ -1,5 +1,6 @@
 {
 	"league": 0,
+	"title": "決勝リーグ",
 	"groups": ["nonfic", "dresscode", "yoruami", "adamth"],
 	"rankToPoints": [100, 70, 50, 40],
 	"fcRankToCount": [65, 50, 40, 30],

@@ -1,5 +1,6 @@
 {
 	"league": 3,
+	"title": "入れ替え戦",
 	"groups": ["akishibu", "ion", "tenrin", "ill", "chula", "nanakoro", "parasai", "paradeeq"],
 	"rankToPoints": [100, 80, 65, 50, 40, 30, 20, 10],
 	"fcRankToCount": [55, 40, 30, 20, 15, 10, 5, 0],

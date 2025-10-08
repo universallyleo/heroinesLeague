@@ -23,17 +23,24 @@
 
 <section>
 	<div class="pageContainer">
-		リーグ：
-		{#each { length: 2 }, i}
-			<label> <input type="radio" name="league" value={i} bind:group={league} /> {i + 1} </label> &nbsp;
-		{/each}
-
-		マッチ選択：
-		<select bind:value={match}>
-			{#each leagueSeasonData.summary as d, j}
-				<option value={j}> {d.shortdate} @ {d.venue} </option>
+		<div style="margin-bottom:1em;">
+			リーグ：
+			{#each [3, 0, 1, 2] as i}
+				<label>
+					<input type="radio" name="league" value={i} bind:group={league} />
+					{dataCollection[i][0].title}
+				</label>
 			{/each}
-		</select>
+		</div>
+
+		<div>
+			マッチ選択：
+			<select bind:value={match}>
+				{#each leagueSeasonData.summary as d, j}
+					<option value={j}> {d.shortdate} @ {d.venue} </option>
+				{/each}
+			</select>
+		</div>
 	</div>
 	<div class="pageContainer">
 		<MatchDetails

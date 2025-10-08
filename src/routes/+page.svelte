@@ -21,10 +21,10 @@
 
 <svelte:window bind:innerWidth />
 
-{#snippet leagueAccord(leagueData, title, open = false)}
+{#snippet leagueAccord(leagueData, open = false)}
 	<AccordionItem {open}>
 		{#snippet header()}
-			{title} 結果
+			{leagueData.title} 結果
 		{/snippet}
 		<ProgressTable {leagueData} clamp={innerWidth < 600} />
 	</AccordionItem>
@@ -32,10 +32,10 @@
 
 <section>
 	<Accordion>
-		{@render leagueAccord(champLeagueData[0], '決勝リーグ', true)}
-		{@render leagueAccord(playoffsData[0], '入れ替え戦', true)}
-		{@render leagueAccord(leagueData[0], 'リーグ1', false)}
-		{@render leagueAccord(leagueData[1], 'リーグ2', false)}
+		{@render leagueAccord(champLeagueData[0], true)}
+		{@render leagueAccord(playoffsData[0], true)}
+		{@render leagueAccord(leagueData[0], false)}
+		{@render leagueAccord(leagueData[1], false)}
 	</Accordion>
 </section>
 
