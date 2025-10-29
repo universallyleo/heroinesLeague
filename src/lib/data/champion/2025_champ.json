@@ -38,6 +38,34 @@
 			"shimeiNum": [453, 169, 450, 81],
 			"fcRankToCount": [65, 50, 40, 30],
 			"fcRank": [1, 2, 3, 4]
+		},
+		{
+			"date": "2025-11-25",
+			"venue": "EBISU The Garden Hall",
+			"tweet": "https://x.com/Yoruamiofficial/status/1983474763927564540",
+			"timetable": [
+				{
+					"group": "adamth",
+					"time": ["1200", "1230"],
+					"tokuten": ["1240", "1340"]
+				},
+				{
+					"group": "dresscode",
+					"time": ["1230", "1300"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "yoruami",
+					"time": ["1300", "1330"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "nonfic",
+					"time": ["1330", "1400"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"fcRankToCount": [65, 50, 40, 30]
 		}
 	]
 }
