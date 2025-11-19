@@ -106,6 +106,54 @@
 				}
 			],
 			"fcRankToCount": [55, 40, 30, 20, 15, 10, 5, 0]
+		},
+		{
+			"date": "2025-12-10",
+			"venue": "TOYOSU PIT",
+			"tweet": "https://x.com/TENRIN_official/status/1983473924827701694",
+			"timetable": [
+				{
+					"group": "未定",
+					"time": ["1100", "1125"],
+					"tokuten": ["1135", "1235"]
+				},
+				{
+					"group": "未定",
+					"time": ["1125", "1150"],
+					"tokuten": ["1200", "1300"]
+				},
+				{
+					"group": "未定",
+					"time": ["1150", "1215"],
+					"tokuten": ["1225", "1325"]
+				},
+				{
+					"group": "未定",
+					"time": ["1215", "1240"],
+					"tokuten": ["1250", "1350"]
+				},
+				{
+					"group": "未定",
+					"time": ["1245", "1310"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "未定",
+					"time": ["1310", "1335"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "未定",
+					"time": ["1335", "1400"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "未定",
+					"time": ["1400", "1425"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"fcRankToCount": [55, 40, 30, 20, 15, 10, 5, 0]
 		}
 	]
 }

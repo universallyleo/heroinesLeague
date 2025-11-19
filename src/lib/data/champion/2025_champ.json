@@ -66,6 +66,34 @@
 				}
 			],
 			"fcRankToCount": [65, 50, 40, 30]
+		},
+		{
+			"date": "2025-12-10",
+			"venue": "TOYOSU PIT",
+			"tweet": "https://x.com/heroines_idol/status/1991085151766413460",
+			"timetable": [
+				{
+					"group": "未定",
+					"time": ["1800", "1830"],
+					"tokuten": ["1840", "1940"]
+				},
+				{
+					"group": "未定",
+					"time": ["1830", "1900"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "未定",
+					"time": ["1900", "1930"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "未定",
+					"time": ["1930", "2000"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"fcRankToCount": [65, 50, 40, 30]
 		}
 	]
 }
