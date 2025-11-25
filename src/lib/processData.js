@@ -16,6 +16,11 @@ const leagueOneFiles = import.meta.glob('./data/league1/*.json', { eager: true }
 const leagueTwoFiles = import.meta.glob('./data/league2/*.json', { eager: true });
 const playoffsFiles = import.meta.glob('./data/playoffs/*.json', { eager: true });
 const championLeagueFiles = import.meta.glob('./data/champion/*.json', { eager: true });
+/**
+ * @enum {number}
+ */
+export const LeagueType = { CHAMP: 0, ONE: 1, TWO: 2, PLAYOFFS: 3};
+
 /** @type {LeagueDataRaw[]} */
 export const leagueOne = [];
 /** @type {LeagueDataRaw[]} */
@@ -27,10 +32,10 @@ export const champLeague = [];
 export const groups = [];
 [
 	[groupFiles, groups],
+	[championLeagueFiles, champLeague],
 	[leagueOneFiles, leagueOne],
 	[leagueTwoFiles, leagueTwo],
-	[playoffsFiles, playoffs],
-	[championLeagueFiles, champLeague]
+	[playoffsFiles, playoffs]
 ].forEach(([f, g]) => {
 	Object.keys(f).map((path) => {
 		// @ts-ignore
@@ -447,8 +452,9 @@ export function CalculateLeagueResult(raw) {
 	}
 
 	let finalMatchWithResult = lastFinishedMatchID(res.matches);
+	console.log(`*** Final Match with result: ${finalMatchWithResult+1}***`);
 	let joinAfter = res.matches.reduce(
-		(arr, { assignedLP }, j) => assignedLP.map((v, i) => (v === 0 ? j : arr[i])),
+		(arr, { assignedLP }, j) => assignedLP.length>0?(assignedLP.map((v, i) => (v === 0 ? j : arr[i]))):arr,
 		new Array(raw.groups.length).fill(null)
 	);
 	let finalAssignedLP = joinAfter.map((v, i) =>
@@ -457,7 +463,6 @@ export function CalculateLeagueResult(raw) {
 				(finalMatchWithResult - v)
 			: null
 	);
-	// console.log('finalAssignedLP: ', finalAssignedLP);
 
 	// loop again to process advanced data
 	for (const [sn, match] of Object.entries(res.matches)) {
@@ -671,15 +676,17 @@ export function partitionResultToSortedGroups(resultdata) {
 			);
 		}
 		//! hardcoded category criteria (for now...)
-		if (resultdata.league == 1 || resultdata.league == 3) {
+		if (resultdata.league == LeagueType.ONE || resultdata.league == LeagueType.PLAYOFFS) {
 			gpResultData[i].category =
 				gpResultData[i].rankNow <= 4
 					? 'upperGp'
 					: gpResultData[i].rankNow > resultdata.groups.length - 4
 						? 'lowerGp'
 						: '';
-		} else if (resultdata.league == 2) {
+		} else if (resultdata.league == LeagueType.TWO) {
 			gpResultData[i].category = gpResultData[i].rankNow <= 4 ? 'upperGp' : '';
+		} else {
+			gpResultData[i].category = '';
 		}
 	}
 
@@ -771,4 +778,4 @@ export const dataCollection = [champLeague, leagueOne, leagueTwo, playoffs].map(
 	}
 );
 // console.log(dataCollection);
-console.log(dataCollection[2][0].resByGp[2]);
+// console.log(dataCollection[0]);

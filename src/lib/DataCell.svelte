@@ -8,6 +8,7 @@
 	// let hasFC = $derived(gpResult.fcCount[n] != null);
 	let { hasShimei, hasFC } = $derived(resultTypes(gpResult, n));
 	let hasResult = $derived(gpResult.totalRank[n] > 0);
+	// $inspect('n:', n, 'gp: ', gpResult.group,'; hasResult: ', hasResult, '; gpResult.accumPtDiff:', gpResult.accumPtDiff);
 </script>
 
 <div class="dataCell">

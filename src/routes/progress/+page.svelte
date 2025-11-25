@@ -1,7 +1,8 @@
 <script>
-	import { dataCollection, matchDates, seriesFromResult } from '$lib/processData.js';
+	import { dataCollection, LeagueType, matchDates, seriesFromResult } from '$lib/processData.js';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 
+	let selectableLeagues = [LeagueType.ONE, LeagueType.TWO, LeagueType.CHAMP];
 	let league = $state(1);
 	let progressType = $state('accumRank');
 	let selectedData = $derived(dataCollection[league][0]);
@@ -35,8 +36,8 @@
 <div style="controlDiv">
 	<div>
 		リーグ：
-		{#each { length: 2 }, i}
-			<label><input type="radio" name="league" value={i + 1} bind:group={league} /> {i + 1} </label>
+		{#each selectableLeagues as i}
+			<label><input type="radio" name="league" value={i} bind:group={league} /> {dataCollection[i][0].title} </label>
 		{/each}
 		<!-- https://svelte.dev/docs/svelte/each#Keyed-each-blocks -->
 	</div>
