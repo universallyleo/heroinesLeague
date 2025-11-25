@@ -105,12 +105,15 @@
 					"tokuten": ["after", ""]
 				}
 			],
+			"shimeiNum": [210, 135, 134, 326, 154, 92, 32, 19],
+			"fcRank": [5,1,2,3,7,4,6,8],
 			"fcRankToCount": [55, 40, 30, 20, 15, 10, 5, 0]
 		},
 		{
 			"date": "2025-12-10",
 			"venue": "TOYOSU PIT",
 			"tweet": "https://x.com/TENRIN_official/status/1983473924827701694",
+			"rules": ["https://x.com/heroines_idol/status/1993142453243986147"],
 			"timetable": [
 				{
 					"group": "未定",

@@ -65,6 +65,9 @@
 					<td>
 						{@render def('動員pt')} (<a href="https://pbs.twimg.com/media/Gw8LPQ5bkAAUxMM.jpg:orig"
 							>2025-07</a
+						>より), <br/>
+						{@render def('ライブpt')} (<a href="https://pbs.twimg.com/media/Gw8LPQ5bkAAUxMM.jpg:orig"
+							>2025-11</a
 						>より)
 					</td>
 				</tr>
