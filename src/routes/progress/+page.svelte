@@ -2,7 +2,7 @@
 	import { dataCollection, LeagueType, matchDates, seriesFromResult } from '$lib/processData.js';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 
-	let selectableLeagues = [LeagueType.ONE, LeagueType.TWO, LeagueType.CHAMP];
+	const selectableLeagues = [LeagueType.ONE, LeagueType.TWO, LeagueType.CHAMP, LeagueType.PLAYOFFS];
 	let league = $state(1);
 	let progressType = $state('accumRank');
 	let selectedData = $derived(dataCollection[league][0]);
