@@ -113,45 +113,45 @@
 		{
 			"date": "2025-12-10",
 			"venue": "TOYOSU PIT",
-			"tweet": "https://x.com/TENRIN_official/status/1983473924827701694",
+			"tweet": "https://x.com/TENRIN_official/status/1998293101958635731",
 			"timetable": [
 				{
-					"group": "未定",
+					"group": "paradeeq",
 					"time": ["1100", "1125"],
 					"tokuten": ["1135", "1235"]
 				},
 				{
-					"group": "未定",
+					"group": "parasai",
 					"time": ["1125", "1150"],
 					"tokuten": ["1200", "1300"]
 				},
 				{
-					"group": "未定",
+					"group": "nanakoro",
 					"time": ["1150", "1215"],
 					"tokuten": ["1225", "1325"]
 				},
 				{
-					"group": "未定",
+					"group": "chula",
 					"time": ["1215", "1240"],
 					"tokuten": ["1250", "1350"]
 				},
 				{
-					"group": "未定",
+					"group": "tenrin",
 					"time": ["1245", "1310"],
-					"tokuten": ["after", ""]
+					"tokuten": ["1320", "1420"]
 				},
 				{
-					"group": "未定",
+					"group": "ion",
 					"time": ["1310", "1335"],
 					"tokuten": ["after", ""]
 				},
 				{
-					"group": "未定",
+					"group": "akishibu",
 					"time": ["1335", "1400"],
 					"tokuten": ["after", ""]
 				},
 				{
-					"group": "未定",
+					"group": "ill",
 					"time": ["1400", "1425"],
 					"tokuten": ["after", ""]
 				}
