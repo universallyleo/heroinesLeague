@@ -159,6 +159,55 @@
 			"shimeiNum": [119, 106, 72, 98, 199, 64, 27, 25],
 			"fcRank": [5,1,2,4,6,3,7,8],
 			"fcRankToCount": [55, 40, 30, 20, 15, 10, 5, 0]
+		},
+		
+		{
+			"date": "2025-01-13",
+			"venue": "Zepp Osaka Bayside",
+			"tweet": "https://x.com/heroines_idol/status/2000509343473774898",
+			"timetable": [
+				{
+					"group": "paradeeq",
+					"time": ["1400", "1430"],
+					"tokuten": ["1440", "1540"]
+				},
+				{
+					"group": "parasai",
+					"time": ["1430", "1500"],
+					"tokuten": ["1510", "1610"]
+				},
+				{
+					"group": "nanakoro",
+					"time": ["1500", "1530"],
+					"tokuten": ["1540", "1550"]
+				},
+				{
+					"group": "tenrin",
+					"time": ["1530", "1600"],
+					"tokuten": ["1610", "1710"]
+				},
+				{
+					"group": "ill",
+					"time": ["1605", "1635"],
+					"tokuten": ["1645", "1745"]
+				},
+				{
+					"group": "akishibu",
+					"time": ["1635", "1705"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "ion",
+					"time": ["1705", "1735"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "chula",
+					"time": ["1735", "1805"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"fcRankToCount": [55, 40, 30, 20, 15, 10, 5, 0]
 		}
 	]
 }
