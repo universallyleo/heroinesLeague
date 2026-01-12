@@ -1,7 +1,7 @@
 <script>
 	import {
 		dataCollection,
-		extractLastMatchDataByGroups,
+		LeagueType,
 		lastFinishedMatchID,
 		ordering
 	} from '$lib/processData.js';
@@ -14,7 +14,7 @@
 	let { clamp = false } = $props();
 	// let dataset = ['09/11', '10/01', '11/12'];
 	let showIcon = $state(true);
-	let league = $state(1);
+	let league = $state(LeagueType.PLAYOFFS);
 	let lastLeague = 0;
 	let lastMatchID = $derived(lastFinishedMatchID(dataCollection[league][0].extData.matches));
 	let lastMatch = $derived(dataCollection[league][0].extData.matches[lastMatchID]);
@@ -41,7 +41,8 @@
 		let lateJoiners = [];
 		let accumPts = resByGps.reduce((res, { group, assignedLP, accumPt }) => {
 			// determine if we can just copy accumPt or need to recalculate assignedLP
-			if (assignedLP.some((x) => x !== 0)) {
+			// console.log("Processing: ", group, " assingedLP: ", assignedLP);
+			if (assignedLP.some((x) => x!==0 && x!==null)) {
 				const i = dataCollection[league][0].extData.groups.indexOf(group);
 				const getPts = dataCollection[league][0].extData.matches.map(({ getLPt }) =>
 					i < getLPt.length ? getLPt[i] : 0
