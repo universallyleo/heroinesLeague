@@ -107,7 +107,7 @@
 				}
 			],
 			"shimeiNum": [210, 135, 134, 326, 154, 92, 32, 19],
-			"fcRank": [5,1,2,3,7,4,6,8],
+			"fcRank": [5, 1, 2, 3, 7, 4, 6, 8],
 			"fcRankToCount": [55, 40, 30, 20, 15, 10, 5, 0]
 		},
 		{
@@ -157,10 +157,10 @@
 				}
 			],
 			"shimeiNum": [119, 106, 72, 98, 199, 64, 27, 25],
-			"fcRank": [5,1,2,4,6,3,7,8],
+			"fcRank": [5, 1, 2, 4, 6, 3, 7, 8],
 			"fcRankToCount": [55, 40, 30, 20, 15, 10, 5, 0]
 		},
-		
+
 		{
 			"date": "2025-01-13",
 			"venue": "Zepp Osaka Bayside",
@@ -207,53 +207,53 @@
 					"tokuten": ["after", ""]
 				}
 			],
-			"shimeiNum": [51,256,178,92,137,279,28,23],
-			"fcRank": [6,1,3,5,2,4,7,8],
+			"shimeiNum": [51, 256, 178, 92, 137, 279, 28, 23],
+			"fcRank": [6, 1, 3, 5, 2, 4, 7, 8],
 			"fcRankToCount": [55, 40, 30, 20, 15, 10, 5, 0]
 		},
 		{
 			"date": "2025-02-07",
 			"venue": "新木場GARDEN FACTORY",
-			"tweet": "https://x.com/heroines_idol/status/2008886474918551665",
+			"tweet": "https://x.com/heroines_idol/status/2019390419625472138",
 			"rules": ["https://x.com/heroines_idol/status/2008886474918551665"],
 			"timetable": [
 				{
-					"group": "TBC",
+					"group": "paradeeq",
 					"time": ["1130", "1155"],
 					"tokuten": ["1205", "1305"]
 				},
 				{
-					"group": "TBC",
+					"group": "parasai",
 					"time": ["1155", "1220"],
 					"tokuten": ["1230", "1330"]
 				},
 				{
-					"group": "TBC",
+					"group": "akishibu",
 					"time": ["1220", "1245"],
 					"tokuten": ["1255", "1355"]
 				},
 				{
-					"group": "TBC",
+					"group": "ill",
 					"time": ["1245", "1310"],
 					"tokuten": ["1320", "1420"]
 				},
 				{
-					"group": "TBC",
+					"group": "chula",
 					"time": ["1315", "1340"],
 					"tokuten": ["1350", "1450"]
 				},
 				{
-					"group": "TBC",
+					"group": "tenrin",
 					"time": ["1340", "1405"],
 					"tokuten": ["after", ""]
 				},
 				{
-					"group": "TBC",
+					"group": "nanakoro",
 					"time": ["1405", "1430"],
 					"tokuten": ["after", ""]
 				},
 				{
-					"group": "TBC",
+					"group": "ion",
 					"time": ["1430", "1455"],
 					"tokuten": ["after", ""]
 				}
