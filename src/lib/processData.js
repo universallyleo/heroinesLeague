@@ -19,7 +19,7 @@ const championLeagueFiles = import.meta.glob('./data/champion/*.json', { eager: 
 /**
  * @enum {number}
  */
-export const LeagueType = { CHAMP: 0, ONE: 1, TWO: 2, PLAYOFFS: 3};
+export const LeagueType = { CHAMP: 0, ONE: 1, TWO: 2, PLAYOFFS: 3 };
 
 /** @type {LeagueDataRaw[]} */
 export const leagueOne = [];
@@ -144,6 +144,7 @@ export function groupDisplayShort(search_id) {
  * @property {GuestDataRaw} [guestShimeiFC]
  * @property {string[]} [comments]
  * @property {number[]} [guestIdx]
+ * @property {string[]} [resultRecord]
  * @property {AssignMatchLPt[]} [lpFormulae]
  * if have shimei and fcRank
  * 		=> match rank determined by (fcRankToCount + shimeiNum)
@@ -452,9 +453,10 @@ export function CalculateLeagueResult(raw) {
 	}
 
 	let finalMatchWithResult = lastFinishedMatchID(res.matches);
-	console.log(`*** Final Match with result: ${finalMatchWithResult+1}***`);
+	console.log(`*** Final Match with result: ${finalMatchWithResult + 1}***`);
 	let joinAfter = res.matches.reduce(
-		(arr, { assignedLP }, j) => assignedLP.length>0?(assignedLP.map((v, i) => (v === 0 ? j : arr[i]))):arr,
+		(arr, { assignedLP }, j) =>
+			assignedLP.length > 0 ? assignedLP.map((v, i) => (v === 0 ? j : arr[i])) : arr,
 		new Array(raw.groups.length).fill(null)
 	);
 	let finalAssignedLP = joinAfter.map((v, i) =>
