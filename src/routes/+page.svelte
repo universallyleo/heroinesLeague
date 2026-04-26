@@ -12,6 +12,7 @@
 	let leagueData = [dataCollection[1][selectedSeason - 1], dataCollection[2][selectedSeason - 1]];
 	let playoffsData = [dataCollection[3][0]];
 	let champLeagueData = [dataCollection[0][0]];
+	let gradeUpData = [dataCollection[4][0]];
 </script>
 
 <svelte:head>
@@ -32,10 +33,11 @@
 
 <section>
 	<Accordion>
-		{@render leagueAccord(champLeagueData[0], true)}
-		{@render leagueAccord(playoffsData[0], true)}
-		{@render leagueAccord(leagueData[0], false)}
+		{@render leagueAccord(gradeUpData[0], true)}
+		{@render leagueAccord(champLeagueData[0], false)}
+		{@render leagueAccord(playoffsData[0], false)}
 		{@render leagueAccord(leagueData[1], false)}
+		{@render leagueAccord(leagueData[0], false)}
 	</Accordion>
 </section>
 

@@ -36,15 +36,18 @@
 <div style="controlDiv">
 	<div>
 		リーグ：
-		{#each selectableLeagues as i}
-			<label><input type="radio" name="league" value={i} bind:group={league} /> {dataCollection[i][0].title} </label>
+		{#each selectableLeagues as i (i)}
+			<label
+				><input type="radio" name="league" value={i} bind:group={league} />
+				{dataCollection[i][0].title}
+			</label>
 		{/each}
 		<!-- https://svelte.dev/docs/svelte/each#Keyed-each-blocks -->
 	</div>
 
 	<div style="progressSelect">
 		推移データ：
-		{#each Object.entries(labels) as [val, lab]}
+		{#each Object.entries(labels) as [val, lab] (lab)}
 			<label>
 				<input type="radio" name="progressType" value={val} bind:group={progressType} />
 				{lab}

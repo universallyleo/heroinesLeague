@@ -1,0 +1,64 @@
+{
+	"id": "fullcourse",
+	"displayName": "フルコース",
+	"displayNameAlt": ["Full Course"],
+	"displayShort": "フルコ",
+	"debut": "2026-02-27",
+	"members": [
+		{
+			"name": "Nakagawa Cocoro",
+			"display": "中川心",
+			"colorCode": "#CA2222",
+			"color": "Red",
+			"join": "2026-02-27"
+		},
+		{
+			"name": "Abe Nanami",
+			"display": "阿部菜々実",
+			"colorCode": "#FFFFFF",
+			"color": "White",
+			"join": "2026-02-27"
+		},
+		{
+			"name": "Suzuki Haruka",
+			"display": "鈴木遥夏",
+			"colorCode": "#8327C9",
+			"color": "Purple",
+			"join": "2026-02-27"
+		},
+		{
+			"name": "Konoha Cona",
+			"display": "小葉こな",
+			"colorCode": "#22C523",
+			"color": "Green",
+			"join": "2026-02-27"
+		},
+		{
+			"name": "Kaneshiro Maki",
+			"display": "金城まき",
+			"colorCode": "#FFEF00",
+			"color": "Yellow",
+			"join": "2026-02-27"
+		},
+		{
+			"name": "Osaki Mihane",
+			"display": "桜咲みはね",
+			"colorCode": "#FF04B7",
+			"color": "Pink",
+			"join": "2026-02-27"
+		},
+		{
+			"name": "Mizukami Rimika",
+			"display": "水上凜巳花",
+			"colorCode": "#02D5FB",
+			"color": "Light Blue",
+			"join": "2026-02-27"
+		}
+	],
+	"sns": {
+		"twitter": "FullCourse_idol",
+		"instagram": "fullcourse_idol",
+		"tiktok": "fullcourse_idol",
+		"youtube": "FullCourse_idol"
+	}
+}

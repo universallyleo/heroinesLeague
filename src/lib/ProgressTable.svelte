@@ -17,6 +17,7 @@
 	let opts = $state({
 		detailTable: true
 	});
+	// eslint-disable-next-line no-unused-vars
 	let openMatchesDetails = $state(leagueSeasonData.summary.map((_) => false)); // binding would not work reactively if using $derived
 	// c.f. https://github.com/sveltejs/svelte/issues/12320
 	let headingRowData = $derived(leagueSeasonData.summary);
@@ -67,7 +68,7 @@
 				<th class="sticky headingRow" style="left:0;width:1em;">順</th>
 				<th class="sticky headingRow" style="left:1.7em;">グループ </th>
 				<!-- #region match details -->
-				{#each headingRowData as match, i}
+				{#each headingRowData as match, i (i)}
 					<th class="headingRow" style:width={opts.detailTable ? '7.8em' : '5em'}>
 						<div>
 							<button class="plainBtn" onclick={() => openMatchDetails(i)}>
@@ -94,7 +95,7 @@
 				<tr>
 					<th class="sticky"></th>
 					<th class="sticky"></th>
-					{#each leagueSeasonData.extData.matches as match, i}
+					{#each leagueSeasonData.extData.matches as match, i (i)}
 						<th
 							style="font-weight:normal; font-size:.9em; border-top: dashed 1px #999; vertical-align:middle;"
 						>
@@ -111,7 +112,7 @@
 			<tr class="headingRowSubData">
 				<th class="sticky"></th>
 				<th class="sticky" style="font-weight: normal; font-size:.7em;">（全戦合計指名数）</th>
-				{#each headingRowData as match}
+				{#each headingRowData as match (match)}
 					<th
 						style="font-weight: normal; font-size:.7em; border-top: dashed 1px #999; padding-top:.2em; "
 					>
@@ -125,7 +126,7 @@
 
 		<!--#region main table -->
 		<tbody>
-			{#each leagueSeasonData.resByGp as gp, i}
+			{#each leagueSeasonData.resByGp as gp (gp)}
 				<tr>
 					<td
 						class={['headingCell', 'sticky', gp.category]}
@@ -138,7 +139,7 @@
 						style="font-size:smaller;left:1.7em;"
 					>
 						<img
-							src={`.\/gpLogo\/${gp.group}.jpg`}
+							src={`./gpLogo/${gp.group}.jpg`}
 							width={clamp ? '40' : '60'}
 							alt={getGroup(gp.group).displayName}
 						/>

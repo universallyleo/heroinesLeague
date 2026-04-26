@@ -1,6 +1,7 @@
 {
 	"league": 3,
-	"title": "入れ替え戦",
+	"season": 2025,
+	"title": "入替戦",
 	"groups": ["akishibu", "ion", "tenrin", "ill", "chula", "nanakoro", "parasai", "paradeeq"],
 	"rankToPoints": [100, 80, 65, 50, 40, 30, 20, 10],
 	"fcRankToCount": [55, 40, 30, 20, 15, 10, 5, 0],
@@ -259,8 +260,8 @@
 				}
 			],
 			"fcRankToCount": [55, 40, 30, 20, 15, 10, 5, 0],
-			"fcRank":[6,1,2,5,3,4,7,8],
-			"shimeiNum": [71,160,306,124,270,75,30,32 ]
+			"fcRank": [6, 1, 2, 5, 3, 4, 7, 8],
+			"shimeiNum": [71, 160, 306, 124, 270, 75, 30, 32]
 		}
 	]
 }

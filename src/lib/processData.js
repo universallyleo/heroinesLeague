@@ -1,4 +1,3 @@
-// import aggregate from "$lib/data/aggregate.json";
 import {
 	rank,
 	ShortJPDate,
@@ -16,6 +15,7 @@ const leagueOneFiles = import.meta.glob('./data/league1/*.json', { eager: true }
 const leagueTwoFiles = import.meta.glob('./data/league2/*.json', { eager: true });
 const playoffsFiles = import.meta.glob('./data/playoffs/*.json', { eager: true });
 const championLeagueFiles = import.meta.glob('./data/champion/*.json', { eager: true });
+const gradeUpFiles = import.meta.glob('./data/gradeup/*.json', { eager: true });
 /**
  * @enum {number}
  */
@@ -29,13 +29,16 @@ export const leagueTwo = [];
 export const playoffs = [];
 /** @type {LeagueDataRaw[]} */
 export const champLeague = [];
+/** @type {LeagueDataRaw[]} */
+export const gradeUp = [];
 export const groups = [];
 [
 	[groupFiles, groups],
 	[championLeagueFiles, champLeague],
 	[leagueOneFiles, leagueOne],
 	[leagueTwoFiles, leagueTwo],
-	[playoffsFiles, playoffs]
+	[playoffsFiles, playoffs],
+	[gradeUpFiles, gradeUp]
 ].forEach(([f, g]) => {
 	Object.keys(f).map((path) => {
 		// @ts-ignore
@@ -185,6 +188,7 @@ export function groupDisplayShort(search_id) {
  *
  * @typedef {Object} LeagueDataRaw
  * @property {number} league
+ * @property {number} season
  * @property {string} title
  * @property {Array<string>} groups
  * @property {Array<number>} [rankToPoints] n-th entry = points given to (n+1)st place group
@@ -194,6 +198,7 @@ export function groupDisplayShort(search_id) {
  *
  * @typedef {Object} LeagueDataExt
  * @property {number} league
+ * @property {number} season
  * @property {string} title
  * @property {Array<string>} groups
  * @property {Array<number>} [rankToPoints] n-th entry = points given to (n+1)st place group
@@ -325,7 +330,7 @@ function ExtendMatchData(rawMatch, numPlayers, fcRankToCount, rankToPoints, prev
 	let hasRes = hasResult(rawMatch);
 	mExt.shortdate = ShortJPDate(rawMatch.date, true);
 	mExt.displayType = hasRes ? 'RESULT' : hasTT(rawMatch) ? 'TT_ONLY' : 'NONE';
-	mExt.hasFC = 'fcRankToCount' in rawMatch;
+	mExt.hasFC = 'fcRankToCount' in rawMatch || 'fcRank' in rawMatch;
 	mExt.hasShimei = hasRes && 'shimeiNum' in rawMatch;
 
 	mExt.fcRankToCount = rawMatch?.fcRankToCount ?? fcRankToCount;
@@ -366,7 +371,12 @@ function ExtendMatchData(rawMatch, numPlayers, fcRankToCount, rankToPoints, prev
 
 		let rankedData = 'rank' in rawMatch ? rank(rawMatch.rank, (a, b) => a - b) : rank(totalCount);
 		mExt.totalRank = 'rank' in rawMatch ? rawMatch.rank : rankedData.rank;
-		mExt.getLPt = mExt.totalRank.map((r) => mExt.rankToPoints[r - 1]);
+		// if no rankToPoints data, then just use totalCount as league point.
+		mExt.getLPt = mExt.totalRank.map((r) =>
+			mExt.rankToPoints.length === mExt.totalRank.length
+				? mExt.rankToPoints[r - 1]
+				: totalCount[rankedData.inv[r - 1]]
+		);
 		// mExt.getLPtDiff = diffFromRanked(mExt.getLPt, rankedData.rank, rankedData.prev);
 		//  console.log(`** L${raw.league} ***** ${n} **** (${rawMatch.date})`);
 		// 	console.log(`totalRank: `, mExt.totalRank);
@@ -436,16 +446,16 @@ export function CalculateLeagueResult(raw) {
 	res.matches = [];
 	// let numGp = raw.groups.length;
 
-	console.log(`********* League ${raw.league} ************ `);
+	// console.log(`********* League ${raw.league} ************ `);
 	// let firstJoinAt = new Array(raw.groups.length);
 	for (const [sn, match] of Object.entries(raw.matches)) {
 		let n = parseInt(sn);
-		console.log(`************ ${n} ************ (${match.date})`);
+		// console.log(`************ ${n} ************ (${match.date})`);
 		let mExt = ExtendMatchData(
 			match,
 			raw.groups.length,
-			raw.fcRankToCount,
-			raw.rankToPoints,
+			raw.fcRankToCount ?? [],
+			raw.rankToPoints ?? [],
 			n > 0 ? res.matches[n - 1] : null
 		);
 		// console.log(mExt);
@@ -453,7 +463,7 @@ export function CalculateLeagueResult(raw) {
 	}
 
 	let finalMatchWithResult = lastFinishedMatchID(res.matches);
-	console.log(`*** Final Match with result: ${finalMatchWithResult + 1}***`);
+	// console.log(`*** Final Match with result: ${finalMatchWithResult + 1}***`);
 	let joinAfter = res.matches.reduce(
 		(arr, { assignedLP }, j) =>
 			assignedLP.length > 0 ? assignedLP.map((v, i) => (v === 0 ? j : arr[i])) : arr,
@@ -753,14 +763,14 @@ const matchPattern = {
 /**
  * @typedef {Object} SeasonLeagueData
  * @property {number} season
- * @property {number} league  1=1, 2=2, 3=playoffs, 0=champion
+ * @property {number} league  1=1, 2=2, 3=playoffs 入替戦, 0=champion 決勝リーグ, 4=gradeup 昇格
  * @property {string} title  1=1, 2=2, 3=playoffs, 0=champion
  * @property {LeagueDataExt} extData
  * @property {GroupResultSeries[]} resByGp
  * @property {MatchSummary[]} summary
  */
 /** @type {SeasonLeagueData[][]} */
-export const dataCollection = [champLeague, leagueOne, leagueTwo, playoffs].map(
+export const dataCollection = [champLeague, leagueOne, leagueTwo, playoffs, gradeUp].map(
 	(leagueSeasonData, i) => {
 		let LS = [];
 		for (let j = 0; j < leagueSeasonData.length; j++) {
@@ -769,7 +779,8 @@ export const dataCollection = [champLeague, leagueOne, leagueTwo, playoffs].map(
 			let res = {
 				league: i + 1,
 				title: leagueSeasonData[j].title,
-				season: j + 1,
+				// season: j + 1,
+				season: extData.season,
 				extData: extData,
 				resByGp: partitionResultToSortedGroups(extData),
 				summary: extractSummaryFromLeagueResExt(extData)

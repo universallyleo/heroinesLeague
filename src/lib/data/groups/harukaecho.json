@@ -1,0 +1,51 @@
+{
+	"id": "harukaecho",
+	"displayName": "ハルカエコー",
+	"displayShort": "ハルカ",
+	"debut": "2026-04-19",
+	"members": [
+		{
+			"name": "Amamiya Ruri",
+			"display": "雨宮るり",
+			"colorCode": "#333790",
+			"color": "Blue",
+			"join": "2026-04-19"
+		},
+		{
+			"name": "Hirasawa Kae",
+			"display": "平沢かえ",
+			"colorCode": "#F6C332",
+			"color": "Yellow",
+			"join": "2026-04-19"
+		},
+		{
+			"name": "Kannagi Mifuyu",
+			"display": "神凪みふゆ",
+			"colorCode": "#532C9F",
+			"color": "Purple",
+			"join": "2026-04-19"
+		},
+		{
+			"name": "Tokiwa Uta",
+			"display": "常盤うた",
+			"colorCode": "#DD2690",
+			"color": "Pink",
+			"join": "2026-04-19"
+		},
+		{
+			"name": "Ashina Yui",
+			"display": "芦名ゆい",
+			"colorCode": "#FFFFFF",
+			"color": "White",
+			"join": "2026-04-19"
+		},
+		{
+			"name": "Kousaka Rin",
+			"display": "高坂りん",
+			"colorCode": "#983436",
+			"color": "Red",
+			"join": "2026-04-19"
+		}
+	],
+	"sns": { "twitter": "HARUKAECHO_IDOL", "tiktok": "harukaecho", "youtube": "HARUKAECHO" }
+}

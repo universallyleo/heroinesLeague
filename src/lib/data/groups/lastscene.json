@@ -1,0 +1,56 @@
+{
+	"id": "lastscene",
+	"displayName": "ラストシーン",
+	"displayNameAlt": ["LAST SCENE"],
+	"displayShort": "ラスシン",
+	"debut": "2025-12-24",
+	"members": [
+		{
+			"name": "Amo Shiori",
+			"display": "天羽しおり",
+			"colorCode": "#39C6A5",
+			"color": "Green",
+			"join": ""
+		},
+		{
+			"name": "Kanade Onpu",
+			"display": "歌奏おんぷ",
+			"colorCode": "white",
+			"color": "White|s",
+			"join": ""
+		},
+		{
+			"name": "Yuzuki Ichika",
+			"display": "佑月いちか",
+			"colorCode": "#FFD049",
+			"color": "Yellow",
+			"join": ""
+		},
+		{
+			"name": "Yuuki Azusa",
+			"display": "優木あずさ",
+			"colorCode": "#FB6B6A",
+			"color": "Red",
+			"join": ""
+		},
+		{
+			"name": "Miyase Uyu",
+			"display": "宮瀬うゆ",
+			"colorCode": "#FF6AC1",
+			"color": "Pink",
+			"join": ""
+		},
+		{
+			"name": "Koga Mirei",
+			"display": "古賀みれい",
+			"colorCode": "#A455C0",
+			"color": "Purple",
+			"join": ""
+		}
+	],
+	"sns": {
+		"twitter": "LASTSCENE_idol",
+		"tiktok": "lastscene_idol",
+		"youtube": "lastscene_heroines"
+	}
+}

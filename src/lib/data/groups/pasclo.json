@@ -1,0 +1,71 @@
+{
+	"id": "pasclo",
+	"displayName": "Pastel Closet",
+	"displayNameAlt": ["パステルクローゼット"],
+	"displayShort": "パスクロ",
+	"debut": "2025-08-02",
+	"sns": {
+		"twitter": "Pasclo_official",
+		"ig": "pasclo_official",
+		"yt": "pasclo_official",
+		"tiktok": "pasclo_official"
+	},
+	"members": [
+		{
+			"name": "Shinohara Sakura",
+			"display": "篠原さくら",
+			"colorCode": "#F3B6D5",
+			"color": "Pink",
+			"join": "2025-08-02"
+		},
+		{
+			"name": "Yukino Reia",
+			"display": "幸野れいあ",
+			"colorCode": "#E76F75",
+			"color": "Red",
+			"join": "2025-08-02"
+		},
+		{
+			"name": "Nishina Mitsu",
+			"display": "仁科美都",
+			"colorCode": "#FFFFFF",
+			"color": "White",
+			"join": "2025-08-02"
+		},
+		{
+			"name": "Sumihara Kaho",
+			"display": "澄原夏帆",
+			"colorCode": "#73D193",
+			"color": "Emerald Green",
+			"join": "2025-08-02"
+		},
+		{
+			"name": "Hinaki Nonoka",
+			"display": "雛城ののか",
+			"colorCode": "#5383E4",
+			"color": "Blue",
+			"join": "2025-08-02"
+		},
+		{
+			"name": "Hanaki Maika",
+			"display": "花木舞花",
+			"colorCode": "#FBA783",
+			"color": "Orange",
+			"join": "2025-08-02"
+		},
+		{
+			"name": "Anzai Minori",
+			"display": "安齋みのり",
+			"colorCode": "#B08AEB",
+			"color": "Purple",
+			"join": "2025-08-02"
+		},
+		{
+			"name": "Kanno Ai",
+			"display": "柑乃あい",
+			"colorCode": "#F4EB8A",
+			"color": "Yellow",
+			"join": "2025-08-02"
+		}
+	]
+}

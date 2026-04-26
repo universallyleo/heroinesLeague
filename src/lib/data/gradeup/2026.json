@@ -1,0 +1,100 @@
+{
+	"league": 4,
+	"season": 2026,
+	"title": "昇格戦",
+	"groups": [
+		"lastscene",
+		"tenran",
+		"nanakoro",
+		"pasclo",
+		"calres",
+		"fullcourse",
+		"ponkotu",
+		"harukaecho",
+		"paradeeq",
+		"parasai",
+		"akishibu",
+		"ladybaby",
+		"zuttomotto"
+	],
+	"rankToPoints": [],
+	"fcRankToCount": [55, 40, 30, 25, 20, 15, 10, 10, 5, 5, 5, 0, 0],
+	"matches": [
+		{
+			"date": "2026-04-24",
+			"venue": "Kanadevia Hall",
+			"tweet": "https://x.com/heroines_idol/status/2047526673688793255",
+			"rules": ["https://x.com/heroines_idol/status/2047526673688793255"],
+			"timetable": [
+				{
+					"group": "tenran",
+					"time": ["1430", "1455"],
+					"tokuten": ["1505", "1605"]
+				},
+				{
+					"group": "fullcourse",
+					"time": ["1455", "1520"],
+					"tokuten": ["1530", "1630"]
+				},
+				{
+					"group": "lastscene",
+					"time": ["1520", "1545"],
+					"tokuten": ["1555", "1655"]
+				},
+				{
+					"group": "zuttomotto",
+					"time": ["1545", "1610"],
+					"tokuten": ["1620", "1720"]
+				},
+				{
+					"group": "calres",
+					"time": ["1615", "1750"],
+					"tokuten": ["1650", "1750"]
+				},
+				{
+					"group": "ponkotu",
+					"time": ["1640", "1705"],
+					"tokuten": ["1715", "1815"]
+				},
+				{
+					"group": "ladybaby",
+					"time": ["1705", "1730"],
+					"tokuten": ["1740", "1840"]
+				},
+				{
+					"group": "pasclo",
+					"time": ["1730", "1755"],
+					"tokuten": ["1805", "1905"]
+				},
+				{
+					"group": "harukaecho",
+					"time": ["1800", "1825"],
+					"tokuten": ["1835", "1935"]
+				},
+				{
+					"group": "paradeeq",
+					"time": ["1825", "1850"],
+					"tokuten": ["1900", "2000"]
+				},
+				{
+					"group": "parasai",
+					"time": ["1850", "1915"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "nanakoro",
+					"time": ["1915", "1940"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "akishibu",
+					"time": ["1940", "2005"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"shimeiNum": [404, 257, 201, 103, 96, 100, 60, 55, 51, 38, 37, 26, 23],
+			"fcRank": [3, 2, 1, 4, 6, 9, 5, 7, 7, 9, 12, 9, 12],
+			"resultRecord": ["https://x.com/ks_ecophysi/status/2047636987386163280?s=20"]
+		}
+	]
+}
