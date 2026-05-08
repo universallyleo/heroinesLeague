@@ -3,16 +3,13 @@
 	import AccordionItem from '$lib/AccordionItem.svelte';
 	import ProgressTable from '$lib/ProgressTable.svelte';
 
-	import { dataCollection } from '$lib/processData.js';
+	import { dataCollec } from '$lib/processData.js';
 
 	let innerWidth = $state(0);
 	// $inspect('innerWidth: ', innerWidth);
 
-	let selectedSeason = 1;
-	let leagueData = [dataCollection[1][selectedSeason - 1], dataCollection[2][selectedSeason - 1]];
-	let playoffsData = [dataCollection[3][0]];
-	let champLeagueData = [dataCollection[0][0]];
-	let gradeUpData = [dataCollection[4][0]];
+	let leagueData = dataCollec({ season: 2026, league: 1 });
+	$inspect(leagueData);
 </script>
 
 <svelte:head>
@@ -33,41 +30,9 @@
 
 <section>
 	<Accordion>
-		{@render leagueAccord(gradeUpData[0], true)}
-		{@render leagueAccord(champLeagueData[0], false)}
-		{@render leagueAccord(playoffsData[0], false)}
-		{@render leagueAccord(leagueData[1], false)}
-		{@render leagueAccord(leagueData[0], false)}
+		{@render leagueAccord(leagueData, false)}
 	</Accordion>
 </section>
-
-<!-- 
-{#snippet leagueAccord(data, open = false)}
-	<AccordionItem {open}>
-		{#snippet header()}
-			リーグ{data.league} 結果
-		{/snippet}
-		<ProgressTable rawdata={data.data} clamp={innerWidth < 600} />
-	</AccordionItem>
-{/snippet} -->
-
-<!-- <section>
-	{#if innerWidth <= 1080}
-	<Accordion>
-		{@render leagueAccord(pageData[0], true)}
-		{@render leagueAccord(pageData[1], true)}
-	</Accordion>
-	{:else}
-	<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1px;">
-			<Accordion>
-				{@render leagueAccord(pageData[0], true)}
-			</Accordion>
-			<Accordion>
-				{@render leagueAccord(pageData[1], true)}
-			</Accordion>
-		</div>
-	{/if}
-	</section> -->
 
 <style>
 </style>

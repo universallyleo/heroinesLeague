@@ -16,9 +16,7 @@
 	let matchList = $derived(selectedSeason?.extData?.matches ?? []);
 	let selectedMatch = $derived(matchList[selectedMatchIndex] ?? null);
 	let groups = $derived(selectedSeason?.extData?.groups ?? []);
-	let fcRankToCount = $derived(
-		selectedMatch?.fcRankToCount ?? selectedSeason?.extData?.fcRankToCount ?? []
-	);
+	let fcRankToCount = $derived(selectedMatch?.fcRankToCount ?? []);
 
 	function resetInputs() {
 		shimeiValues = new Array(groups.length).fill('');

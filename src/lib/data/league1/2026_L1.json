@@ -1,0 +1,32 @@
+{
+	"league": 1,
+	"season": 2026,
+	"title": "リーグⅠ",
+	"groups": [
+		"ilife",
+		"nonfic",
+		"yoruami",
+		"dresscode",
+		"adamth",
+		"megafon",
+		"ion",
+		"ill",
+		"tenrin",
+		"chula",
+		"lastscene",
+		"tenran"
+	],
+	"assignLPWeight": 0.7,
+	"matches": [
+		{
+			"date": "2025-05-20",
+			"venue": "Kanadevia Hall",
+			"tweet": "https://x.com/heroines_idol/status/2049826541493006587",
+			"rules": ["https://x.com/heroines_idol/status/2049826541493006587"],
+			"rankToPoints": [120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5],
+			"fcRankToCount": [40, 30, 25, 20, 15, 15, 10, 10, 5, 5, 0, 0],
+			"abemaRankToCount": [60, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0],
+			"timetable": []
+		}
+	]
+}

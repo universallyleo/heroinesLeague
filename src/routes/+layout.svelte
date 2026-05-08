@@ -31,7 +31,8 @@
 		</label>
 		<ul>
 			<li><a href="{base}/">🏆総合ランキング</a></li>
-			<li><a href="{base}/rules">🧾ルール変更一覧</a></li>
+			<li><a href="{base}/">🧾過去の結果</a></li>
+			<li><a href="{base}/rules">📑ルール変更一覧</a></li>
 			<li><a href="{base}/progress">📈各データ推移</a></li>
 			<li><a href="{base}/details">⚔️各戦詳細</a></li>
 			<!-- <li><a href="{base}/about">ℹ️ページについて</a></li> -->
