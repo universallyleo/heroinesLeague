@@ -1,4 +1,5 @@
 <script>
+	import { base } from '$app/paths';
 	import { matchDates, getGroup, seriesFromResult, groupDisplayShort } from '$lib/processData.js';
 	import { toPng } from 'html-to-image';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
@@ -139,7 +140,7 @@
 						style="font-size:smaller;left:1.7em;"
 					>
 						<img
-							src={`./gpLogo/${gp.group}.jpg`}
+							src={`${base}/gpLogo/${gp.group}.jpg`}
 							width={clamp ? '40' : '60'}
 							alt={getGroup(gp.group).displayName}
 						/>
