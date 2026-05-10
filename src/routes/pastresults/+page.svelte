@@ -71,31 +71,3 @@
 		{/each}
 	</Accordion>
 </section>
-
-<!-- 
-{#snippet leagueAccord(data, open = false)}
-	<AccordionItem {open}>
-		{#snippet header()}
-			リーグ{data.league} 結果
-		{/snippet}
-		<ProgressTable rawdata={data.data} clamp={innerWidth < 600} />
-	</AccordionItem>
-{/snippet} -->
-
-<!-- <section>
-	{#if innerWidth <= 1080}
-	<Accordion>
-		{@render leagueAccord(pageData[0], true)}
-		{@render leagueAccord(pageData[1], true)}
-	</Accordion>
-	{:else}
-	<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1px;">
-			<Accordion>
-				{@render leagueAccord(pageData[0], true)}
-			</Accordion>
-			<Accordion>
-				{@render leagueAccord(pageData[1], true)}
-			</Accordion>
-		</div>
-	{/if}
-	</section> -->
