@@ -8,8 +8,9 @@
 	let innerWidth = $state(0);
 	// $inspect('innerWidth: ', innerWidth);
 
-	let leagueData = dataCollec({ season: 2026, league: 1 });
-	$inspect(leagueData);
+	let leagueOneData = dataCollec({ season: 2026, league: 1 });
+	let leagueTwoData = dataCollec({ season: 2026, league: 2 });
+	// $inspect(leagueData);
 </script>
 
 <svelte:head>
@@ -30,7 +31,8 @@
 
 <section>
 	<Accordion>
-		{@render leagueAccord(leagueData, false)}
+		{@render leagueAccord(leagueOneData, true)}
+		{@render leagueAccord(leagueTwoData, true)}
 	</Accordion>
 </section>
 

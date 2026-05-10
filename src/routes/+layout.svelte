@@ -31,10 +31,15 @@
 		</label>
 		<ul>
 			<li><a href="{base}/">🏆総合ランキング</a></li>
-			<li><a href="{base}/">🧾過去の結果</a></li>
+			<li><a href="{base}/pastresults">🧾過去の結果</a></li>
 			<li><a href="{base}/rules">📑ルール変更一覧</a></li>
 			<li><a href="{base}/progress">📈各データ推移</a></li>
 			<li><a href="{base}/details">⚔️各戦詳細</a></li>
+			<li>
+				<a class="external" href="https://universallyleo.github.io/heroinesCrowdfund/">
+					💰クラファン記録
+				</a>
+			</li>
 			<!-- <li><a href="{base}/about">ℹ️ページについて</a></li> -->
 		</ul>
 	</nav>
@@ -51,10 +56,10 @@
 		<a href="https://x.com/55gohan06">
 			<img width="32" src={xicon} alt="Twitter" />
 		</a>
-		&nbsp;&nbsp;
+		<!-- &nbsp;&nbsp;
 		<a class="external" href="https://universallyleo.github.io/heroinesCrowdfund/">
 			ヒロインズクラファ記録
-		</a>
+		</a> -->
 	</footer>
 </div>
 

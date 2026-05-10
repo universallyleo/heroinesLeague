@@ -1,12 +1,13 @@
 <script>
-	import { resultTypes } from './processData';
+	// import { resultTypes } from './processData';
 	import RankNumber from './RankNumber.svelte';
 	import SubDataCell from './SubDataCell.svelte';
 	let { gpResult, n, detailed } = $props();
 
-	// let hasShimei = $derived(gpResult.shimeiNum[n] != null);
-	// let hasFC = $derived(gpResult.fcCount[n] != null);
-	let { hasShimei, hasFC } = $derived(resultTypes(gpResult, n));
+	let hasShimei = $derived(gpResult.shimeiNum[n] != null);
+	let hasFC = $derived(gpResult.fcCount[n] != null);
+	let hasAbema = $derived(gpResult.abemaCount[n] != null);
+
 	let hasResult = $derived(gpResult.totalRank[n] > 0);
 	// $inspect('n:', n, 'gp: ', gpResult.group,'; hasResult: ', hasResult, '; gpResult.accumPtDiff:', gpResult.accumPtDiff);
 </script>
@@ -25,11 +26,14 @@
 				<SubDataCell
 					{hasShimei}
 					{hasFC}
+					{hasAbema}
 					shimeiNum={gpResult.shimeiNum[n]}
 					shimeiRank={gpResult.shimeiRank[n]}
 					shimeiDiff={gpResult.shimeiDiff[n]}
 					fcCount={gpResult.fcCount[n]}
 					fcRank={gpResult.fcRank[n]}
+					abemaCount={gpResult.fcCount[n]}
+					abemaRank={gpResult.fcRank[n]}
 					totalRank={gpResult.totalRank[n]}
 					countDiff={gpResult.countDiff[n]}
 				/>

@@ -61,8 +61,10 @@ export function rankDiffAssign(arr, obj, rkKey, diffKey, f = (a, b) => b - a) {
 // 	return [...counts].filter(([, l]) => l > 1).map(([x]) => x);
 // }
 
-export function betterObjectFromEntries(entries, source) {
-	return Object.fromEntries(entries.filter((k) => k in source).map((k) => [k, source[k]]));
+export function betterObjectFromEntries(entries, source, forceAll = false) {
+	return Object.fromEntries(
+		entries.filter((k) => forceAll || k in source).map((k) => [k, k in source ? source[k] : null])
+	);
 }
 
 export function deltaTime(fromTime, toTime) {

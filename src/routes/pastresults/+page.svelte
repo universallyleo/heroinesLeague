@@ -1,0 +1,101 @@
+<script>
+	import { flip } from 'svelte/animate';
+	import Accordion from '$lib/Accordion.svelte';
+	import AccordionItem from '$lib/AccordionItem.svelte';
+	import ProgressTable from '$lib/ProgressTable.svelte';
+
+	import { dataCollection } from '$lib/processData.js';
+
+	let innerWidth = $state(0);
+
+	let activeTitle = $state(null);
+	let orderTitle = $state(null);
+
+	const allLeagues = [
+		dataCollection[4][0], // gradeUp
+		dataCollection[0][0], // champ
+		dataCollection[3][0], // playoffs
+		dataCollection[2][0], // league 2
+		dataCollection[1][0] // league 1
+	];
+
+	let sortedLeagues = $derived.by(() => {
+		if (!orderTitle) return allLeagues;
+		const target = allLeagues.find((l) => l.title === orderTitle);
+		const others = allLeagues.filter((l) => l.title !== orderTitle);
+		return [...others, target];
+	});
+
+	function toggleActive(title, e) {
+		e.stopPropagation();
+		if (activeTitle === title) {
+			// Just close the current one, don't change order
+			activeTitle = null;
+		} else {
+			activeTitle = null; // (1) Close all accordions first
+			orderTitle = title; // (2) Reorder: move clicked item to bottom
+			// (3) After reordering animation, open the tab
+			setTimeout(
+				() => {
+					activeTitle = title;
+				},
+				450 // Matches flip duration (400) + small buffer
+			);
+		}
+	}
+</script>
+
+{#snippet leagueAccord(lsData)}
+	<AccordionItem open={activeTitle === lsData.title}>
+		{#snippet header()}
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div
+				onclick={(e) => toggleActive(lsData.title, e)}
+				style="cursor: pointer; width: 100%; height: 100%; margin: -1rem; padding: 1rem;"
+			>
+				{lsData.title} 結果
+			</div>
+		{/snippet}
+		<ProgressTable leagueSeasonData={lsData} clamp={innerWidth < 600} />
+	</AccordionItem>
+{/snippet}
+
+<section>
+	<h2>2025年度結果まとめ</h2>
+	<Accordion>
+		{#each sortedLeagues as lsData (lsData.title)}
+			<div animate:flip={{ duration: 400 }}>
+				{@render leagueAccord(lsData)}
+			</div>
+		{/each}
+	</Accordion>
+</section>
+
+<!-- 
+{#snippet leagueAccord(data, open = false)}
+	<AccordionItem {open}>
+		{#snippet header()}
+			リーグ{data.league} 結果
+		{/snippet}
+		<ProgressTable rawdata={data.data} clamp={innerWidth < 600} />
+	</AccordionItem>
+{/snippet} -->
+
+<!-- <section>
+	{#if innerWidth <= 1080}
+	<Accordion>
+		{@render leagueAccord(pageData[0], true)}
+		{@render leagueAccord(pageData[1], true)}
+	</Accordion>
+	{:else}
+	<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1px;">
+			<Accordion>
+				{@render leagueAccord(pageData[0], true)}
+			</Accordion>
+			<Accordion>
+				{@render leagueAccord(pageData[1], true)}
+			</Accordion>
+		</div>
+	{/if}
+	</section> -->

@@ -1,0 +1,98 @@
+{
+	"league": 1,
+	"season": 2026,
+	"title": "リーグⅠ",
+	"groups": [
+		"nanakoro",
+		"pasclo",
+		"calres",
+		"fullcourse",
+		"ponkotu",
+		"harukaecho",
+		"paradeeq",
+		"parasai",
+		"akishibu",
+		"ladybaby",
+		"zuttomotto",
+		"heroken",
+		"herokenOsaka"
+	],
+	"assignLPWeight": 0.7,
+	"matches": [
+		{
+			"date": "2025-05-17",
+			"venue": "Ebisu Garden Hall",
+			"tweet": "https://x.com/heroines_idol/status/2053435029360087421",
+			"rules": ["https://x.com/heroines_idol/status/2053435029360087421"],
+			"rankToPoints": [120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 5],
+			"fcRankToCount": [30, 25, 20, 15, 15, 10, 10, 5, 5, 5, 5, 5, 5],
+			"timetable": [
+				{
+					"group": "herokenOsaka",
+					"time": ["1500", "1525"],
+					"tokuten": ["1535", "1635"]
+				},
+				{
+					"group": "heroken",
+					"time": ["1525", "1550"],
+					"tokuten": ["1600", "1700"]
+				},
+				{
+					"group": "zuttomotto",
+					"time": ["1550", "1615"],
+					"tokuten": ["1625", "1725"]
+				},
+				{
+					"group": "ladybaby",
+					"time": ["1615", "1640"],
+					"tokuten": ["1650", "1750"]
+				},
+				{
+					"group": "akishibu",
+					"time": ["1640", "1705"],
+					"tokuten": ["1715", "1815"]
+				},
+				{
+					"group": "parasai",
+					"time": ["1710", "1735"],
+					"tokuten": ["1745", "1845"]
+				},
+				{
+					"group": "paradeeq",
+					"time": ["1735", "1800"],
+					"tokuten": ["1810", "1910"]
+				},
+				{
+					"group": "harukaecho",
+					"time": ["1800", "1825"],
+					"tokuten": ["1835", "1935"]
+				},
+				{
+					"group": "ponkotu",
+					"time": ["1825", "1850"],
+					"tokuten": ["1900", "2000"]
+				},
+				{
+					"group": "fullcourse",
+					"time": ["1855", "1920"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "calres",
+					"time": ["1920", "1945"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "pasclo",
+					"time": ["1945", "2010"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "nanakoro",
+					"time": ["2010", "2035"],
+					"tokuten": ["after", ""]
+				}
+			]
+		}
+	]
+}

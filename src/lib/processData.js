@@ -1,5 +1,6 @@
 import {
 	rank,
+	betterObjectFromEntries,
 	ShortJPDate,
 	isFuture,
 	palette,
@@ -176,8 +177,10 @@ export function groupDisplayShort(search_id) {
  * @extends MatchDataRaw
  * @property {string} shortdate
  * @property {boolean} hasFC
+ * @property {boolean} hasFCResult
  * @property {boolean} hasShimei
  * @property {boolean} hasAbema
+ * @property {boolean} hasAbemaResult
  * @property {string} displayType one of 'RESULT', 'TT_ONLY', 'NONE'
  * @property {number[]} [shimeiRank]
  * @property {number[]} [shimeiDiff]
@@ -202,6 +205,8 @@ export function groupDisplayShort(search_id) {
  * @property {string} title
  * @property {Array<string>} groups
  * @property {Array<MatchDataRaw>} matches array of all matches data
+ * @property {number} [lastUpperGroup]
+ * @property {number} [topLowerGroup] this number should be less than 0 (= counting from the last.  last group=-1, 2nd last=-2, etc.)
  * @property {number} assignLPWeight weighting on league pts assigned to groups in match they have not yet participated (league assigned in each match = WEIGHTED average of partcipated matches)
  *
  * @typedef {Object} LeagueDataExt
@@ -210,6 +215,8 @@ export function groupDisplayShort(search_id) {
  * @property {string} title
  * @property {Array<string>} groups
  * @property {Array<MatchDataExt>} matches array of all matches data
+ * @property {number} [lastUpperGroup]
+ * @property {number} [topLowerGroup]
  * @property {number} assignLPWeight weighting on league pts assigned to groups in match they have not yet participated (league assigned in each match = average of league pts in all particpated matches * weight)
  */
 
@@ -303,22 +310,12 @@ export function lastFinishedMatchID(extMatches) {
 	// );
 }
 
-/**
- * @typedef {Object} ResultType
- * @property {boolean} hasShimei
- * @property {boolean} hasFC
- * @property {boolean} hasAbema
- *
- * @param  {GroupResultSeries} gpResult
- * @param  {number} matchID=0, which match we consider
- * @return {ResultType}
- */
-export function resultTypes(gpResult, matchID = 0) {
-	let hasShimei = gpResult.shimeiNum[matchID] != null;
-	let hasFC = gpResult.fcCount[matchID] != null;
-	let hasAbema = 'abemaCount' in gpResult && gpResult.abemaCount[matchID] != null;
-	return { hasShimei, hasFC, hasAbema };
-}
+// export function resultTypes(gpResult, matchID = 0) {
+// 	let hasShimei = gpResult.shimeiNum[matchID] != null;
+// 	let hasFC = gpResult.fcCount[matchID] != null;
+// 	let hasAbema = gpResult.abemaCount[matchID] != null;
+// 	return { hasShimei, hasFC, hasAbema };
+// }
 
 export function hasResult(matchDataRaw) {
 	return 'shimeiNum' in matchDataRaw || 'rank' in matchDataRaw;
@@ -338,20 +335,22 @@ function ExtendMatchData(rawMatch, numPlayers, prevMatchExt = null) {
 	mExt.shortdate = ShortJPDate(rawMatch.date, true);
 	mExt.displayType = hasRes ? 'RESULT' : hasTT(rawMatch) ? 'TT_ONLY' : 'NONE';
 	mExt.hasShimei = hasRes && 'shimeiNum' in rawMatch;
-	mExt.hasFC = 'fcRankToCount' in rawMatch && 'fcRank' in rawMatch;
+	mExt.hasFC = 'fcRankToCount' in rawMatch;
+	mExt.hasFCResult = mExt.hasFC && 'fcRank' in rawMatch;
 	mExt.fcRankToCount = rawMatch?.fcRankToCount ?? [];
-	mExt.hasAbema = 'fcRankToCount' in rawMatch && 'abemaRank' in rawMatch;
+	mExt.hasAbema = 'fcRankToCount' in rawMatch;
+	mExt.hasAbemaResult = mExt.hasAbema && 'abemaRank' in rawMatch;
 	mExt.abemaRankToCount = rawMatch?.abemaRankToCount ?? [];
 
-	console.log('Processing: ', rawMatch.date);
+	// console.log('Processing: ', rawMatch.date);
 	if (hasRes) {
 		let totalCount = [];
-		if (mExt.hasFC) {
+		if (mExt.hasFCResult) {
 			mExt.fcCount = rawMatch.fcRank.map((x) => mExt.fcRankToCount[x - 1]);
 			totalCount = mExt.fcCount;
 		}
 
-		if (mExt.hasAbema) {
+		if (mExt.hasAbemaResult) {
 			mExt.abemaCount = rawMatch.abemaRank.map((x) => mExt.abemaRankToCount[x - 1]);
 			totalCount = mExt.hasFC ? totalCount.map((x, i) => x + mExt.abemaCount[i]) : mExt.abemaCount;
 		}
@@ -365,7 +364,7 @@ function ExtendMatchData(rawMatch, numPlayers, prevMatchExt = null) {
 					)
 				: rawMatch.shimeiNum;
 
-			if (mExt.hasFC || mExt.hasAbema) {
+			if (mExt.hasFCResult || mExt.hasAbemaResult) {
 				totalCount = totalCount.map((x, i) => x + rawMatch.shimeiNum[i]);
 				rankDiffAssign(totalCount, mExt, '', 'countDiff');
 			} else {
@@ -451,15 +450,14 @@ function ExtendMatchData(rawMatch, numPlayers, prevMatchExt = null) {
  * @return {LeagueDataExt}
  */
 export function CalculateLeagueResult(raw) {
-	const res = Object.fromEntries(
-		['league', 'groups', 'season', 'title', 'assignLPWeight']
-			.filter((k) => k in raw)
-			.map((k) => [k, raw[k]])
+	const res = betterObjectFromEntries(
+		['league', 'groups', 'season', 'title', 'assignLPWeight', 'lastUpperGroup', 'topLowerGroup'],
+		raw
 	);
 	res.matches = [];
 	// let numGp = raw.groups.length;
 
-	console.log(`********* League ${raw.league} ************ `);
+	// console.log(`********* League ${raw.league} ************ `);
 	// let firstJoinAt = new Array(raw.groups.length);
 	for (const [sn, match] of Object.entries(raw.matches)) {
 		let n = parseInt(sn);
@@ -484,7 +482,7 @@ export function CalculateLeagueResult(raw) {
 	);
 
 	// loop again to process advanced data
-	console.log(`*** 2nd loop`);
+	// console.log(`*** 2nd loop`);
 	for (const [sn, match] of Object.entries(res.matches)) {
 		match.accumRank = new Array(match.totalRank.length); // ensure final output always have accumRank
 		if (match.totalRank.length > 0) {
@@ -546,7 +544,9 @@ export function CalculateLeagueResult(raw) {
 
 /**
  * @typedef {Object} MatchSummary
- * @extends {ResultType}
+ * @property {boolean} hasShimei
+ * @property {boolean} hasFC
+ * @property {boolean} hasAbema
  * @property {string} shortdate
  * @property {string} venue
  * @property {number[]} fcRankToCount
@@ -562,33 +562,24 @@ export function CalculateLeagueResult(raw) {
  * @returns {MatchSummary[]}
  */
 export function extractSummaryFromLeagueResExt(leagueResExt) {
-	return leagueResExt.matches.map(
-		({
-			shortdate,
-			venue,
-			fcRankToCount,
-			rankToPoints,
-			shimeiTotal,
-			displayType,
-			hasFC,
-			hasShimei,
-			hasAbema,
-			abemaRankToCount,
-			guestIdx
-		}) => ({
-			shortdate,
-			venue,
-			fcRankToCount,
-			rankToPoints,
-			shimeiTotal,
-			displayType,
-			hasFC,
-			hasShimei,
-			hasAbema,
-			abemaRankToCount,
-			guestIdx
-		})
-	);
+	const summaryKeys = [
+		'shortdate',
+		'venue',
+		'fcRankToCount',
+		'rankToPoints',
+		'shimeiTotal',
+		'displayType',
+		'hasFC',
+		'hasShimei',
+		'hasAbema',
+		'abemaRankToCount',
+		'lastUpperGroup',
+		'topLowerGroup',
+		'guestIdx'
+	];
+
+	// @ts-ignore
+	return leagueResExt.matches.map((match) => betterObjectFromEntries(summaryKeys, match, true));
 }
 
 /**
@@ -647,7 +638,7 @@ export function extractLastMatchDataByGroups(extData) {
  * @property {number[]} fcCount calculated using fcRankToCount
  * @property {number[]} abemaRank
  * @property {number[]} abemaCount
- * @property {number[]} totalRank determined by fcCount+shimeiNum
+ * @property {number[]} totalRank determined by shimeiNum+fcCount+abemaCount
  * @property {number[]} countDiff
  * @property {number[]} getLPt = rankToPoints[totalRank]
  * @property {number[]} [assignedLP] = calculated from getLPt, different from points get from battle
@@ -703,18 +694,18 @@ export function partitionResultToSortedGroups(resultdata) {
 				key in m ? (m[key].length > i ? m[key][i] : null) : null
 			);
 		}
-		//! hardcoded category criteria (for now...)
-		if (resultdata.league == LeagueType.ONE || resultdata.league == LeagueType.PLAYOFFS) {
+
+		// check grade up/down criteria
+		if (n > -1) {
+			const { rankNow } = gpResultData[i];
+			const { lastUpperGroup, topLowerGroup, groups } = resultdata;
+			// note if key is not present in the object, then it is undefined, and the comparison will be automatically "false"
 			gpResultData[i].category =
-				gpResultData[i].rankNow <= 4
+				rankNow <= lastUpperGroup
 					? 'upperGp'
-					: gpResultData[i].rankNow > resultdata.groups.length - 4
+					: rankNow >= groups.length + 1 + topLowerGroup
 						? 'lowerGp'
 						: '';
-		} else if (resultdata.league == LeagueType.TWO) {
-			gpResultData[i].category = gpResultData[i].rankNow <= 4 ? 'upperGp' : '';
-		} else {
-			gpResultData[i].category = '';
 		}
 	}
 

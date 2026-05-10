@@ -53,7 +53,7 @@
 	</thead>
 
 	<tbody>
-		{#each sortedGps as gp}
+		{#each sortedGps as gp (gp)}
 			{#if gp.totalRank[matchID] != null}
 				<tr>
 					<td class="headingCell sticky" style="font-size: small;left:0;">

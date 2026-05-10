@@ -1,7 +1,14 @@
 <script>
 	import RankNumber from './RankNumber.svelte';
 
-	let { hasFC, fcRankToCount = [], rankToPoints = [], rules = [] } = $props();
+	let {
+		hasFC,
+		hasAbema,
+		fcRankToCount = [],
+		abemaRankToCount = [],
+		rankToPoints = [],
+		rules = []
+	} = $props();
 </script>
 
 <div style="font-weight:normal;">
@@ -9,18 +16,40 @@
 	{#if rules.length == 0}
 		データなし
 	{:else}
-		{#each rules as lk, j}
+		{#each rules as lk, j (j)}
 			[ <a href={lk}> {j + 1} </a> ] &nbsp;
 		{/each}
 	{/if}
 </div>
 
-{#if hasFC}
+{#snippet conversionTable(caption, rankToCount, noDecorate)}
 	<table class="simpTb">
+		<caption> {caption} </caption>
+		<thead>
+			<tr>
+				{#each { length: rankToCount.length }, n (n)}
+					<th> <RankNumber rank={n + 1} {noDecorate} /> </th>
+				{/each}
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				{#each rankToCount as cnt, idx (idx)}
+					<td> {cnt} </td>
+				{/each}
+			</tr>
+		</tbody>
+	</table>
+{/snippet}
+
+{#if hasFC}
+	{@render conversionTable('FC投票順位とその得点', fcRankToCount, false)}
+	<!-- <table class="simpTb">
 		<caption> FC投票順位とその得点 </caption>
 		<thead>
 			<tr>
-				{#each { length: fcRankToCount.length }, n}
+				{#each { length: fcRankToCount.length }, n (n)}
 					<th> <RankNumber rank={n + 1} noDecorate={false} /> </th>
 				{/each}
 			</tr>
@@ -28,20 +57,25 @@
 
 		<tbody>
 			<tr>
-				{#each fcRankToCount as cnt}
+				{#each fcRankToCount as cnt, idx (idx)}
 					<td> {cnt} </td>
 				{/each}
 			</tr>
 		</tbody>
-	</table>
+	</table> -->
+{/if}
+
+{#if hasAbema}
+	{@render conversionTable('Abema投票順位とその得点', abemaRankToCount, false)}
 {/if}
 
 {#if rankToPoints.length > 0}
-	<table class="simpTb">
+	{@render conversionTable('総合得点順位とその獲得ポイント', rankToPoints, false)}
+	<!-- <table class="simpTb">
 		<caption> 総合得点順位とその獲得ポイント </caption>
 		<thead>
 			<tr>
-				{#each { length: rankToPoints.length }, n}
+				{#each { length: rankToPoints.length }, n (n)}
 					<th> <RankNumber rank={n + 1} noDecorate={false} /> </th>
 				{/each}
 			</tr>
@@ -49,12 +83,12 @@
 
 		<tbody>
 			<tr>
-				{#each rankToPoints as cnt}
+				{#each rankToPoints as cnt, idx (idx)}
 					<td> {cnt} </td>
 				{/each}
 			</tr>
 		</tbody>
-	</table>
+	</table> -->
 {/if}
 
 <style>

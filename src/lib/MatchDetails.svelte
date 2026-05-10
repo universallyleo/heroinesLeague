@@ -3,10 +3,11 @@
 	import Rules from './Rules.svelte';
 	import MatchTable from './MatchTable.svelte';
 	import { numberToKanji } from './util';
+
 	// let { clamp, leagueTitle, rawMatch, gpResults, guestResults, match, matchID } = $props();
 	let { clamp, leagueSeasonData, matchID } = $props();
 
-	// /** @type {MatchDataExt} */
+	/** @type {import('./processData').MatchDataExt} */
 	let match = $derived(leagueSeasonData.extData.matches[matchID]);
 	// $inspect('match data: ', match);
 	// $inspect('resByGp: ', leagueSeasonData.resByGp);
@@ -17,7 +18,11 @@
 				: match?.shimeiTotal[0]
 			: 'データなし'
 	);
-	let resultType = $derived({ hasFC: match.hasFC, hasShimei: match.hasShimei });
+	let resultType = $derived({
+		hasFC: match.hasFC,
+		hasAbema: match.hasAbema,
+		hasShimei: match.hasShimei
+	});
 </script>
 
 {#if match.displayType === 'RESULT'}
@@ -38,8 +43,10 @@
 
 <Rules
 	hasFC={match.hasFC}
+	hasAbema={match.hasAbema}
 	rankToPoints={match.rankToPoints}
 	fcRankToCount={match.fcRankToCount}
+	abemaRankToCount={match.abemaRankToCount}
 	rules={match.rules}
 />
 

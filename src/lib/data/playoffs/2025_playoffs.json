@@ -3,6 +3,7 @@
 	"season": 2025,
 	"title": "入替戦",
 	"groups": ["akishibu", "ion", "tenrin", "ill", "chula", "nanakoro", "parasai", "paradeeq"],
+	"lastUpperGroup": 4,
 	"matches": [
 		{
 			"date": "2025-10-08",
