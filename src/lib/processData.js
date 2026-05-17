@@ -338,7 +338,7 @@ function ExtendMatchData(rawMatch, numPlayers, prevMatchExt = null) {
 	mExt.hasFC = 'fcRankToCount' in rawMatch;
 	mExt.hasFCResult = mExt.hasFC && 'fcRank' in rawMatch;
 	mExt.fcRankToCount = rawMatch?.fcRankToCount ?? [];
-	mExt.hasAbema = 'fcRankToCount' in rawMatch;
+	mExt.hasAbema = 'abemaRankToCount' in rawMatch;
 	mExt.hasAbemaResult = mExt.hasAbema && 'abemaRank' in rawMatch;
 	mExt.abemaRankToCount = rawMatch?.abemaRankToCount ?? [];
 
