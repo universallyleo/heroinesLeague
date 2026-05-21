@@ -315,7 +315,7 @@
 		align-self: start;
 	}
 
-	.rk .vote {
+	.vote {
 		font-weight: normal;
 		grid-area: vote;
 		text-align: right;
