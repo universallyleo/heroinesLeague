@@ -14,18 +14,18 @@
 		"dresscode",
 		"ion"
 	],
-	"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10, 5],
+	"rankToLP": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10, 5],
 	"fcRankToCount": [50, 40, 30, 20, 15, 10, 10, 5, 0, 0, 0],
 	"lastUpperGroup": 4,
 	"topLowerGroup": -4,
 	"assignLPWeight": 0.7,
 	"matches": [
 		{
-			"date": "2026-05-11",
+			"date": "2025-05-11",
 			"venue": "KANDA SQUARE HALL",
 			"tweet": "https://x.com/heroines_idol/status/1921158309710528825",
 			"rules": ["https://x.com/heroines_idol/status/1921158309710528825"],
-			"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10, 5],
+			"rankToLP": [90, 70, 55, 40, 30, 20, 15, 10, 5],
 			"timetable": [
 				{
 					"group": "dresscode",
@@ -95,8 +95,13 @@
 				"https://x.com/heroines_idol/status/1923694990804517087",
 				"https://x.com/heroines_idol/status/1930942763111235609"
 			],
-			"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10, 5],
-			"fcRankToCount": [50, 40, 30, 20, 15, 10, 10, 5, 0],
+			"rankToLP": [90, 70, 55, 40, 30, 20, 15, 10, 5],
+			"mPts": {
+				"FC": {
+					"rankToCount": [50, 40, 30, 20, 15, 10, 10, 5, 0],
+					"rank": [1, 9, 2, 3, 6, 5, 6, 4, 8]
+				}
+			},
 			"timetable": [
 				{
 					"group": "ill",
@@ -169,13 +174,8 @@
 					"tokuten": ["after", "0"]
 				}
 			],
-			"shimeiNum": [306, 241, 176, 188, 104, 129, 104, 103, 85],
-			"fcRank": [1, 9, 2, 3, 6, 5, 6, 4, 8],
-			"guestShimeiFC": [
-				["ion", 48, -1, -1],
-				["chula", 35, -1, -1],
-				["tenran", 12, -1, -1]
-			],
+			"shimeiNum": [306, 241, 176, 188, 104, 129, 104, 103, 85, 48, 35, 12],
+			"guests": ["ion", "chula", "tenran"],
 			"src": "https://x.com/ks_ecophysi/status/1933842506950815795",
 			"guestIdx": [4, 5, 6, 8, 9]
 		},
@@ -184,8 +184,7 @@
 			"venue": "豊洲PIT",
 			"tweet": "https://x.com/heroines_idol/status/1943545159154577604",
 			"rules": ["https://x.com/heroines_idol/status/1943545159154577604"],
-			"fcRankToCount": [70, 50, 30, 20, 15, 10, 5, 0, 0, 0, 0],
-			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10, 5],
+			"rankToLP": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10, 5],
 			"timetable": [
 				{
 					"group": "tenran",
@@ -248,13 +247,14 @@
 					"tokuten": ["after", ""]
 				}
 			],
-			"shimeiNum": [486, 87, 203, 168, 165, 98, 159, 124, 116],
-			"fcRank": [3, 8, 4, 2, 8, 7, 6, 5, 1],
-			"guestShimeiFC": [
-				["ion", 112, -1, -1],
-				["chula", 63, -1, -1],
-				["tenran", 26, -1, -1]
-			],
+			"shimeiNum": [486, 87, 203, 168, 165, 98, 159, 124, 116, 112, 63, 26],
+			"mPts": {
+				"FC": {
+					"rankToCount": [70, 50, 30, 20, 15, 10, 5, 0, 0, 0, 0],
+					"rank": [3, 8, 4, 2, 8, 7, 6, 5, 1]
+				}
+			},
+			"guests": ["ion", "chula", "tenran"],
 			"src": [
 				"https://x.com/ks_ecophysi/status/1944709929715277952",
 				"https://x.com/ks_ecophysi/status/1944957043103949027"
@@ -269,8 +269,7 @@
 				"https://x.com/iLiFE_official/status/1945814478731501931",
 				"https://x.com/heroines_idol/status/1949789528237154645"
 			],
-			"fcRankToCount": [45, 30, 20, 15, 15, 10, 10, 5, 5, 0],
-			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
+			"rankToLP": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
 			"timetable": [
 				{
 					"group": "akishibu",
@@ -324,7 +323,12 @@
 				}
 			],
 			"shimeiNum": [303, 56, 153, 220, 111, 72, 215, 54, 143, 82],
-			"fcRank": [4, 10, 5, 1, 2, 7, 6, 8, 3, 9]
+			"mPts": {
+				"FC": {
+					"rankToCount": [45, 30, 20, 15, 15, 10, 10, 5, 5, 0],
+					"rank": [4, 10, 5, 1, 2, 7, 6, 8, 3, 9]
+				}
+			}
 		},
 		{
 			"date": "2025-09-23",
@@ -383,10 +387,14 @@
 					"tokuten": ["after", ""]
 				}
 			],
-			"fcRankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5],
-			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
+			"rankToLP": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
 			"shimeiNum": [213, 106, 117, 140, 168, 63, 150, 71, 216, 162],
-			"fcRank": [3, 8, 4, 2, 1, 8, 5, 8, 6, 6]
+			"mPts": {
+				"FC": {
+					"rankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5],
+					"rank": [3, 8, 4, 2, 1, 8, 5, 8, 6, 6]
+				}
+			}
 		},
 		{
 			"date": "2025-09-24",
@@ -396,8 +404,7 @@
 				"https://x.com/heroines_idol/status/1955555152917930171",
 				"https://x.com/heroines_idol/status/1970445530154303751"
 			],
-			"fcRankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5],
-			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
+			"rankToLP": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
 			"timetable": [
 				{
 					"group": "ill",
@@ -457,7 +464,12 @@
 			],
 			"guestIdx": [3],
 			"shimeiNum": [237, 193, 118, 165, 126, 52, 120, 62, 215, 121],
-			"fcRank": [2, 8, 6, 3, 1, 8, 4, 8, 5, 6]
+			"mPts": {
+				"FC": {
+					"rankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5],
+					"rank": [2, 8, 6, 3, 1, 8, 4, 8, 5, 6]
+				}
+			}
 		}
 	]
 }

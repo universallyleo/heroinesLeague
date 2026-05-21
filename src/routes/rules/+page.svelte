@@ -9,9 +9,9 @@
 			-1
 		);
 
-	let rankToPointsCollec = $derived([
-		extractAndLevel(leagueOne[0], 'rankToPoints'),
-		extractAndLevel(leagueTwo[0], 'rankToPoints')
+	let rankToLPCollec = $derived([
+		extractAndLevel(leagueOne[0], 'rankToLP'),
+		extractAndLevel(leagueTwo[0], 'rankToLP')
 	]);
 	let fcRankToCountCollec = $derived([
 		extractAndLevel(leagueOne[0], 'fcRankToCount'),
@@ -26,10 +26,10 @@
 		leagueOne[0].matches.map(({ venue }) => venue),
 		leagueTwo[0].matches.map(({ venue }) => venue)
 	]);
-	// $inspect(rankToPointsCollec[0]);
+	// $inspect(rankToLPCollec[0]);
 </script>
 
-<RuleChangesTable array={rankToPointsCollec} title="「戦順位 → ポイント」の変化" headings={dates} />
+<RuleChangesTable array={rankToLPCollec} title="「戦順位 → ポイント」の変化" headings={dates} />
 
 <RuleChangesTable
 	array={fcRankToCountCollec}
@@ -65,9 +65,9 @@
 					<td>
 						{@render def('動員pt')} (<a href="https://pbs.twimg.com/media/Gw8LPQ5bkAAUxMM.jpg:orig"
 							>2025-07</a
-						>より), <br/>
-						{@render def('ライブpt')} (<a href="https://pbs.twimg.com/media/Gw8LPQ5bkAAUxMM.jpg:orig"
-							>2025-11</a
+						>より), <br />
+						{@render def('ライブpt')} (<a
+							href="https://pbs.twimg.com/media/Gw8LPQ5bkAAUxMM.jpg:orig">2025-11</a
 						>より)
 					</td>
 				</tr>

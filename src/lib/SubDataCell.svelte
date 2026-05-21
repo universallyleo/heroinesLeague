@@ -2,34 +2,44 @@
 	// import { padNum } from '$lib/util.js';
 	let {
 		hasShimei,
-		hasFC,
-		hasAbema,
+		// hasFC,
+		// hasAbema,
 		shimeiNum,
 		shimeiRank,
 		shimeiDiff,
-		fcCount,
-		fcRank,
-		abemaCount,
-		abemaRank,
+		mPts,
+		// fcCount,
+		// fcRank,
+		// abemaCount,
+		// abemaRank,
+		totalCount,
 		totalRank,
 		countDiff
 	} = $props();
 
+	$inspect('mPts in subdata', mPts);
+
 	// const rkStr = $derived(rank ? `${rank}位` : '');
-	let totalCount = $derived(
-		(hasShimei ? shimeiNum : 0) + (hasFC ? fcCount : 0) + (hasAbema ? abemaCount : 0)
-	);
+	// let totalCount = $derived(
+	// 	(hasShimei ? shimeiNum : 0) + (hasFC ? fcCount : 0) + (hasAbema ? abemaCount : 0)
+	// );
 </script>
 
 <div class="tableContainer">
-	{#if hasFC || hasShimei || hasAbema}
+	<!-- {#if hasFC || hasShimei || hasAbema} -->
+	{#if hasShimei}
 		<table>
 			<thead>
 				<tr>
 					<td></td>
 					<td>入</td>
-					{#if hasFC}<td>FC</td>{/if}
-					{#if hasAbema}<td>Abe</td>{/if}
+					{#each mPts as x (x[0])}
+						{#if x[1] != null}
+							<td> {x[0].slice(0, 2)} </td>
+						{/if}
+					{/each}
+					<!-- {#if hasFC}<td>FC</td>{/if}
+					{#if hasAbema}<td>Abe</td>{/if} -->
 					<td>合</td>
 				</tr>
 			</thead>
@@ -37,22 +47,37 @@
 				<tr>
 					<td>点</td>
 					<td>{shimeiNum ?? '-'}</td>
-					{#if hasFC}<td>{fcCount ?? '-'}</td>{/if}
-					{#if hasAbema}<td>{abemaCount ?? '-'}</td>{/if}
+					{#each mPts as x (x[0])}
+						{#if x[1] != null}
+							<td> {x[1]} </td>
+						{/if}
+					{/each}
+					<!-- {#if hasFC}<td>{fcCount ?? '-'}</td>{/if}
+					{#if hasAbema}<td>{abemaCount ?? '-'}</td>{/if} -->
 					<td>{totalCount > 0 ? totalCount : '-'}</td>
 				</tr>
 				<tr>
 					<td>順</td>
 					<td>{shimeiRank ?? '-'}</td>
-					{#if hasFC}<td>{fcRank ?? '-'}</td>{/if}
-					{#if hasAbema}<td>{abemaRank ?? '-'}</td>{/if}
+					{#each mPts as x (x[0])}
+						{#if x[1] != null}
+							<td> {x[2]} </td>
+						{/if}
+					{/each}
+					<!-- {#if hasFC}<td>{fcRank ?? '-'}</td>{/if}
+					{#if hasAbema}<td>{abemaRank ?? '-'}</td>{/if} -->
 					<td>{totalRank ?? '-'}</td>
 				</tr>
 				<tr>
 					<td>差</td>
 					<td>{shimeiDiff >= 0 ? shimeiDiff : '-'}</td>
-					{#if hasFC}<td> - </td>{/if}
-					{#if hasAbema}<td> - </td>{/if}
+					{#each mPts as x (x[0])}
+						{#if x[1] != null}
+							<td> {x[3] != null && x[3] >= 0 ? x[3] : '-'} </td>
+						{/if}
+					{/each}
+					<!-- {#if hasFC}<td> - </td>{/if}
+					{#if hasAbema}<td> - </td>{/if} -->
 					<td>{countDiff >= 0 ? countDiff : '-'}</td>
 				</tr>
 			</tbody>

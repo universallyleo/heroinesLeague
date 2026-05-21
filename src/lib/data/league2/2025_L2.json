@@ -65,9 +65,8 @@
 					"tokuten": ["after", ""]
 				}
 			],
-			"guestIdx": [],
 			"rank": [2, 4, 3, 5, 1, 6, 7, 8],
-			"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10]
+			"rankToLP": [90, 70, 55, 40, 30, 20, 15, 10]
 		},
 		{
 			"date": "2025-06-26",
@@ -131,16 +130,16 @@
 					"tokuten": ["after", ""]
 				}
 			],
-			"shimeiNum": [75, 85, 115, 90, 102, 74, 40, 28],
-			"fcRank": [3, 1, 5, 7, 7, 7, 4, 7],
-			"guestShimeiFC": [
-				["ion", 76, 2, 20],
-				["chula", 39, 6, 2],
-				["tenran", 8, 7, 0]
-			],
+			"shimeiNum": [75, 85, 115, 90, 102, 74, 40, 28, 76, 39, 8],
+			"guests": ["ion", "chula", "tenran"],
 			"guestIdx": [2, 4],
-			"rankToPoints": [90, 70, 55, 40, 30, 20, 15, 10],
-			"fcRankToCount": [30, 20, 10, 5, 3, 2, 0, 0, 0, 0, 0],
+			"rankToLP": [90, 70, 55, 40, 30, 20, 15, 10],
+			"mPts": {
+				"FC": {
+					"rankToCount": [30, 20, 10, 5, 3, 2, 0, 0, 0, 0, 0],
+					"rank": [3, 1, 5, 7, 7, 7, 4, 7, 2, 6, 7]
+				}
+			},
 			"src": "https://x.com/kamekichi_id/status/1938211479972667663"
 		},
 		{
@@ -210,11 +209,15 @@
 				}
 			],
 			"guestIdx": [2, 4],
-			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
-			"fcRankToCount": [30, 20, 10, 5, 3, 2, 0, 0, 0],
+			"rankToLP": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5],
 			"shimeiNum": [68, 65, 64, 140, 72, 80, 29, 18, 3],
-			"fcRank": [3, 1, 6, 4, 2, 7, 5, 7, 7],
-			"src": "https://x.com/ks_ecophysi/status/1945812053891154044"
+			"src": "https://x.com/ks_ecophysi/status/1945812053891154044",
+			"mPts": {
+				"FC": {
+					"rankToCount": [30, 20, 10, 5, 3, 2, 0, 0, 0],
+					"rank": [3, 1, 6, 4, 2, 7, 5, 7, 7]
+				}
+			}
 		},
 		{
 			"date": "2025-07-31",
@@ -281,7 +284,7 @@
 			"shimeiNum": [56, 236, 75, 108, 53, 45, 37, 5, 49],
 			"rank": [5, 1, 3, 2, 7, 9, 10, 11, 8],
 			"guestIdx": [3, 5],
-			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10, 5]
+			"rankToLP": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10, 5]
 		},
 		{
 			"date": "2025-08-06",
@@ -345,11 +348,15 @@
 			],
 			"tweet": "https://x.com/heroines_idol/status/1952202884264960105",
 			"rules": ["https://x.com/heroines_idol/status/1952202884264960105"],
-			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10],
-			"fcRankToCount": [45, 30, 20, 15, 15, 10, 10, 5, 5, 0, 0],
+			"rankToLP": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10],
 			"shimeiNum": [42, 65, 53, 154, 97, 77, 31, 17, 4, 46, 24],
-			"fcRank": [3, 2, 6, 6, 1, 8, 8, 10, 10, 4, 4],
-			"src": ["https://x.com/ks_ecophysi/status/1953060096029933867"]
+			"src": ["https://x.com/ks_ecophysi/status/1953060096029933867"],
+			"mPts": {
+				"FC": {
+					"rankToCount": [45, 30, 20, 15, 15, 10, 10, 5, 5, 0, 0],
+					"rank": [3, 2, 6, 6, 1, 8, 8, 10, 10, 4, 4]
+				}
+			}
 		},
 		{
 			"date": "2025-08-21",
@@ -413,7 +420,7 @@
 			],
 			"tweet": "https://x.com/heroines_idol/status/1957791565080064162",
 			"rules": ["https://x.com/heroines_idol/status/1946555660923285863"],
-			"rankToPoints": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10],
+			"rankToLP": [90, 70, 55, 45, 40, 35, 30, 25, 20, 15, 10],
 			"shimeiNum": [40, 98, 56, 58, 25, 29, 31, 15, 27, 150, 132],
 			"src": "https://x.com/yuki_kyo2ya/status/1958488722074374396",
 			"comments": [
@@ -432,9 +439,7 @@
 				"https://x.com/heroines_idol/status/1957373881947435427",
 				"https://x.com/heroines_idol/status/1965030540572262819"
 			],
-			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5, 5],
-			"fcRankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5, 5],
-			"fcRank": [4, 3, 6, 8, 2, 8, 6, 8, 8, 1, 5],
+			"rankToLP": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5, 5],
 			"timetable": [
 				{
 					"group": "heroken",
@@ -498,7 +503,13 @@
 				"https://x.com/heroines_idol/status/1970118856271393141",
 				"https://x.com/ks_ecophysi/status/1970084391524450776",
 				"https://x.com/55gohan06/status/1970171342885654855"
-			]
+			],
+			"mPts": {
+				"FC": {
+					"rankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5, 5],
+					"rank": [4, 3, 6, 8, 2, 8, 6, 8, 8, 1, 5]
+				}
+			}
 		},
 		{
 			"date": "2025-09-25",
@@ -562,14 +573,18 @@
 			],
 			"tweet": "https://x.com/heroines_idol/status/1970118856271393141",
 			"rules": ["https://x.com/heroines_idol/status/1957373881947435427"],
-			"rankToPoints": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5, 5],
-			"fcRankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5, 5],
+			"rankToLP": [90, 70, 55, 40, 30, 25, 20, 15, 10, 5, 5],
 			"shimeiNum": [25, 62, 82, 39, 69, 31, 23, 42, 8, 150, 16],
-			"fcRank": [4, 2, 6, 8, 3, 8, 6, 8, 8, 1, 5],
 			"resultRecord": [
 				"https://x.com/ks_ecophysi/status/1971171354750877981",
 				"https://x.com/55gohan06/status/1971173019688251573"
-			]
+			],
+			"mPts": {
+				"FC": {
+					"rankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5, 5],
+					"rank": [4, 2, 6, 8, 3, 8, 6, 8, 8, 1, 5]
+				}
+			}
 		}
 	]
 }

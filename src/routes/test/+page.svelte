@@ -1,10 +1,5 @@
 <script>
-	import {
-		dataCollection,
-		LeagueType,
-		lastFinishedMatchID,
-		ordering
-	} from '$lib/processData.js';
+	import { dataCollection, LeagueType, lastFinishedMatchID, ordering } from '$lib/processData.js';
 	import { rankDiffAssign } from '$lib/util';
 	import GroupButton from '$lib/GroupButton.svelte';
 	import { onMount } from 'svelte';
@@ -42,7 +37,7 @@
 		let accumPts = resByGps.reduce((res, { group, assignedLP, accumPt }) => {
 			// determine if we can just copy accumPt or need to recalculate assignedLP
 			// console.log("Processing: ", group, " assingedLP: ", assignedLP);
-			if (assignedLP.some((x) => x!==0 && x!==null)) {
+			if (assignedLP.some((x) => x !== 0 && x !== null)) {
 				const i = dataCollection[league][0].extData.groups.indexOf(group);
 				const getPts = dataCollection[league][0].extData.matches.map(({ getLPt }) =>
 					i < getLPt.length ? getLPt[i] : 0
@@ -62,12 +57,13 @@
 		accumPts = newRanks.reduce((obj, rks, i) => {
 			rks.forEach((gp, j) => {
 				if (gp !== '') {
-					// console.log(`added ${rec.rankToPoints[i]} to ${gp}`);
+					// console.log(`added ${rec.rankToLP[i]} to ${gp}`);
 					obj[gp] +=
 						numFutureMatch > 0
-							? dataCollection[league][0].extData.matches[lastMatchID + j + 1].rankToPoints[i]
-							: lastMatch.rankToPoints[i];
+							? dataCollection[league][0].extData.matches[lastMatchID + j + 1].rankToLP[i]
+							: lastMatch.rankToLP[i];
 				}
+				rankToLP;
 			});
 			return obj;
 		}, accumPts);
@@ -282,8 +278,8 @@
 							{/if}
 							<!-- <br /> -->
 							[ +{numFutureMatch > 0
-								? dataCollection[league][0].extData.matches[lastMatchID + j + 1].rankToPoints[i]
-								: lastMatch.rankToPoints[i]} ]
+								? dataCollection[league][0].extData.matches[lastMatchID + j + 1].rankToLP[i]
+								: lastMatch.rankToLP[i]} ]
 						</td>
 					{/each}
 					<td class="arrowBox"> ➡ </td>

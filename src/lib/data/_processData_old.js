@@ -33,7 +33,7 @@ export function CalculateResult(raw) {
 		if (['shimeiNum', 'fcRank', 'rank'].reduce((p, c) => p && !(c in match), true)) continue;
 
 		let n = parseInt(sn);
-		let rkConvert = match?.rankToPoints ?? raw.rankToPoints;
+		let rkConvert = match?.rankToLP ?? raw.rankToLP;
 		// let rkptDiff = rkConvert.reduce(
 		// 	(res, pt, i, o) => ((res[i] = i > 0 ? pt - o[i - 1] : -1), res),
 		// 	[]

@@ -1,3 +1,12 @@
+// export function composeCompares(compfuncs, a, b) {
+// 	let c = compfuncs.forEach((fn, i) => fn(a[i], b[i]));
+// 	return c.reduce((accum, curr) => (accum ? accum : curr));
+// }
+export const composeCompares =
+	(...cmps) =>
+	(a, b) =>
+		cmps.reduce((r, cmp) => r || cmp(a, b), 0);
+
 export function padNum(num, maxDigit, positiveOnly = true, by = '&nbsp;') {
 	if (isNaN(num)) return Array(maxDigit).fill('&nbsp;').join('');
 	let s = positiveOnly && num < 0 ? '-' : num.toString();
@@ -41,7 +50,7 @@ export function diffFromRanked(arr, rank, prev) {
  * @param {string} diffKey store difference in obj[diffKey]
  * @param {(a:number,b:number)=>number} f  compare function
  */
-export function rankDiffAssign(arr, obj, rkKey, diffKey, f = (a, b) => b - a) {
+export function rankDiffAssign(arr, obj, rkKey = 'rank', diffKey = 'diff', f = (a, b) => b - a) {
 	let ranked = rank(arr, f);
 	if (rkKey !== '') obj[rkKey] = ranked.rank;
 	if (diffKey !== '') obj[diffKey] = diffFromRanked(arr, ranked.rank, ranked.prev);
@@ -65,6 +74,14 @@ export function betterObjectFromEntries(entries, source, forceAll = false) {
 	return Object.fromEntries(
 		entries.filter((k) => forceAll || k in source).map((k) => [k, k in source ? source[k] : null])
 	);
+}
+
+// export function betterValueOf(obj, key, defaultVal) {
+// 	return obj ? (key in obj ? defaultVal : defaultVal) : defaultVal;
+// }
+
+export function sumArray(arr, filterFn = () => true) {
+	return arr.filter(filterFn).reduce((s, v) => (s += v), 0);
 }
 
 export function deltaTime(fromTime, toTime) {

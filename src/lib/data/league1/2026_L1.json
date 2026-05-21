@@ -21,13 +21,11 @@
 	"assignLPWeight": 0.7,
 	"matches": [
 		{
-			"date": "2025-05-20",
+			"date": "2026-05-20",
 			"venue": "Kanadevia Hall",
 			"tweet": "https://x.com/heroines_idol/status/2054879889950699815",
 			"rules": ["https://x.com/heroines_idol/status/2049826541493006587"],
-			"rankToPoints": [120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5],
-			"fcRankToCount": [40, 30, 25, 20, 15, 15, 10, 10, 5, 5, 0, 0],
-			"abemaRankToCount": [60, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0],
+			"rankToLP": [120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5],
 			"timetable": [
 				{
 					"group": "tenran",
@@ -77,7 +75,7 @@
 				{
 					"group": "yoruami",
 					"time": ["1825", "1850"],
-					"tokuten": ["1900", "1930"]
+					"tokuten": ["1710", "1740", "1900", "1930"]
 				},
 				{
 					"group": "nonfic",
@@ -86,10 +84,102 @@
 				},
 				{
 					"group": "ilife",
-					"time": ["1920", "945"],
+					"time": ["1920", "1945"],
 					"tokuten": ["after", ""]
 				}
+			],
+			"mPts": {
+				"FC": {
+					"rankToCount": [40, 30, 25, 20, 15, 15, 10, 10, 5, 5, 0, 0],
+					"rank": [1, 2, 7, 9, 3, 5, 4, 11, 6, 8, 12, 10]
+				},
+				"Abema": {
+					"rankToCount": [60, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0],
+					"vote": [289, 96, 168, 99, 131, 133, 128, 126, 174, 149, 64, 89]
+				}
+			},
+			"shimeiNum": [551, 299, 166, 144, 284, 245, 261, 83, 169, 68, 75, 49],
+			"src": [
+				"https://x.com/heroines_idol/status/2057063250362016223",
+				"https://x.com/ks_ecophysi/status/2057058072837988591"
 			]
+		},
+		{
+			"date": "2026-05-20",
+			"venue": "Kanadevia Hall",
+			"tweet": "https://x.com/heroines_idol/status/2057431217465590109",
+			"rules": ["https://x.com/heroines_idol/status/2057431217465590109"],
+			"rankToLP": [120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5],
+			"timetable": [
+				{
+					"group": "tenran",
+					"time": ["1400", "1425"],
+					"tokuten": ["1435", "1605"]
+				},
+				{
+					"group": "lastscene",
+					"time": ["1425", "1450"],
+					"tokuten": ["1500", "1600"]
+				},
+				{
+					"group": "ill",
+					"time": ["1450", "1515"],
+					"tokuten": ["1525", "1625"]
+				},
+				{
+					"group": "chula",
+					"time": ["1515", "1540"],
+					"tokuten": ["1550", "1650"]
+				},
+				{
+					"group": "dresscode",
+					"time": ["1545", "1610"],
+					"tokuten": ["1620", "1720"]
+				},
+				{
+					"group": "yoruami",
+					"time": ["1610", "1635"],
+					"tokuten": ["1645", "1745"]
+				},
+				{
+					"group": "tenrin",
+					"time": ["1635", "1700"],
+					"tokuten": ["1710", "1810"]
+				},
+				{
+					"group": "megafon",
+					"time": ["1700", "1725"],
+					"tokuten": ["1735", "1835"]
+				},
+				{
+					"group": "ion",
+					"time": ["1730", "1755"],
+					"tokuten": ["1805", "1905"]
+				},
+				{
+					"group": "adamth",
+					"time": ["1755", "1825"],
+					"tokuten": ["1640", "1710", "1835", "1905"]
+				},
+				{
+					"group": "nonfic",
+					"time": ["1825", "1855"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "ilife",
+					"time": ["1900", "1943"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"mPts": {
+				"FC": {
+					"rankToCount": [40, 30, 25, 20, 15, 15, 10, 10, 5, 5, 0, 0]
+				},
+				"Abema": {
+					"rankToCount": [60, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0]
+				}
+			}
 		}
 	]
 }

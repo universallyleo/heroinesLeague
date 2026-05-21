@@ -111,15 +111,73 @@ export function groupDisplayShort(search_id) {
 }
 
 //#region object def
+
+/**
+ * RAW = score directly to point; RANKED = rank the score first then use a pre-assigned table to convert to point
+ * @enum {number}
+ */
+export const CountType = { RAW_COUNT: 0, RANKED_HIDDEN_VOTE: 2, RANKED_WITH_VOTE: 1 };
+/**
+ *
+ * @typedef {Object} MatchPointRecord
+ * @property {number[]} [count]  count of -1 are ignored.
+ * @property {Array<number|null>} [vote] vote of -1 are ignored; null = no data/not applicable.
+ * @property {number[]} [voteDiff]
+ * @property {number[]} [rank] not needed even if data is ranked and count is provided (rank will be computed back from count)
+ * @property {number[]} [rankToCount]
+ *
+ *  * add category when needed
+ * @typedef {Object} MatchPointRecordCollec
+ * @property {MatchPointRecord} FC
+ * @property {MatchPointRecord} Abema
+ * @property {MatchPointRecord} MC
+ *
+ * @typedef {Object} MatchPointType
+ * @property {string} label
+ * @property {number} id  requirement: ScoreType[this.label] = this.id
+ * @property {string} icon
+ * @property {string} [longLabel]
+ * @property {string} [additionalLabel] follows long/jp label
+ * @property {string[]} jpLabel
+ * @property {string} sortKey
+ * @property {CountType} countType
+ */
+/** @type {MatchPointType[]} */
+export const MatchPointsData = [
+	{
+		label: 'FC',
+		id: 0,
+		icon: '🗳️',
+		longLabel: 'FC Pt',
+		jpLabel: ['FC投票Pt', 'FC pt'],
+		sortKey: 'fcCount',
+		countType: CountType.RANKED_HIDDEN_VOTE
+	},
+	{
+		label: 'Abema',
+		id: 1,
+		icon: '▶️',
+		longLabel: 'Abmea Pt',
+		jpLabel: ['Abema Pt', 'Ab.pt'],
+		sortKey: 'abemaCount',
+		countType: CountType.RANKED_WITH_VOTE
+	},
+	{
+		label: 'MC',
+		id: 2,
+		icon: '🎙️',
+		longLabel: 'MC Pt',
+		jpLabel: ['MC指名Pt', 'MC pt'],
+		sortKey: 'mcCount',
+		countType: CountType.RAW_COUNT
+	}
+];
 /**
  *
  * @typedef {Object} StageSchedule
  * @property {string} group group ID
  * @property {Array<string>} time starts and ends time
  * @property {Array<string>} tokuten starts and ends time of buppan
- *
- * @typedef {[string, number, number, number]} GuestDataRaw [codename, shimeiNum, FCrank, FCpt]
- * !! cannot handle Abema point
  *
  * @typedef {Object} AssignMatchLPt
  * @property {string} group
@@ -140,20 +198,22 @@ export function groupDisplayShort(search_id) {
  * @property {string} tweet url to tweet of timetable
  * @property {Array<string>} [rules] url to tweet of rules
  * @property {Array<StageSchedule>} timetable
- * @property {Array<number>} rankToPoints n-th entry = points given to (n+1)st place group
+ * @property {Array<number>} rankToLP n-th entry = points given to (n+1)st place group
+ * @property {MatchPointRecordCollec} [mPts] to handle FC pt, Abema pt, etc.
  * @property {Array<number>} [shimeiNum] array of number of 指名入場
- * @property {Array<number>} [fcRank] array of FC投票 ranking
- * @property {Array<number>} [fcRankToCount] n-th entry = counts given to (n+1)st placed group
  * @property {Array<number>} [rank] both result and rank are read in the order of the league data group
- * @property {Array<number>} [abemaRank] Abema Rank (new from 2026)
- * @property {Array<number>} [abemaRankToCount] Abema Rank (new from 2026)
  * @property {Array<string>} [src] array of sources of match result data
- * @property {GuestDataRaw} [guestShimeiFC]
- * @property {[string,number]} [guestAbemaRk] [groupName, abemaRank]
+ * @property {string[]} [guests] codename of the guests with result data, i-th guest will have data in each match pt record in the ((length of main players)+i)-th entry
  * @property {string[]} [comments]
- * @property {number[]} [guestIdx] index of guest group in Timetable's stage order
+ * @property {number[]} [guestTTidx] index of guest group in Timetable's stage order
  * @property {string[]} [resultRecord]
  * @property {AssignMatchLPt[]} [lpFormulae]
+ * 
+ //* * @property {Array<number>} [fcRank] array of FC投票 ranking
+ //* * @property {Array<number>} [fcRankToCount] n-th entry = counts given to (n+1)st placed group
+ // * @property {Array<number>} [abemaRank] Abema Rank (new from 2026)
+ // * @property {Array<number>} [abemaRankToCount] Abema Rank (new from 2026)
+ //  * @property {[string,number]} [guestAbemaRk] [groupName, abemaRank]
  * if have shimei and fcRank
  * 		=> match rank determined by (fcRankToCount + shimeiNum)
  * { league: "1",
@@ -170,24 +230,49 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} [abmeaRank]
  * @property {number[]} [abemaCount]
  * @property {number[]} [countDiff]
+ * @property {number[]} [totalCount]
  * @property {number[]} totalRank
  * @property {number[]} [getLPt]
- *
+ */
+
+/**
+ * @enum {number}
+ * 0 = scoring category not included in current match
+ * 1 = scoring category is included in current match, but no result recorded yet
+ * 2 = scoring category is included and results has been recorded;
+ */
+const ResultRecordType = { NA: 0, included: 1, hasResult: 2 };
+/** 
+ * @typedef {Object} HasResultType
+ * @property {boolean} hasShimei
+ * @property {ResultRecordType} FC
+ * @property {ResultRecordType} Abmea
+ * @property {ResultRecordType} MC
+ * 
+ * @typedef {Object} RankCountDiffData
+ * @property {string} scoreType
+ * @property {number[]} rank
+ * @property {number[]} count
+ * @property {number[]} diff
+ *  * 
  * @typedef {Object} MatchDataExt
  * @extends MatchDataRaw
- * @property {string} shortdate
- * @property {boolean} hasFC
- * @property {boolean} hasFCResult
- * @property {boolean} hasShimei
- * @property {boolean} hasAbema
- * @property {boolean} hasAbemaResult
+ * @property {string} shortdate 
+ * @property {number} numActivePlayers 
+ * @property {HasResultType} hasResults
+//  * @property {boolean} hasFC
+//  * @property {boolean} hasFCResult
+//  * @property {boolean} hasShimei
+//  * @property {boolean} hasAbema
+//  * @property {boolean} hasAbemaResult
  * @property {string} displayType one of 'RESULT', 'TT_ONLY', 'NONE'
  * @property {number[]} [shimeiRank]
  * @property {number[]} [shimeiDiff]
  * @property {[number,number]} [shimeiTotal] 1st entry = only match member, 2nd = include guest
- * @property {number[]} [fcCount]
- * @property {number[]} [abemaRank]
- * @property {number[]} [abemaDiff]
+//  * @property {number[]} [fcCount]
+//  * @property {number[]} [abemaRank]
+//  * @property {number[]} [abemaDiff]
+ * @property {number[]} totalCount
  * @property {number[]} countDiff
  * @property {number[]} totalRank
  * @property {number[]} getLPt
@@ -197,7 +282,7 @@ export function groupDisplayShort(search_id) {
  * @property {number[]} accumPt
  * @property {number[]} accumPtDiff
  * @property {number[]} accumRank
- * @property {GuestMatchData[]} guestResults
+ * @property {GuestResultData[]} guestResults
  *
  * @typedef {Object} LeagueDataRaw
  * @property {number} league
@@ -265,8 +350,8 @@ export function refineTT(tt, guestIdx = []) {
 }
 
 export function getGuestIdx(groups, rawTT, rawMatch) {
-	let knownGuest = new Set(rawMatch?.guestShimeiFC ?? []);
-	// let res = (rawMatch?.guestShimeiFC ?? []).map((x) => rawTT.find(({ group }) => group == x[0]));
+	let knownGuest = new Set(rawMatch?.guests ?? []);
+	// let res = (rawMatch?.guests ?? []).map((x) => rawTT.find(({ group }) => group == x[0]));
 	let gSet = new Set(groups).difference(knownGuest);
 	let res = rawTT.map(({ group }, i) => (gSet.has(group) ? -1 : i)).filter((i) => i !== -1);
 	return [...new Set(res)].sort((a, b) => a - b);
@@ -277,8 +362,13 @@ export function getGuestIdx(groups, rawTT, rawMatch) {
 export const ordering = {
 	totalRank: (a, b) => sortMethod.incWithNullAtLast(a, b),
 	shimeiNum: (a, b) => sortMethod.decWithNullAtLast(a, b),
-	fcCount: (a, b) => sortMethod.decWithNullAtLast(a, b),
-	abemaCount: (a, b) => sortMethod.decWithNullAtLast(a, b),
+	mPts: (a, b, i, cat) => {
+		const sortOn =
+			MatchPointsData.find(({ label }) => label == cat)?.countType == CountType.RANKED_WITH_VOTE
+				? 'vote'
+				: 'count';
+		return sortMethod.decWithNullAtLast(a.mPts[cat][sortOn][i], b.mPts[cat][sortOn][i]);
+	},
 	accumPt: (a, b) => sortMethod.decWithNullAtLast(a, b),
 	accumRank: (a, b) => sortMethod.incWithNullAtLast(a, b)
 };
@@ -317,46 +407,166 @@ export function lastFinishedMatchID(extMatches) {
 // 	return { hasShimei, hasFC, hasAbema };
 // }
 
-export function hasResult(matchDataRaw) {
-	return 'shimeiNum' in matchDataRaw || 'rank' in matchDataRaw;
+/**
+ * Use raw data to compute rank-diff of each match pt type, and details which match pt type is present and is with record
+ * !!NOTE: this mutates mPts
+ *
+ * @param {MatchPointRecordCollec} mPts
+ * @param {boolean} [hasShimei=false]
+ * @returns {HasResultType}
+ */
+function initResultTypeAndExtendMatchPoint(mPts, hasShimei = false) {
+	// console.log('***initiale match point extension: ', mPts);
+
+	const otherMP = Object.fromEntries(
+		MatchPointsData.map((restype) => {
+			const hasCat = mPts ? restype.label in mPts : false;
+			// extends match point data here (not part of return value)
+			let hasResult = false;
+			if (hasCat) {
+				const data = mPts[restype.label]; //! this is mutated
+
+				if (restype.countType != CountType.RAW_COUNT) {
+					if ('vote' in data && data.vote.length > 0) {
+						rankDiffAssign(data.vote, data, 'rank', 'voteDiff');
+						hasResult = true;
+					} else if ('rank' in data && data.rank.length > 0) {
+						// const { prev } = rank(data.rank, sortMethod.incWithNullAtLast);
+						// data.diff = diffFromRanked(data.rank, data.rank, prev);
+						hasResult = true;
+					}
+					data.count = hasResult ? data.rank.map((r) => data.rankToCount[r - 1]) : [];
+				} else {
+					if ('count' in data && data.count.length > 0) {
+						rankDiffAssign(data.count, data, 'rank', 'voteDiff');
+						hasResult = true;
+					}
+				}
+			}
+
+			return [
+				restype.label,
+				hasCat
+					? hasResult
+						? ResultRecordType.hasResult
+						: ResultRecordType.included
+					: ResultRecordType.NA
+			];
+		})
+	);
+	// console.log(otherMP);
+	// console.log('***initiale match point extension: done ');
+	// @ts-ignore
+	return { hasShimei, ...otherMP };
 }
 
 //#region main calculation
+
+function refinedRankFromTotalCount(totalCount, shimeiNum) {
+	let data = totalCount.map((x, i) => [x, shimeiNum[i]]);
+	// first compoare totalCount, if tied, then compare shimeiNum
+	return rank(
+		data,
+		(a, b) => sortMethod.decWithNullAtLast(a[0], b[0]) || sortMethod.decWithNullAtLast(a[1], b[1])
+	);
+}
+
 /**
  * @param  {MatchDataRaw} rawMatch
- * @param  {number} numPlayers
+ * @param  {string[]} leaguePlayers
  * @param  {MatchDataExt|null} prevMatchExt=null
  */
-function ExtendMatchData(rawMatch, numPlayers, prevMatchExt = null) {
+function ExtendMatchData(rawMatch, leaguePlayers, prevMatchExt = null) {
 	/** @type {MatchDataExt} */
+	// @ts-ignore
 	let mExt = { ...rawMatch }; // faster than structured clone; our data are only array of numbers and strings anyway
 	let hasPrevMatch = prevMatchExt !== null;
-	let hasRes = hasResult(rawMatch);
+	// @ts-ignore
+	let hasMatchRecord = 'shimeiNum' in rawMatch || 'rank' in rawMatch;
 	mExt.shortdate = ShortJPDate(rawMatch.date, true);
-	mExt.displayType = hasRes ? 'RESULT' : hasTT(rawMatch) ? 'TT_ONLY' : 'NONE';
-	mExt.hasShimei = hasRes && 'shimeiNum' in rawMatch;
-	mExt.hasFC = 'fcRankToCount' in rawMatch;
-	mExt.hasFCResult = mExt.hasFC && 'fcRank' in rawMatch;
-	mExt.fcRankToCount = rawMatch?.fcRankToCount ?? [];
-	mExt.hasAbema = 'abemaRankToCount' in rawMatch;
-	mExt.hasAbemaResult = mExt.hasAbema && 'abemaRank' in rawMatch;
-	mExt.abemaRankToCount = rawMatch?.abemaRankToCount ?? [];
+	mExt.displayType = hasMatchRecord ? 'RESULT' : hasTT(rawMatch) ? 'TT_ONLY' : 'NONE';
+	mExt.hasShimei = hasMatchRecord && 'shimeiNum' in rawMatch;
+	mExt.hasResults = initResultTypeAndExtendMatchPoint(rawMatch.mPts, mExt.hasShimei);
+
+	const mptd = mExt.mPts;
+
+	const numGuests = 'guests' in rawMatch ? rawMatch.guests.length : 0;
+	let guestTotalCount = [];
+	// exclude those in TT but shimei/FC not counted
+	const numPlayers = rawMatch?.shimeiNum?.length ?? rawMatch.rankToLP.length;
+	// number of groups that are in league in the current match
+	const numActivePlayers =
+		numGuests > 0
+			? Math.min(
+					...rawMatch.guests.map((g) => {
+						const i = leaguePlayers.indexOf(g);
+						return i > 0 ? i : leaguePlayers.length;
+					}),
+					numPlayers,
+					rawMatch.rankToLP.length
+				)
+			: numPlayers;
+
+	// if (rawMatch.date == '2025-08-06') {
+	// 	console.log(
+	// 		`${rawMatch.date} numActive ${numActivePlayers} numPlayers ${numPlayers} numGuests ${numGuests}`
+	// 	);
+	// }
+
+	mExt.numActivePlayers = numActivePlayers;
+
+	// if (rawMatch.date == '2025-07-14') {
+	// 	console.log(
+	// 		'numGuests:',
+	// 		numGuests,
+	// 		' |activePlayers:',
+	// 		numActivePlayers,
+	// 		' |leaguePlayers num:',
+	// 		leaguePlayers.length
+	// 	);
+	// }
+
+	// mExt.hasFC = 'fcRankToCount' in rawMatch;
+	// mExt.hasFCResult = mExt.hasFC && 'fcRank' in rawMatch;
+	// // @ts-ignore
+	// mExt.fcRankToCount = rawMatch?.fcRankToCount ?? [];
+	// mExt.hasAbema = 'abemaRankToCount' in rawMatch;
+	// mExt.hasAbemaResult = mExt.hasAbema && 'abemaRank' in rawMatch;
+	// // @ts-ignore
+	// mExt.abemaRankToCount = rawMatch?.abemaRankToCount ?? [];
 
 	// console.log('Processing: ', rawMatch.date);
-	if (hasRes) {
-		let totalCount = [];
-		if (mExt.hasFCResult) {
-			mExt.fcCount = rawMatch.fcRank.map((x) => mExt.fcRankToCount[x - 1]);
-			totalCount = mExt.fcCount;
+	if (hasMatchRecord) {
+		/** @type {number[]} */
+		let totalCount = MatchPointsData.reduce(
+			(acc, { label }) => acc.map((val, i) => val + (mptd?.[label]?.count?.[i] ?? 0)),
+			Array(numPlayers).fill(0)
+		);
+
+		if (rawMatch.date == '2026-05-20') {
+			console.log('Abema', mExt.mPts.Abema);
 		}
 
-		if (mExt.hasAbemaResult) {
-			mExt.abemaCount = rawMatch.abemaRank.map((x) => mExt.abemaRankToCount[x - 1]);
-			totalCount = mExt.hasFC ? totalCount.map((x, i) => x + mExt.abemaCount[i]) : mExt.abemaCount;
-		}
+		// if (mExt.hasFCResult) {
+		// 	// @ts-ignore
+		// 	mExt.fcCount = rawMatch.fcRank.map((x) => mExt.fcRankToCount[x - 1]);
+		// 	totalCount = mExt.fcCount;
+		// }
+
+		// if (mExt.hasAbemaResult) {
+		// 	// @ts-ignore
+		// 	mExt.abemaCount = rawMatch.abemaRank.map((x) => mExt.abemaRankToCount[x - 1]);
+		// 	// @ts-ignore
+		// 	totalCount = mExt.hasFC ? totalCount.map((x, i) => x + mExt.abemaCount[i]) : mExt.abemaCount;
+		// }
 
 		if (mExt.hasShimei) {
-			rankDiffAssign(rawMatch.shimeiNum, mExt, 'shimeiRank', 'shimeiDiff');
+			rankDiffAssign(
+				rawMatch.shimeiNum.slice(0, numActivePlayers),
+				mExt,
+				'shimeiRank',
+				'shimeiDiff'
+			);
 			mExt.shimeiTotal = [rawMatch.shimeiNum.reduce((a, x) => a + x, 0), null];
 			mExt.accumShimei = hasPrevMatch
 				? rawMatch.shimeiNum.map(
@@ -364,36 +574,51 @@ function ExtendMatchData(rawMatch, numPlayers, prevMatchExt = null) {
 					)
 				: rawMatch.shimeiNum;
 
-			if (mExt.hasFCResult || mExt.hasAbemaResult) {
-				totalCount = totalCount.map((x, i) => x + rawMatch.shimeiNum[i]);
-				rankDiffAssign(totalCount, mExt, '', 'countDiff');
-			} else {
-				totalCount = rawMatch.shimeiNum;
-				mExt.countDiff = mExt.shimeiDiff;
-			}
+			totalCount = totalCount.map((x, i) => x + rawMatch.shimeiNum[i]);
+			guestTotalCount = totalCount.slice(numActivePlayers);
+			rankDiffAssign(totalCount, mExt, '', 'countDiff');
 		} else {
-			//update accumShimei even if there is shimei data for current match
+			// only happens if match rank is public without shimeiNum
+			//update accumShimei even if there is no shimei data for current match
 			mExt.accumShimei = hasPrevMatch
 				? prevMatchExt.accumShimei
 				: new Array(rawMatch.rank.length).fill(0);
 		}
 
+		// console.log('*** mpd: ', mExt?.mPts);
+		// console.log('*** accumShimei: ', mExt.accumShimei);
+		// console.log('*** rank data now');
+
 		// having rank in rawMatch allows over-riding ranking determined by counts;
 		// e.g. when there is guest who can changes ranking but without publicised shimei/FC data.
 
-		let rankedData = 'rank' in rawMatch ? rank(rawMatch.rank, (a, b) => a - b) : rank(totalCount);
+		let rankedData =
+			'rank' in rawMatch
+				? rank(rawMatch.rank, (a, b) => a - b)
+				: refinedRankFromTotalCount(
+						totalCount.slice(0, numActivePlayers),
+						mExt.shimeiNum.slice(0, numActivePlayers)
+					);
+
+		// if (rawMatch.date == '2025-08-06') {
+		// 	console.log('rankedData: (length =', rankedData.rank.length, '), data=', rankedData);
+		// }
 		mExt.totalRank = 'rank' in rawMatch ? rawMatch.rank : rankedData.rank;
-		// if no rankToPoints data, then just use totalCount as league point.
-		mExt.getLPt = mExt.totalRank.map((r) =>
-			'rankToPoints' in mExt ? mExt.rankToPoints[r - 1] : totalCount[rankedData.inv[r - 1]]
+		mExt.totalCount = totalCount;
+		// if no rankToLP data, then just use totalCount as league point.
+		mExt.getLPt = mExt.totalRank.map((r, i) =>
+			'rankToLP' in mExt
+				? i < mExt.rankToLP.length
+					? mExt.rankToLP[r - 1]
+					: 0
+				: totalCount[rankedData.inv[r - 1]]
 		);
 		// mExt.getLPtDiff = diffFromRanked(mExt.getLPt, rankedData.rank, rankedData.prev);
-		//  console.log(`** L${raw.league} ***** ${n} **** (${rawMatch.date})`);
-		// 	console.log(`totalRank: `, mExt.totalRank);
-		// 	console.log(`getLPt: `, mExt.getLPt);
-		//  set accumPt=0 for groups not joined yet
+		// console.log(`totalRank: `, mExt.totalRank);
+		// console.log(`getLPt: `, mExt.getLPt);
 
-		mExt.accumPt = new Array(numPlayers)
+		//  set accumPt=0 for groups not joined yet
+		mExt.accumPt = new Array(leaguePlayers.length)
 			.fill(0)
 			.map(
 				(_, i) =>
@@ -402,43 +627,63 @@ function ExtendMatchData(rawMatch, numPlayers, prevMatchExt = null) {
 			);
 
 		// flag positions of groups that needs to assign LP by taking entry=0
-		mExt.assignedLP = new Array(numPlayers)
+		mExt.assignedLP = new Array(leaguePlayers.length)
 			.fill()
-			.map((_, i) => (i >= mExt.getLPt.length ? 0 : null));
-		// console.log(`assignLP: `, mExt.assignedLP);
+			.map((_, i) => (i >= numActivePlayers ? 0 : null));
+		if (numActivePlayers < leaguePlayers.length) {
+			console.log(`assignLP: `, mExt.assignedLP);
+		}
 	} else {
 		mExt.accumShimei = [];
 		mExt.totalRank = [];
+		mExt.totalCount = [];
 		mExt.getLPt = [];
 		mExt.assignedLP = [];
 	}
 
 	// tidy guest data if there is any
 	if (!('guestIdx' in rawMatch)) {
+		// @ts-ignore
 		mExt.guestIdx = [];
 	}
 	mExt.guestResults = [];
-	if ('guestShimeiFC' in rawMatch) {
-		let shimei = rawMatch.guestShimeiFC.map((x) => x[1]);
+	if ('guests' in rawMatch && hasMatchRecord) {
+		// if (numActivePlayers + numGuests != mExt.shimeiNum.length) {
+		// if (rawMatch.date == '2025-06-26') {
+		// 	console.log(
+		// 		`** numActivePlayers: ${numActivePlayers} | numGuests: ${numGuests} | numShimeiRecord: ${mExt.shimeiNum.length}`
+		// 	);
+		// }
+		let shimei = rawMatch.guests.map((_, i) => mExt.shimeiNum[numActivePlayers + i]);
+		// @ts-ignore
 		mExt.shimeiTotal[1] = shimei.reduce((a, x) => a + x);
 		let shimeiRk = rank(shimei);
-		let diff = diffFromRanked(shimei, shimeiRk.rank, shimeiRk.prev);
-		let gd = rawMatch.guestShimeiFC.map((x, i) => {
-			//TODO: add handling of abema rank
-			let prevCount =
-				i == 0 ? x[1] + x[3] : rawMatch.guestShimeiFC[i - 1][1] + rawMatch.guestShimeiFC[i - 1][3];
+		let shimeiDiff = diffFromRanked(shimei, shimeiRk.rank, shimeiRk.prev);
+		let scoreRk = rank(guestTotalCount);
+		let fcData = mptd?.FC ?? null;
+		let [fcRank, fcCount] =
+			fcData && fcData.rank.length > numActivePlayers
+				? [fcData.rank.slice(numActivePlayers), fcData.count.slice(numActivePlayers)]
+				: [new Array(numGuests).fill(null), new Array(numGuests).fill(null)];
+
+		let gd = rawMatch.guests.map((g, i) => {
+			// let [fcRank, fcCount] = hasFCrank
+			// 	? [fcData.rank[numActivePlayers + i], fcData.count[numActivePlayers + i]]
+			// 	: [null, null];
 			return {
-				group: x[0],
-				shimeiNum: [x[1]],
+				group: g,
+				shimeiNum: [shimei[i]],
 				shimeiRank: [shimeiRk.rank[i]],
-				shimeiDiff: [diff[i]],
-				fcRank: [x[2] == -1 ? null : x[2]],
-				fcCount: [x[3] == -1 ? null : x[3]],
-				totalRank: [i + 1],
-				countDiff: [prevCount - x[1] - Math.max(x[3], 0)],
+				shimeiDiff: [shimeiDiff[i]],
+				fcRank: [fcRank[i]],
+				fcCount: [fcCount[i]],
+				totalRank: [scoreRk.rank[i]],
+				totalCount: [guestTotalCount[i]],
+				countDiff: [scoreRk.prev[i] > -1 ? guestTotalCount[scoreRk.prev[i]] : 0],
 				getLPt: [-1] // for distinguish guest from match groups
 			};
 		});
+		// @ts-ignore
 		mExt.guestResults = gd;
 	}
 
@@ -457,12 +702,16 @@ export function CalculateLeagueResult(raw) {
 	res.matches = [];
 	// let numGp = raw.groups.length;
 
-	// console.log(`********* League ${raw.league} ************ `);
+	if (raw.league == 2) {
+		console.log(`********* League ${raw.league} ************ `);
+	}
 	// let firstJoinAt = new Array(raw.groups.length);
 	for (const [sn, match] of Object.entries(raw.matches)) {
 		let n = parseInt(sn);
-		// console.log(`************ ${n} ************ (${match.date})`);
-		let mExt = ExtendMatchData(match, raw.groups.length, n > 0 ? res.matches[n - 1] : null);
+		if (raw.league == 2) {
+			console.log(`************ ${n} ************ (${match.date})`);
+		}
+		let mExt = ExtendMatchData(match, raw.groups, n > 0 ? res.matches[n - 1] : null);
 		// console.log(mExt);
 		res.matches[n] = mExt;
 	}
@@ -480,6 +729,22 @@ export function CalculateLeagueResult(raw) {
 				(finalMatchWithResult - v)
 			: null
 	);
+
+	// if (raw.league == 2) {
+	// 	console.log(
+	// 		'finalMatchID:',
+	// 		finalMatchWithResult,
+	// 		' | num match in leagues:',
+	// 		joinAfter.map((v, i) => (i > 7 ? finalMatchWithResult - v : null)).filter((x) => x != null)
+	// 	);
+	// 	console.log(joinAfter, finalAssignedLP);
+	// 	console.log([8, 9, 10].map((i) => res.matches[finalMatchWithResult].accumPt[i]));
+	// }
+
+	// if (raw.season == 2025 && raw.league === 1) {
+	// 	console.log('!!!!!! numActivePlayers !!!!!!!!!!');
+	// 	console.log(res.matches.map(({ numActivePlayers }) => numActivePlayers));
+	// }
 
 	// loop again to process advanced data
 	// console.log(`*** 2nd loop`);
@@ -545,16 +810,19 @@ export function CalculateLeagueResult(raw) {
 /**
  * @typedef {Object} MatchSummary
  * @property {boolean} hasShimei
- * @property {boolean} hasFC
- * @property {boolean} hasAbema
+ * @property {HasResultType} hasResults
+//  * @property {boolean} hasFC
+//  * @property {boolean} hasAbema
  * @property {string} shortdate
  * @property {string} venue
- * @property {number[]} fcRankToCount
- * @property {number[]} abemaRankToCount
- * @property {number[]} rankToPoints
+//  * @property {number[]} fcRankToCount
+//  * @property {number[]} abemaRankToCount
+ * @property {MatchPointRecordCollec} mPts
+ * @property {number[]} rankToLP
  * @property {number} shimeiTotal
  * @property {string} displayType
  * @property {number[]} guestIdx
+ * @property {boolean} guestWithFCRank
  */
 
 /**
@@ -565,14 +833,16 @@ export function extractSummaryFromLeagueResExt(leagueResExt) {
 	const summaryKeys = [
 		'shortdate',
 		'venue',
-		'fcRankToCount',
-		'rankToPoints',
+		// 'fcRankToCount',
+		'rankToLP',
 		'shimeiTotal',
 		'displayType',
-		'hasFC',
+		// 'hasFC',
 		'hasShimei',
-		'hasAbema',
-		'abemaRankToCount',
+		'hasResults',
+		'mPts',
+		// 'hasAbema',
+		// 'abemaRankToCount',
 		'lastUpperGroup',
 		'topLowerGroup',
 		'guestIdx'
@@ -580,6 +850,14 @@ export function extractSummaryFromLeagueResExt(leagueResExt) {
 
 	// @ts-ignore
 	return leagueResExt.matches.map((match) => betterObjectFromEntries(summaryKeys, match, true));
+	// return leagueResExt.matches.map((match) => {
+	// 	const base = betterObjectFromEntries(summaryKeys, match, true);
+	// 	base.guestWithFCRank = match.guestResults.reduce(
+	// 		(/** @type {boolean} */ flag, { fcRank }) => flag || fcRank[0] > 0,
+	// 		false
+	// 	);
+	// 	return base;
+	// });
 }
 
 /**
@@ -593,7 +871,7 @@ export function extractSummaryFromLeagueResExt(leagueResExt) {
  *
  * @typedef {Object} LastData
  * @property {number} matchID index of the last match in season
- * @property {number[]} rankToPoints
+ * @property {number[]} rankToLP
  * @property {GroupLastData[]} rankedGps
  */
 
@@ -604,11 +882,11 @@ export function extractSummaryFromLeagueResExt(leagueResExt) {
 export function extractLastMatchDataByGroups(extData) {
 	let n = lastFinishedMatchID(extData.matches);
 	let lastMatch = extData.matches[n];
-	// console.log(lastMatch.rankToPoints);
+	// console.log(lastMatch.rankToLP);
 	//! does not yet handle the case when there is special assigned league pt.
 	return {
 		matchID: n,
-		rankToPoints: lastMatch.rankToPoints,
+		rankToLP: lastMatch.rankToLP,
 		rankedGps: extData.groups
 			.map((gp, i) => {
 				return {
@@ -625,22 +903,26 @@ export function extractLastMatchDataByGroups(extData) {
 }
 
 //#region Series handling
-/**
+/** 
+ * 
  * @typedef {Object} GroupResultSeries
  * @property {string} group  i-th entry of each of the remaining properties is the data from i-th match
  * @property {number} id
+ * @property {number} activeSince = p if becomes league player in the (p+1)-th match
  * @property {number} rankNow
  * @property {"upperGp"|"lowerGp"|""} category 上位・下位グループ
  * @property {number[]} shimeiNum
  * @property {number[]} shimeiRank
  * @property {number[]} shimeiDiff difference in shimei number from the group of one rank higher
- * @property {number[]} fcRank
- * @property {number[]} fcCount calculated using fcRankToCount
- * @property {number[]} abemaRank
- * @property {number[]} abemaCount
+//  * @property {number[]} fcRank
+//  * @property {number[]} fcCount calculated using fcRankToCount
+//  * @property {number[]} abemaRank
+//  * @property {number[]} abemaCount
+ * @property {MatchPointRecordCollec} mPts
  * @property {number[]} totalRank determined by shimeiNum+fcCount+abemaCount
+ * @property {number[]} totalCount
  * @property {number[]} countDiff
- * @property {number[]} getLPt = rankToPoints[totalRank]
+ * @property {number[]} getLPt = rankToLP[totalRank]
  * @property {number[]} [assignedLP] = calculated from getLPt, different from points get from battle
  * @property {number[]} accumPt
  * @property {number[]} accumPtDiff
@@ -657,10 +939,11 @@ export function partitionResultToSortedGroups(resultdata) {
 		'shimeiNum',
 		'shimeiRank',
 		'shimeiDiff',
-		'fcRank',
-		'fcCount',
-		'abemaRank',
-		'abemaCount',
+		// 'fcRank',
+		// 'fcCount',
+		// 'abemaRank',
+		// 'abemaCount',
+		'totalCount',
 		'totalRank',
 		'countDiff',
 		'getLPt',
@@ -671,8 +954,9 @@ export function partitionResultToSortedGroups(resultdata) {
 	];
 	/** @type {GroupResultSeries[]} */
 	let gpResultData = [];
+	const matches = resultdata.matches;
 	// let n = resultdata.matches.findLastIndex(({ accumRank }) => accumRank.length > 0);
-	let n = lastFinishedMatchID(resultdata.matches);
+	let n = lastFinishedMatchID(matches);
 	// console.log('n=', n, ' out of ', resultdata.matches.length, ' matches');
 
 	for (const [si, gp] of Object.entries(resultdata.groups)) {
@@ -682,19 +966,92 @@ export function partitionResultToSortedGroups(resultdata) {
 		gpResultData[i] = {
 			group: gp,
 			id: i,
-			rankNow: n >= 0 ? resultdata.matches[n].accumRank[i] : i + 1,
-			accumShimei: n >= 0 ? resultdata.matches[n].accumShimei[i] : 0
+			rankNow: n >= 0 ? matches[n].accumRank[i] : i + 1,
+			accumShimei: n >= 0 ? matches[n].accumShimei[i] : 0
 		};
 		for (const key of keys) {
 			// !every data that has no value will be default to null
 			// if(gp == 'ion'){
 			// 	console.log(`i=${i}: key=${key}, in data=${key in m}`)
 			// }
-			gpResultData[i][key] = resultdata.matches.map((m) =>
+			gpResultData[i][key] = matches.map((m) =>
 				key in m ? (m[key].length > i ? m[key][i] : null) : null
 			);
 		}
+		gpResultData[i].activeSince = 0;
 
+		// console.log(gp);
+		// if (gp === 'ion' && resultdata.season == 2025 && resultdata.league === 1){
+		// 	console.log("!!!!!!!!!!!! iON !!!!!!!!!!!!!!!!!!!!!!!!!")
+		// }
+		// @ts-ignore
+		gpResultData[i].mPts = Object.fromEntries(
+			MatchPointsData.map(({ label }) => {
+				const vote = new Array(matches.length);
+				const voteDiff = new Array(matches.length);
+				const rank = new Array(matches.length);
+				const count = new Array(matches.length);
+
+				for (let m = 0; m < matches.length; m++) {
+					// secretely flagging if group joins later
+					gpResultData[i].activeSince += i >= matches[m].numActivePlayers ? 1 : 0;
+					// if (gp === 'ion' && resultdata.season == 2025 && resultdata.league === 1){
+					// 	console.log('id: ', i, ' | numActivePlayers: ')
+
+					if ('mPts' in matches[m]) {
+						const data = matches[m]?.mPts?.[label];
+
+						vote[m] = data?.vote?.[i] ?? null;
+						voteDiff[m] = data?.voteDiff?.[i] ?? null;
+						rank[m] = data?.rank?.[i] ?? null;
+						count[m] = data?.count?.[i] ?? null;
+					} else {
+						vote[m] = null;
+						voteDiff[m] = null;
+						rank[m] = null;
+						count[m] = null;
+					}
+
+					// if (gp == 'ion' && resultdata.league == 1 && resultdata.season == 2026) {
+					// if (
+					// 	gp === 'ion' &&
+					// 	resultdata.league == 1 &&
+					// 	resultdata.season == 2025 &&
+					// 	label === 'FC' &&
+					// 	m > 3
+					// ) {
+					// console.log(`Match ${m}.  Cat ${label}.  Gp Id: ${i}`);
+					// console.log('mPts', matches[m]?.mPts);
+					// if (matches[m].mPts) {
+					// 	console.log('has mPts');
+					// 	if (label == 'Abema') {
+					// 		console.log('has Abema : ', label in matches[m].mPts);
+					// 		console.log('Abema : ', matches[m]?.mPts?.[label]);
+					// 		console.log('rank??', matches[m]?.mPts?.[label]?.rank);
+					// 		console.log('i-th rank??', matches[m]?.mPts?.[label]?.rank?.[i]);
+					// 	}
+					// }
+					// console.log(rank[m], count[m], vote[m], voteDiff);
+					// }
+				}
+				// if (gp === 'ion' && resultdata.league === 1 && resultdata.season == 2025) {
+				// 	console.log('!!!!!!!!!!!!! ion rank');
+				// 	console.log(
+				// 		'mPts in series: ',
+				// 		resultdata.matches.map((m) => m.mPts)
+				// 	);
+				// 	console.log([label, { vote, voteDiffs, rank, count }]);
+				// }
+
+				return [label, { vote, voteDiff, rank, count }];
+			})
+		);
+		// if (gp === 'ion' && resultdata.season == 2025 && resultdata.league === 1) {
+		// 	console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		// 	// 	console.log(`gp: ${gp}. mPts: `);
+		// 	console.log(gpResultData[i].activeSince);
+		// 	console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		// }
 		// check grade up/down criteria
 		if (n > -1) {
 			const { rankNow } = gpResultData[i];

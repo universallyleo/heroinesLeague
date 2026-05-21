@@ -21,6 +21,7 @@
 				</tr>
 			</thead>
 			<tbody>
+				<!-- eslint-disable-next-line svelte/require-each-key-->
 				{#each tt as itm}
 					<tr>
 						<td> {itm.time[0]} </td>
@@ -41,7 +42,8 @@
 								{:else if itm.tokuten[0] === ''}
 									未定
 								{:else}
-									{itm.tokuten[0]} ~ {itm.tokuten[1]}
+									{itm.tokuten[0]} ~ {itm.tokuten[1]}{#if itm.tokuten.length > 2}／{itm.tokuten[2]} ~
+										{itm.tokuten[3]}{/if}
 								{/if}
 							</td>
 						{/if}

@@ -1,12 +1,27 @@
 <script>
+	import { CountType, MatchPointsData } from './processData';
+
 	// import { resultTypes } from './processData';
 	import RankNumber from './RankNumber.svelte';
 	import SubDataCell from './SubDataCell.svelte';
 	let { gpResult, n, detailed } = $props();
 
 	let hasShimei = $derived(gpResult.shimeiNum[n] != null);
-	let hasFC = $derived(gpResult.fcCount[n] != null);
-	let hasAbema = $derived(gpResult.abemaCount[n] != null);
+	// let hasFC = $derived(gpResult.mPts.FC[n] != null);
+	// let hasAbema = $derived(gpResult.mPts.Abema[n] != null);
+	let mPts = $derived(
+		MatchPointsData.map(({ label, countType }) => {
+			const base = gpResult.mPts[label];
+			const entry =
+				countType == CountType.RANKED_WITH_VOTE
+					? ['vote', 'rank', 'voteDiff']
+					: ['count', 'rank', null];
+			// console.log(gpResult.group, label, n, gpResult.mPts[label][entry][n]);
+			const triple = hasShimei ? entry.map((key) => (key ? base[key][n] : null)) : null;
+			return [label, ...triple];
+		})
+	);
+	$inspect('n:', n, 'gp: ', gpResult.group, '; mPts:', mPts);
 
 	let hasResult = $derived(gpResult.totalRank[n] > 0);
 	// $inspect('n:', n, 'gp: ', gpResult.group,'; hasResult: ', hasResult, '; gpResult.accumPtDiff:', gpResult.accumPtDiff);
@@ -23,17 +38,20 @@
 
 		<div class="subData">
 			{#if detailed}
+				<!-- {hasFC} -->
+				<!-- {hasAbema} -->
+				<!--  fcCount={gpResult.mPts.FC.count[n]} -->
+				<!--  fcRank={gpResult.mPts.FC.rank[n]} -->
+				<!-- abemaCount={gpResult.mPts.Abema.vote[n]} -->
+				<!-- abemaRank={gpResult.mPts.Abema.rank[n]}  -->
+
 				<SubDataCell
 					{hasShimei}
-					{hasFC}
-					{hasAbema}
 					shimeiNum={gpResult.shimeiNum[n]}
 					shimeiRank={gpResult.shimeiRank[n]}
 					shimeiDiff={gpResult.shimeiDiff[n]}
-					fcCount={gpResult.fcCount[n]}
-					fcRank={gpResult.fcRank[n]}
-					abemaCount={gpResult.fcCount[n]}
-					abemaRank={gpResult.fcRank[n]}
+					{mPts}
+					totalCount={gpResult.totalCount[n]}
 					totalRank={gpResult.totalRank[n]}
 					countDiff={gpResult.countDiff[n]}
 				/>

@@ -1,0 +1,48 @@
+{
+	"id": "giltygilty",
+	"displayName": "GILTY×GILTY",
+	"debut": "2021-09-29",
+	"sns": {
+		"twitter": "GILTYxGILTY",
+		"ig": "giltyxgilty",
+		"yt": "giltygilty",
+		"tiktok": "GILTY×GILTY"
+	},
+	"members": [
+		{
+			"name": "Aoi Kanau",
+			"display": "蒼井叶",
+			"colorCode": "",
+			"color": "none",
+			"join": "Founding Member; Concurrent member of Ill"
+		},
+		{
+			"name": "Shirayuki Himeno",
+			"display": "白雪姫乃",
+			"colorCode": "",
+			"color": "none",
+			"join": "Founding Member; Concurrent member of Ill"
+		},
+		{
+			"name": "Hakuu Coai",
+			"display": "白空こあい",
+			"colorCode": "",
+			"color": "none",
+			"join": "Founding Member; Concurrent member of Yakousei Amuse"
+		},
+		{
+			"name": "Konose Haruka",
+			"display": "恋星はるか",
+			"colorCode": "",
+			"color": "none",
+			"join": "Founding Member; Concurrent member of Non-Fiction"
+		},
+		{
+			"name": "Konoka Riri",
+			"display": "心花りり",
+			"colorCode": "",
+			"color": "none",
+			"join": "Founding Member; Concurrent member of iLiFE!"
+		}
+	]
+}

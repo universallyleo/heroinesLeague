@@ -1,0 +1,27 @@
+{
+	"id": "icol",
+	"displayName": "i-COL",
+	"debut": "2021-06-05",
+	"sns": {
+		"twitter": "icol_official",
+		"ig": "icol_official",
+		"yt": "i-COL_official",
+		"tiktok": "icol_official"
+	},
+	"members": [
+		{
+			"name": "Aisu|Ice",
+			"display": "あいす",
+			"colorCode": "#3E82CC",
+			"color": "Blue",
+			"join": "Founding Member; Concurrent member of iLiFE!"
+		},
+		{
+			"name": "Colne",
+			"display": "こるね",
+			"colorCode": "#E5434B",
+			"color": "red",
+			"join": "Founding Member; Concurrent member of Non-Fiction"
+		}
+	]
+}

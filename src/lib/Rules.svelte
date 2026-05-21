@@ -6,7 +6,7 @@
 		hasAbema,
 		fcRankToCount = [],
 		abemaRankToCount = [],
-		rankToPoints = [],
+		rankToLP = [],
 		rules = []
 	} = $props();
 </script>
@@ -69,13 +69,13 @@
 	{@render conversionTable('Abema投票順位とその得点', abemaRankToCount, false)}
 {/if}
 
-{#if rankToPoints.length > 0}
-	{@render conversionTable('総合得点順位とその獲得ポイント', rankToPoints, false)}
+{#if rankToLP.length > 0}
+	{@render conversionTable('総合得点順位とその獲得ポイント', rankToLP, false)}
 	<!-- <table class="simpTb">
 		<caption> 総合得点順位とその獲得ポイント </caption>
 		<thead>
 			<tr>
-				{#each { length: rankToPoints.length }, n (n)}
+				{#each { length: rankToLP.length }, n (n)}
 					<th> <RankNumber rank={n + 1} noDecorate={false} /> </th>
 				{/each}
 			</tr>
@@ -83,7 +83,7 @@
 
 		<tbody>
 			<tr>
-				{#each rankToPoints as cnt, idx (idx)}
+				{#each rankToLP as cnt, idx (idx)}
 					<td> {cnt} </td>
 				{/each}
 			</tr>
