@@ -21,13 +21,13 @@
 	);
 
 	let mPtsInfo = $derived(
-		MatchPointsData.map(({ label, countType }) =>
-			countType == CountType.RANKED_WITH_VOTE
+		MatchPointsData.map(({ label, countType }) => {
+			return countType == CountType.RANKED_WITH_VOTE
 				? label in match.mPts && 'vote' in match.mPts[label]
 					? sumArray(match.mPts[label].vote.slice(0, match.numActivePlayers))
 					: null
-				: (match.mPts?.[label]?.info ?? null)
-		)
+				: (match.mPts?.[label]?.info ?? null);
+		})
 	);
 </script>
 

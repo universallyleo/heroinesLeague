@@ -480,6 +480,7 @@ function ExtendMatchData(rawMatch, leaguePlayers, prevMatchExt = null) {
 	/** @type {MatchDataExt} */
 	// @ts-ignore
 	let mExt = { ...rawMatch }; // faster than structured clone; our data are only array of numbers and strings anyway
+	if (!('mPts' in mExt)) mExt.mPts = {};
 	let hasPrevMatch = prevMatchExt !== null;
 	// @ts-ignore
 	let hasMatchRecord = 'shimeiNum' in rawMatch || 'rank' in rawMatch;
@@ -543,9 +544,9 @@ function ExtendMatchData(rawMatch, leaguePlayers, prevMatchExt = null) {
 			Array(numPlayers).fill(0)
 		);
 
-		if (rawMatch.date == '2026-05-20') {
-			console.log('Abema', mExt.mPts.Abema);
-		}
+		// if (rawMatch.date == '2026-05-20') {
+		// 	console.log('Abema', mExt.mPts.Abema);
+		// }
 
 		// if (mExt.hasFCResult) {
 		// 	// @ts-ignore
@@ -630,9 +631,9 @@ function ExtendMatchData(rawMatch, leaguePlayers, prevMatchExt = null) {
 		mExt.assignedLP = new Array(leaguePlayers.length)
 			.fill()
 			.map((_, i) => (i >= numActivePlayers ? 0 : null));
-		if (numActivePlayers < leaguePlayers.length) {
-			console.log(`assignLP: `, mExt.assignedLP);
-		}
+		// if (numActivePlayers < leaguePlayers.length) {
+		// 	console.log(`(numActivePlayers < leaguePlayers) assignLP: `, mExt.assignedLP);
+		// }
 	} else {
 		mExt.accumShimei = [];
 		mExt.totalRank = [];
@@ -702,15 +703,11 @@ export function CalculateLeagueResult(raw) {
 	res.matches = [];
 	// let numGp = raw.groups.length;
 
-	if (raw.league == 2) {
-		console.log(`********* League ${raw.league} ************ `);
-	}
+	// console.log(`********* League ${raw.league} ************ `);
 	// let firstJoinAt = new Array(raw.groups.length);
 	for (const [sn, match] of Object.entries(raw.matches)) {
 		let n = parseInt(sn);
-		if (raw.league == 2) {
-			console.log(`************ ${n} ************ (${match.date})`);
-		}
+		// 	console.log(`************ ${n} ************ (${match.date})`);
 		let mExt = ExtendMatchData(match, raw.groups, n > 0 ? res.matches[n - 1] : null);
 		// console.log(mExt);
 		res.matches[n] = mExt;

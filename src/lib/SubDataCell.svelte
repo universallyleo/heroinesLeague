@@ -17,7 +17,7 @@
 		countDiff
 	} = $props();
 
-	$inspect('mPts in subdata', mPts);
+	// $inspect('mPts in subdata', mPts);
 
 	// const rkStr = $derived(rank ? `${rank}位` : '');
 	// let totalCount = $derived(
