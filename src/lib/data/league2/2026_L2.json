@@ -1,7 +1,7 @@
 {
 	"league": 2,
 	"season": 2026,
-	"title": "リーグII",
+	"title": "リーグⅡ",
 	"groups": [
 		"nanakoro",
 		"pasclo",
@@ -104,6 +104,85 @@
 				}
 			},
 			"src": ["https://x.com/ks_ecophysi/status/2056341837770867005"]
+		},
+		{
+			"date": "2025-06-18",
+			"venue": "Ebisu Garden Hall",
+			"tweet": "https://x.com/heroines_idol/status/2058881137230131602",
+			"rules": ["https://x.com/heroines_idol/status/2058881137230131602"],
+			"rankToLP": [120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 5],
+			"timetable": [
+				{
+					"group": "herokenOsaka",
+					"time": ["1500", "1525"],
+					"tokuten": ["1535", "1635"]
+				},
+				{
+					"group": "heroken",
+					"time": ["1525", "1550"],
+					"tokuten": ["1600", "1700"]
+				},
+				{
+					"group": "ladybaby",
+					"time": ["1550", "1615"],
+					"tokuten": ["1625", "1725"]
+				},
+				{
+					"group": "fullcourse",
+					"time": ["1615", "1640"],
+					"tokuten": ["1650", "1750"]
+				},
+				{
+					"group": "parasai",
+					"time": ["1640", "1705"],
+					"tokuten": ["1715", "1815"]
+				},
+				{
+					"group": "harukaecho",
+					"time": ["1710", "1735"],
+					"tokuten": ["1745", "1845"]
+				},
+				{
+					"group": "paradeeq",
+					"time": ["1735", "1800"],
+					"tokuten": ["1810", "1910"]
+				},
+				{
+					"group": "pasclo",
+					"time": ["1800", "1825"],
+					"tokuten": ["1835", "1935"]
+				},
+				{
+					"group": "ponkotu",
+					"time": ["1825", "1850"],
+					"tokuten": ["1900", "2000"]
+				},
+				{
+					"group": "clares",
+					"time": ["1855", "1920"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "akishibu",
+					"time": ["1920", "1945"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "nanakoro",
+					"time": ["1945", "2010"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "zuttomotto",
+					"time": ["2010", "2035"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"mPts": {
+				"FC": {
+					"rankToCount": [30, 25, 20, 15, 15, 10, 10, 5, 5, 5, 5, 5, 5]
+				}
+			}
 		}
 	]
 }

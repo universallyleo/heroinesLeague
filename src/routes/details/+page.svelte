@@ -1,22 +1,57 @@
 <script>
 	import MatchDetails from '$lib/MatchDetails.svelte';
-	import { dataCollection, lastFinishedMatchID } from '$lib/processData.js';
+	import { dataCollec, lastFinishedMatchID, seasonLeagueCombinations } from '$lib/processData.js';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
-	let { clamp } = $props();
-	let league = $state(3);
-	let leagueSeasonData = $derived(dataCollection[league][0]); //second index is for "season"
-	let matchID = $derived(lastFinishedMatchID(leagueSeasonData.extData.matches));
+	let innerWidth = $state(typeof window !== 'undefined' ? window.innerWidth : 1024); // Default to a common desktop width for SSR
+	let clamp = $derived(innerWidth < 600);
 
-	// $inspect(leagueSeasonData.extData.matches[match]);
+	const allSeasons = Object.keys(seasonLeagueCombinations)
+		.map(Number)
+		.sort((a, b) => b - a);
+
+	let season = $state(allSeasons[0]);
+	let league = $state(1);
+
+	// Dynamically determine which leagues are available for the selected season
+	let availableLeagues = $derived(seasonLeagueCombinations[season] || []);
+
+	// Initialize leagueSeasonData with the initial data.
+	let leagueSeasonData = $state(dataCollec({ season, league }));
+
+	$effect(() => {
+		const lsd = dataCollec({ season: season, league: league });
+		// If the currently selected league is no longer available for the new season,
+		// default to the first available league for that season.
+		if (!availableLeagues.some((l) => l.league === league)) {
+			league = availableLeagues[0]?.league ?? 1;
+		}
+		// Only update leagueSeasonData if lsd is not null.
+		// Otherwise, it retains its previous value.
+		if (lsd !== null) {
+			leagueSeasonData = lsd;
+		}
+	});
+
+	// matchID should also handle the case where leagueSeasonData might be null,
+	// especially if dataCollec returns null initially and no valid data has been set yet.
+	let matchID = $derived(
+		leagueSeasonData ? lastFinishedMatchID(leagueSeasonData.extData.matches) : null
+	);
+
+	// $inspect(leagueSeasonData);
+	//$inspect(leagueSeasonData.extData.matches[match]);
 
 	onMount(() => {
 		let rawmatchID = page.url.searchParams.get('match');
 		if (rawmatchID != null) {
-			let strs = rawmatchID.match(/L(\d+)M(\d+)/);
+			let strs = rawmatchID.match(/S(\d+)L(\d+)M(\d+)/);
 			if (strs) {
-				league = parseInt(strs[1]) - 1;
+				const sIdx = parseInt(strs[1]);
+				const sortedSeasons = [...allSeasons].sort((a, b) => a - b);
+				if (sortedSeasons[sIdx - 1]) season = sortedSeasons[sIdx - 1];
+				league = parseInt(strs[2]) - 1;
 			}
 		}
 	});
@@ -25,11 +60,20 @@
 <section>
 	<div class="pageContainer">
 		<div style="margin-bottom:1em;">
-			リーグ：
-			{#each [3, 0, 1, 2] as i}
+			年度：
+			{#each allSeasons as s (s)}
 				<label>
-					<input type="radio" name="league" value={i} bind:group={league} />
-					{dataCollection[i][0].title}
+					<input type="radio" name="season" value={s} bind:group={season} />
+					{s}
+				</label>
+			{/each}
+		</div>
+		<div style="margin-bottom:1em;">
+			リーグ：
+			{#each availableLeagues as l (l)}
+				<label>
+					<input type="radio" name="league" value={l.league} bind:group={league} />
+					{l.title}
 				</label>
 			{/each}
 		</div>
@@ -37,22 +81,13 @@
 		<div>
 			マッチ選択：
 			<select bind:value={matchID}>
-				{#each leagueSeasonData.summary as d, j}
+				{#each leagueSeasonData?.summary ?? [] as d, j (d.shortdate)}
 					<option value={j}> {d.shortdate} @ {d.venue} </option>
 				{/each}
 			</select>
 		</div>
 	</div>
 	<div class="pageContainer">
-		<!-- <MatchDetails
-			{clamp}
-			leagueTitle={leagueSeasonData.title}
-			rawMatch={leagueSeasonData.extData.matches[match]}
-			matchID={match}
-			gpResults={leagueSeasonData.resByGp}
-			match={leagueSeasonData.summary[match]}
-			guestResults={leagueSeasonData.extData.matches[match]?.guestResults ?? []}
-		/> -->
 		<MatchDetails {clamp} {leagueSeasonData} {matchID} />
 	</div>
 </section>

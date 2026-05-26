@@ -1131,28 +1131,46 @@ const matchPattern = {
  * @property {GroupResultSeries[]} resByGp
  * @property {MatchSummary[]} summary
  */
-/** @type {SeasonLeagueData[][]} */
-export const dataCollection = [champLeague, leagueOne, leagueTwo, playoffs, gradeUp].map(
-	(leagueSeasonData, i) => {
-		let LS = [];
-		for (let j = 0; j < leagueSeasonData.length; j++) {
-			let extData = CalculateLeagueResult(leagueSeasonData[j]);
-			/** @type {SeasonLeagueData} */
-			let res = {
-				league: i,
-				title: leagueSeasonData[j].title,
-				season: leagueSeasonData[j].season,
-				extData: extData,
-				resByGp: partitionResultToSortedGroups(extData),
-				summary: extractSummaryFromLeagueResExt(extData)
-			};
-			LS.push(res);
-		}
-		return LS;
-	}
-);
-// console.log(dataCollection);
-// console.log(dataCollection[0]);
+/**
+ * @typedef {Object} AvailableLeagueInfo
+ * @property {number} league
+ * @property {string} title
+ */
+
+/** @type {Record<number, AvailableLeagueInfo[]>} */
+export const seasonLeagueCombinations = {};
+
+/** @type {Record<number, Record<number, SeasonLeagueData>>} */
+export const dataCollection = [champLeague, leagueOne, leagueTwo, playoffs, gradeUp]
+	.flatMap((leagueData, i) => leagueData.map((raw) => ({ raw, i })))
+	.reduce((acc, { raw, i }) => {
+		const extData = CalculateLeagueResult(raw);
+		/** @type {SeasonLeagueData} */
+		const res = {
+			league: i,
+			title: raw.title,
+			season: raw.season,
+			extData,
+			resByGp: partitionResultToSortedGroups(extData),
+			summary: extractSummaryFromLeagueResExt(extData)
+		};
+
+		if (!acc[res.season]) acc[res.season] = {};
+		acc[res.season][i] = res;
+
+		if (!seasonLeagueCombinations[res.season]) seasonLeagueCombinations[res.season] = [];
+		seasonLeagueCombinations[res.season].push({ league: i, title: res.title });
+
+		return acc;
+	}, {});
+
+// Sort leagues within each season according to the predefined order
+const leagueOrder = [3, 0, 1, 2, 4]; // Playoffs, Champ, L1, L2, GradeUp
+for (const s in seasonLeagueCombinations) {
+	seasonLeagueCombinations[s].sort(
+		(a, b) => leagueOrder.indexOf(a.league) - leagueOrder.indexOf(b.league)
+	);
+}
 
 // console.log(dataCollection[1].map((x) => x.title));
 
@@ -1167,12 +1185,18 @@ export const dataCollection = [champLeague, leagueOne, leagueTwo, playoffs, grad
  * @return {SeasonLeagueData|null}
  */
 export function dataCollec(criteria) {
-	if (!('league' in criteria) && !('title' in criteria)) {
+	if (!criteria || !('season' in criteria) || (!('league' in criteria) && !('title' in criteria))) {
 		console.error('missing criteria for data request');
 		return null;
 	}
-	const chunk = dataCollection.find((x) => {
-		return 'league' in criteria ? x[0].league === criteria.league : x[0].title === criteria.title;
-	});
-	return chunk.find((x) => x.season === criteria.season);
+	console.log('Finding data: ', criteria?.league, ' ', criteria?.title);
+
+	const seasonGroup = dataCollection[criteria.season];
+	if (!seasonGroup) return null;
+
+	if ('league' in criteria) {
+		return seasonGroup[criteria.league] ?? null;
+	}
+
+	return Object.values(seasonGroup).find((l) => l.title === criteria.title) ?? null;
 }
