@@ -1189,7 +1189,7 @@ export function dataCollec(criteria) {
 		console.error('missing criteria for data request');
 		return null;
 	}
-	console.log('Finding data: ', criteria?.league, ' ', criteria?.title);
+	// console.log('Finding data: league=', criteria?.league, ' title=', criteria?.title);
 
 	const seasonGroup = dataCollection[criteria.season];
 	if (!seasonGroup) return null;

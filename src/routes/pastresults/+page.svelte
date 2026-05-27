@@ -4,20 +4,15 @@
 	import AccordionItem from '$lib/AccordionItem.svelte';
 	import ProgressTable from '$lib/ProgressTable.svelte';
 
-	import { dataCollection } from '$lib/processData.js';
+	import { dataCollec } from '$lib/processData.js';
 
 	let innerWidth = $state(0);
 
 	let activeTitle = $state(null);
 	let orderTitle = $state(null);
+	const leagueOrder = [4, 0, 3, 2, 1]; // gradeUp, champ, playoffs, league 2, league 1
 
-	const allLeagues = [
-		dataCollection[4][0], // gradeUp
-		dataCollection[0][0], // champ
-		dataCollection[3][0], // playoffs
-		dataCollection[2][0], // league 2
-		dataCollection[1][0] // league 1
-	];
+	const allLeagues = leagueOrder.map((i) => dataCollec({ season: 2025, league: i }));
 
 	let sortedLeagues = $derived.by(() => {
 		if (!orderTitle) return allLeagues;

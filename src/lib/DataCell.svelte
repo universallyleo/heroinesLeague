@@ -21,7 +21,7 @@
 			return [label, ...triple];
 		})
 	);
-	$inspect('n:', n, 'gp: ', gpResult.group, '; mPts:', mPts);
+	// $inspect('n:', n, 'gp: ', gpResult.group, '; mPts:', mPts);
 
 	let hasResult = $derived(gpResult.totalRank[n] > 0);
 	// $inspect('n:', n, 'gp: ', gpResult.group,'; hasResult: ', hasResult, '; gpResult.accumPtDiff:', gpResult.accumPtDiff);
