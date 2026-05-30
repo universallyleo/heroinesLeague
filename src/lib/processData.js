@@ -857,47 +857,47 @@ export function extractSummaryFromLeagueResExt(leagueResExt) {
 	// });
 }
 
-/**
- * @typedef {Object} GroupLastData
- * @property {string} group
- * @property {number} accumPt
- * @property {number} accumPtDiff
- * @property {number} accumRank
- * @property {number} accumShimei
- * @property {number} totalRank
- *
- * @typedef {Object} LastData
- * @property {number} matchID index of the last match in season
- * @property {number[]} rankToLP
- * @property {GroupLastData[]} rankedGps
- */
+// /**
+//  * @typedef {Object} GroupLastData
+//  * @property {string} group
+//  * @property {number} accumPt
+//  * @property {number} accumPtDiff
+//  * @property {number} accumRank
+//  * @property {number} accumShimei
+//  * @property {number} totalRank
+//  *
+//  * @typedef {Object} LastData
+//  * @property {number} matchID index of the last match in season
+//  * @property {number[]} rankToLP
+//  * @property {GroupLastData[]} rankedGps
+//  */
 
-/**
- * @param {LeagueDataExt} extData
- * @returns {LastData}
- */
-export function extractLastMatchDataByGroups(extData) {
-	let n = lastFinishedMatchID(extData.matches);
-	let lastMatch = extData.matches[n];
-	// console.log(lastMatch.rankToLP);
-	//! does not yet handle the case when there is special assigned league pt.
-	return {
-		matchID: n,
-		rankToLP: lastMatch.rankToLP,
-		rankedGps: extData.groups
-			.map((gp, i) => {
-				return {
-					group: gp,
-					accumPt: lastMatch.accumPt[i],
-					accumPtDiff: lastMatch.accumPtDiff[i],
-					accumRank: lastMatch.accumRank[i],
-					accumShimei: lastMatch.accumShimei[i],
-					totalRank: lastMatch.totalRank[i]
-				};
-			})
-			.toSorted((a, b) => ordering.accumRank(a.accumRank, b.accumRank))
-	};
-}
+// /**
+//  * @param {LeagueDataExt} extData
+//  * @returns {LastData}
+//  */
+// export function extractLastMatchDataByGroups(extData) {
+// 	let n = lastFinishedMatchID(extData.matches);
+// 	let lastMatch = extData.matches[n];
+// 	// console.log(lastMatch.rankToLP);
+// 	//! does not yet handle the case when there is special assigned league pt.
+// 	return {
+// 		matchID: n,
+// 		rankToLP: lastMatch.rankToLP,
+// 		rankedGps: extData.groups
+// 			.map((gp, i) => {
+// 				return {
+// 					group: gp,
+// 					accumPt: lastMatch.accumPt[i],
+// 					accumPtDiff: lastMatch.accumPtDiff[i],
+// 					accumRank: lastMatch.accumRank[i],
+// 					accumShimei: lastMatch.accumShimei[i],
+// 					totalRank: lastMatch.totalRank[i]
+// 				};
+// 			})
+// 			.toSorted((a, b) => ordering.accumRank(a.accumRank, b.accumRank))
+// 	};
+// }
 
 //#region Series handling
 /** 
@@ -1075,22 +1075,31 @@ export function partitionResultToSortedGroups(resultdata) {
 // see: https://www.chartjs.org/docs/latest/samples/line/segments.html
 const skipped = (ctx, value) => (ctx.p0.skip || ctx.p1.skip ? value : undefined);
 /**
- * @param  {GroupResultSeries[]|GroupLastData[]} gpresultdata
+ * @param  {GroupResultSeries[]} gpresultdata
  * @param  {string[]} labels
- * @param  {'accumPt'|'accumRank'|'totalRank'|'shimeiNum'|'shimeiPercent'|'fcRank'} series
+ * @param  {'accumPt'|'accumRank'|'totalRank'|'shimeiNum'|'shimeiPercent'|'fcRank'|'abemaVote'} series
  */
 export function seriesFromResult(gpresultdata, labels, series, shimeiTotal = []) {
 	return {
 		labels,
-		datasets: gpresultdata.map((gr, i) => {
+		datasets: gpresultdata.map((/** @type {GroupResultSeries} */ gr, i) => {
+			let data;
+			switch (series) {
+				case 'shimeiPercent':
+					data = gr['shimeiNum'].map((n, j) =>
+						shimeiTotal[j] ? ((n * 100) / shimeiTotal[j][0]).toFixed(2) : null
+					);
+					break;
+				case 'fcRank':
+					data = gr.mPts?.FC.rank ?? null;
+					break;
+				default:
+					data = gr[series];
+					break;
+			}
 			return {
 				label: groupDisplayShort(gr.group),
-				data:
-					series !== 'shimeiPercent'
-						? gr[series]
-						: gr['shimeiNum'].map((n, j) =>
-								shimeiTotal[j] ? ((n * 100) / shimeiTotal[j][0]).toFixed(2) : null
-							),
+				data,
 				borderColor: `${palette[i]}`,
 				backgroundColor: `${palette[i]}`,
 				pointHitRadius: 20, // larger area for intersect detection
@@ -1132,13 +1141,13 @@ const matchPattern = {
  * @property {MatchSummary[]} summary
  */
 /**
- * @typedef {Object} AvailableLeagueInfo
+ * @typedef {Object} LeagueInfo
  * @property {number} league
  * @property {string} title
  */
 
-/** @type {Record<number, AvailableLeagueInfo[]>} */
-export const seasonLeagueCombinations = {};
+/** @type {Record<number, LeagueInfo[]>} */
+export const leaguesOfSeason = {};
 
 /** @type {Record<number, Record<number, SeasonLeagueData>>} */
 export const dataCollection = [champLeague, leagueOne, leagueTwo, playoffs, gradeUp]
@@ -1158,18 +1167,16 @@ export const dataCollection = [champLeague, leagueOne, leagueTwo, playoffs, grad
 		if (!acc[res.season]) acc[res.season] = {};
 		acc[res.season][i] = res;
 
-		if (!seasonLeagueCombinations[res.season]) seasonLeagueCombinations[res.season] = [];
-		seasonLeagueCombinations[res.season].push({ league: i, title: res.title });
+		if (!leaguesOfSeason[res.season]) leaguesOfSeason[res.season] = [];
+		leaguesOfSeason[res.season].push({ league: i, title: res.title });
 
 		return acc;
 	}, {});
 
 // Sort leagues within each season according to the predefined order
 const leagueOrder = [3, 0, 1, 2, 4]; // Playoffs, Champ, L1, L2, GradeUp
-for (const s in seasonLeagueCombinations) {
-	seasonLeagueCombinations[s].sort(
-		(a, b) => leagueOrder.indexOf(a.league) - leagueOrder.indexOf(b.league)
-	);
+for (const s in leaguesOfSeason) {
+	leaguesOfSeason[s].sort((a, b) => leagueOrder.indexOf(a.league) - leagueOrder.indexOf(b.league));
 }
 
 // console.log(dataCollection[1].map((x) => x.title));

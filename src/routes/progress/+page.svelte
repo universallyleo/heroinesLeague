@@ -1,11 +1,24 @@
 <script>
-	import { dataCollection, LeagueType, matchDates, seriesFromResult } from '$lib/processData.js';
+	import {
+		dataCollec,
+		matchDates,
+		leaguesOfSeason,
+		LeagueType,
+		seriesFromResult
+	} from '$lib/processData.js';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 
-	const selectableLeagues = [LeagueType.ONE, LeagueType.TWO, LeagueType.CHAMP, LeagueType.PLAYOFFS];
-	let league = $state(1);
+	const selectableSeasons = [2025, 2026];
+	const selectableLeagues = {
+		2025: [LeagueType.ONE, LeagueType.TWO, LeagueType.CHAMP, LeagueType.PLAYOFFS],
+		2026: []
+	};
+	let season = $state(2025);
+	let league = $state(LeagueType.ONE);
+	let selectedData = $derived(dataCollec({ season: 2025, league: league }));
+	// $inspect('selectedData: ', selectedData);
+
 	let progressType = $state('accumRank');
-	let selectedData = $derived(dataCollection[league][0]);
 	let progressData = $derived(
 		seriesFromResult(
 			selectedData.resByGp,
@@ -35,25 +48,40 @@
 
 <div style="controlDiv">
 	<div>
-		リーグ：
-		{#each selectableLeagues as i (i)}
-			<label
-				><input type="radio" name="league" value={i} bind:group={league} />
-				{dataCollection[i][0].title}
+		年度：
+		{#each selectableSeasons as S (S)}
+			<label>
+				<input type="radio" name="season" value={S} bind:group={season} />
+				{S}
 			</label>
 		{/each}
-		<!-- https://svelte.dev/docs/svelte/each#Keyed-each-blocks -->
+	</div>
+	<div>
+		リーグ：
+		{#each selectableLeagues[season] as L (L)}
+			<label>
+				<input
+					type="radio"
+					name="league"
+					value={leaguesOfSeason[season][L].league}
+					bind:group={league}
+				/>
+				{leaguesOfSeason[season][L].title}
+			</label>
+		{/each}
 	</div>
 
 	<div style="progressSelect">
 		推移データ：
-		{#each Object.entries(labels) as [val, lab] (lab)}
-			<label>
-				<input type="radio" name="progressType" value={val} bind:group={progressType} />
-				{lab}
-			</label> &nbsp;
-		{/each}
-		<!-- https://svelte.dev/docs/svelte/each#Keyed-each-blocks -->
+		{#if selectableLeagues[season].indexOf(league) > -1}
+			{#each Object.entries(labels) as [val, lab] (lab)}
+				<label>
+					<input type="radio" name="progressType" value={val} bind:group={progressType} />
+					{lab}
+				</label> &nbsp;
+			{/each}
+			<!-- https://svelte.dev/docs/svelte/each#Keyed-each-blocks -->
+		{/if}
 		<br />
 	</div>
 </div>

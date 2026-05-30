@@ -1,13 +1,13 @@
 <script>
 	import MatchDetails from '$lib/MatchDetails.svelte';
-	import { dataCollec, lastFinishedMatchID, seasonLeagueCombinations } from '$lib/processData.js';
+	import { dataCollec, lastFinishedMatchID, leaguesOfSeason } from '$lib/processData.js';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
 	let innerWidth = $state(typeof window !== 'undefined' ? window.innerWidth : 1024); // Default to a common desktop width for SSR
 	let clamp = $derived(innerWidth < 600);
 
-	const allSeasons = Object.keys(seasonLeagueCombinations)
+	const allSeasons = Object.keys(leaguesOfSeason)
 		.map(Number)
 		.sort((a, b) => b - a);
 
@@ -15,7 +15,7 @@
 	let league = $state(1);
 
 	// Dynamically determine which leagues are available for the selected season
-	let availableLeagues = $derived(seasonLeagueCombinations[season] || []);
+	let availableLeagues = $derived(leaguesOfSeason[season] || []);
 
 	// Initialize leagueSeasonData with the initial data.
 	let leagueSeasonData = $state(dataCollec({ season, league }));
