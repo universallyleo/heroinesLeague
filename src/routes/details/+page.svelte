@@ -18,7 +18,7 @@
 	let availableLeagues = $derived(leaguesOfSeason[season] || []);
 
 	// Initialize leagueSeasonData with the initial data.
-	let leagueSeasonData = $state(dataCollec({ season, league }));
+	let leagueSeasonData = $state(dataCollec({ season: allSeasons[0], league: 1 }));
 
 	$effect(() => {
 		const lsd = dataCollec({ season: season, league: league });
