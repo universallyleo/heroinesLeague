@@ -58,11 +58,6 @@
 		shimeiValues = [...shimeiValues];
 	}
 
-	function setFcIndex(index, event) {
-		fcRankSelections[index] = event.target.value;
-		fcRankSelections = [...fcRankSelections];
-	}
-
 	function setAbemaVoteValue(index, event) {
 		const nextValue = event.target.value.replace(/\D/g, '');
 		abemaVoteValues[index] = nextValue;
@@ -83,9 +78,14 @@
 		const mPts = {};
 		let hasMPts = false;
 
-		// FC rank points are now part of mPts
-		mPts.FC = { rank: fcRankSelections.map((value) => (value === '' ? null : Number(value))) };
-		hasMPts = true;
+		if (fcRankToCount.length > 0) {
+			// FC rank points are now part of mPts
+			mPts.FC = {
+				rankToCount: fcRankToCount,
+				rank: fcRankSelections.map((value) => (value === '' ? null : Number(value)))
+			};
+			hasMPts = true;
+		}
 
 		if (includeAbema) {
 			mPts.Abema = { vote: abemaVoteValues.map((value) => Number(value)) };
@@ -109,10 +109,19 @@
 		groups.length > 0 &&
 			shimeiValues.length === groups.length &&
 			shimeiValues.every((value) => value !== '') &&
-			fcRankSelections.length === groups.length && // FC rank selection is mandatory if the form is complete
-			fcRankSelections.every((value) => value !== '') && // Ensure a rank is selected (dropdown prevents empty string)
+			(fcRankToCount.length === 0 ||
+				(fcRankSelections.length === groups.length && fcRankSelections.every((v) => v !== ''))) &&
 			(!includeAbema || abemaVoteValues.length === groups.length) && // If Abema is included, ensure array length matches
 			(!includeMC || mcScoreValues.length === groups.length) // If MC is included, ensure array length matches
+	);
+
+	// Custom formatter to flatten arrays into a single line after stringifying
+	let resultString = $derived(
+		result
+			? JSON.stringify(result, null, 2).replace(/\[\s+([\s\S]*?)\s+\]/g, (match, content) => {
+					return `[${content.replace(/\n\s+/g, ' ')}]`;
+				})
+			: ''
 	);
 </script>
 
@@ -173,7 +182,9 @@
 				<tr>
 					<th>Group</th>
 					<th>shimeiNum</th>
-					<th>FC rank points</th>
+					{#if fcRankToCount.length > 0}
+						<th>FC rank points</th>
+					{/if}
 					{#if includeAbema}
 						<th>Abema votes</th>
 					{/if}
@@ -206,21 +217,16 @@
 								placeholder="0"
 							/>
 						</td>
-						<td>
-							<select
-								value={fcRankSelections[index]}
-								onchange={(event) => setFcIndex(index, event)}
-							>
-								<option value="" disabled selected hidden>Select rank</option>
-								{#if fcRankToCount.length > 0}
+						{#if fcRankToCount.length > 0}
+							<td>
+								<select bind:value={fcRankSelections[index]}>
+									<option value="" disabled selected hidden>Select rank</option>
 									{#each fcRankToCount as count, idx (idx)}
 										<option value={idx + 1}>{idx + 1}位 ({count}pt)</option>
 									{/each}
-								{:else}
-									<option value="" disabled>No FC rank options</option>
-								{/if}
-							</select>
-						</td>
+								</select>
+							</td>
+						{/if}
 						{#if includeAbema}
 							<td>
 								<input
@@ -255,7 +261,7 @@
 		{#if result}
 			<section class="result-box">
 				<h3>Result</h3>
-				<pre>{JSON.stringify(result, null, 2)}</pre>
+				<pre>{resultString}</pre>
 			</section>
 		{/if}
 	{/if}

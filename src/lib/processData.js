@@ -1201,6 +1201,8 @@ export function dataCollec(criteria) {
 	const seasonGroup = dataCollection[criteria.season];
 	if (!seasonGroup) return null;
 
+	// console.log('  seasonGroup: ', seasonGroup);
+	// console.log(' season1: ', seasonGroup[criteria.league]);
 	if ('league' in criteria) {
 		return seasonGroup[criteria.league] ?? null;
 	}

@@ -8,14 +8,14 @@
 	} from '$lib/processData.js';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 
-	const selectableSeasons = [2025, 2026];
+	const selectableSeasons = [2026, 2025];
 	const selectableLeagues = {
 		2025: [LeagueType.ONE, LeagueType.TWO, LeagueType.CHAMP, LeagueType.PLAYOFFS],
-		2026: []
+		2026: [LeagueType.ONE, LeagueType.TWO]
 	};
-	let season = $state(2025);
-	let league = $state(LeagueType.ONE);
-	let selectedData = $derived(dataCollec({ season: 2025, league: league }));
+	let season = $state(2026);
+	let league = $state(LeagueType.TWO);
+	let selectedData = $derived(dataCollec({ season: season, league: league }));
 	// $inspect('selectedData: ', selectedData);
 
 	let progressType = $state('accumRank');
@@ -56,17 +56,13 @@
 			</label>
 		{/each}
 	</div>
+
 	<div>
 		リーグ：
 		{#each selectableLeagues[season] as L (L)}
 			<label>
-				<input
-					type="radio"
-					name="league"
-					value={leaguesOfSeason[season][L].league}
-					bind:group={league}
-				/>
-				{leaguesOfSeason[season][L].title}
+				<input type="radio" name="league" value={L} bind:group={league} />
+				{leaguesOfSeason[season].find(({ league }) => league === L).title}
 			</label>
 		{/each}
 	</div>
@@ -80,7 +76,6 @@
 					{lab}
 				</label> &nbsp;
 			{/each}
-			<!-- https://svelte.dev/docs/svelte/each#Keyed-each-blocks -->
 		{/if}
 		<br />
 	</div>

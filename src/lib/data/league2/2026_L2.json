@@ -100,7 +100,7 @@
 				},
 				"MC": {
 					"count": [3, 1, null, null, null, null, null, 2, null, null, null, null],
-					"info": "(MC: あいす)"
+					"info": "MC: あいす"
 				}
 			},
 			"src": ["https://x.com/ks_ecophysi/status/2056341837770867005"]
@@ -178,12 +178,15 @@
 					"tokuten": ["after", ""]
 				}
 			],
+			"shimeiNum": [221, 68, 48, 78, 183, 64, 70, 48, 184, 72, 181, 36, 8],
 			"mPts": {
 				"FC": {
-					"rankToCount": [30, 25, 20, 15, 15, 10, 10, 5, 5, 5, 5, 5, 5]
+					"rankToCount": [30, 25, 20, 15, 15, 10, 10, 5, 5, 5, 5, 5, 5],
+					"rank": [1, 8, 8, 8, 4, 6, 3, 2, 6, 8, 4, 8, 8]
 				},
 				"MC": {
-					"info": "(MC: 響羽リズ)"
+					"count": [1, null, null, null, null, null, null, 2, null, 3, null, null, null],
+					"info": "MC: 響羽リズ"
 				}
 			}
 		}

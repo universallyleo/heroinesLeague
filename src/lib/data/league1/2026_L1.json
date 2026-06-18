@@ -180,6 +180,83 @@
 					"rankToCount": [60, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0]
 				}
 			}
+		},
+		{
+			"date": "2026-07-11",
+			"venue": "Zepp Osaka Bayside",
+			"tweet": "https://x.com/heroines_idol/status/2067562979026207115",
+			"rules": ["https://x.com/heroines_idol/status/2067562979026207115"],
+			"rankToLP": [120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5],
+			"timetable": [
+				{
+					"group": "tenran",
+					"time": ["1230", "1255"],
+					"tokuten": ["1305", "1405"]
+				},
+				{
+					"group": "lastscene",
+					"time": ["1255", "1320"],
+					"tokuten": ["1330", "1430"]
+				},
+				{
+					"group": "ill",
+					"time": ["1320", "1345"],
+					"tokuten": ["1355", "1455"]
+				},
+				{
+					"group": "chula",
+					"time": ["1345", "1410"],
+					"tokuten": ["1420", "1520"]
+				},
+				{
+					"group": "dresscode",
+					"time": ["1415", "1440"],
+					"tokuten": ["1450", "1550"]
+				},
+				{
+					"group": "yoruami",
+					"time": ["1440", "1505"],
+					"tokuten": ["1515", "1615"]
+				},
+				{
+					"group": "tenrin",
+					"time": ["1505", "1530"],
+					"tokuten": ["1540", "1640"]
+				},
+				{
+					"group": "megafon",
+					"time": ["1530", "1555"],
+					"tokuten": ["1605", "1705"]
+				},
+				{
+					"group": "ion",
+					"time": ["1600", "1625"],
+					"tokuten": ["1635", "1735"]
+				},
+				{
+					"group": "adamth",
+					"time": ["1625", "1650"],
+					"tokuten": ["1700", "1800"]
+				},
+				{
+					"group": "nonfic",
+					"time": ["1650", "1720"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "ilife",
+					"time": ["1730", "1805"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"mPts": {
+				"FC": {
+					"rankToCount": [40, 30, 25, 20, 15, 15, 10, 10, 5, 5, 0, 0]
+				},
+				"Abema": {
+					"rankToCount": [60, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0]
+				}
+			}
 		}
 	]
 }

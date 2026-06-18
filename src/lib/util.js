@@ -159,7 +159,8 @@ export const palette = [
 	'#b2df8a',
 	'#cab2d6',
 	'#555555',
-	'#ffff99'
+	'#bdbd02',
+	'#999999'
 ];
 
 export const sortMethod = {
