@@ -44,14 +44,19 @@
 	//$inspect(leagueSeasonData.extData.matches[match]);
 
 	onMount(() => {
+		console.log(page.url.searchParams);
 		let rawmatchID = page.url.searchParams.get('match');
 		if (rawmatchID != null) {
 			let strs = rawmatchID.match(/S(\d+)L(\d+)M(\d+)/);
+			console.log(strs);
 			if (strs) {
-				const sIdx = parseInt(strs[1]);
-				const sortedSeasons = [...allSeasons].sort((a, b) => a - b);
-				if (sortedSeasons[sIdx - 1]) season = sortedSeasons[sIdx - 1];
-				league = parseInt(strs[2]) - 1;
+				// !! TODO !! handle specific match
+				// const sIdx = parseInt(strs[1]);
+				// const sortedSeasons = [...allSeasons].sort((a, b) => a - b);
+				// if (sortedSeasons[sIdx - 1]) season = sortedSeasons[sIdx - 1];
+				// season = parseInt(strs[1]);
+				// league = parseInt(strs[2]);
+				leagueSeasonData = dataCollec({ season: parseInt(strs[1]), league: parseInt(strs[2]) });
 			}
 		}
 	});
