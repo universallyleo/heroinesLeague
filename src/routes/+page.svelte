@@ -15,7 +15,17 @@
 
 <svelte:head>
 	<title>HEROINES League 結果まとめ</title>
-	<meta name="description" content="Heroines League" />
+	<meta name="description" content="ヒロインズリーグ記録" />
+	<meta property="og:site_name" content="ヒロインズリーグ記録" />
+	<meta property="og:title" content="ヒロインズリーグ記録" />
+	<script type="application/ld+json">
+        {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'ヒロインズリーグ記録',
+            url: 'https://universallyleo.github.io/heroinesLeague/'
+        })}
+	</script>
 </svelte:head>
 
 <svelte:window bind:innerWidth />
