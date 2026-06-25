@@ -159,7 +159,7 @@ export const MatchPointsData = [
 		icon: '▶️',
 		longLabel: 'Abmea Pt',
 		jpLabel: ['Abema Pt', 'Ab.pt'],
-		sortKey: 'abemaCount',
+		sortKey: 'count',
 		countType: CountType.RANKED_WITH_VOTE
 	},
 	{
@@ -168,7 +168,7 @@ export const MatchPointsData = [
 		icon: '🎙️',
 		longLabel: 'MC Pt',
 		jpLabel: ['MC指名Pt', 'MC pt'],
-		sortKey: 'mcCount',
+		sortKey: 'count',
 		countType: CountType.RAW_COUNT
 	}
 ];
@@ -363,10 +363,10 @@ export const ordering = {
 	totalRank: (a, b) => sortMethod.incWithNullAtLast(a, b),
 	shimeiNum: (a, b) => sortMethod.decWithNullAtLast(a, b),
 	mPts: (a, b, i, cat) => {
-		const sortOn =
-			MatchPointsData.find(({ label }) => label == cat)?.countType == CountType.RANKED_WITH_VOTE
-				? 'vote'
-				: 'count';
+		const sortOn = 'count';
+		// MatchPointsData.find(({ label }) => label == cat)?.countType == CountType.RANKED_WITH_VOTE
+		// 	? 'vote'
+		// 	: 'count';
 		return sortMethod.decWithNullAtLast(a.mPts[cat][sortOn][i], b.mPts[cat][sortOn][i]);
 	},
 	accumPt: (a, b) => sortMethod.decWithNullAtLast(a, b),
