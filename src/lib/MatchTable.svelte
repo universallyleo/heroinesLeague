@@ -86,7 +86,9 @@
 		noDecorate = false,
 		isTotal = false
 	} = options}
-	<div class={countType === CountType.RANKED_WITH_VOTE ? 'rkVoteCell' : 'rkDiffCell'}>
+	<div
+		class={countType === CountType.RANKED_WITH_VOTE && vote !== null ? 'rkVoteCell' : 'rkDiffCell'}
+	>
 		<div class="rk">
 			{#if val != null}
 				{#if isTotal}
@@ -101,7 +103,7 @@
 		<div class="val">
 			{val}
 		</div>
-		{#if countType === CountType.RANKED_WITH_VOTE}
+		{#if countType === CountType.RANKED_WITH_VOTE && vote !== null}
 			<div class="vote">{vote}</div>
 		{/if}
 		{#if diff > 0 && val != null}
@@ -187,7 +189,7 @@
 							<td class="datacell">
 								{@render dataCell(gp.mPts[lbl].rank[matchID], gp.mPts[lbl].count[matchID], {
 									diff: gp.mPts[lbl].voteDiff[matchID],
-									vote: gp.mPts[lbl].vote[matchID],
+									vote: gp.mPts[lbl]?.vote[matchID] ?? null,
 									countType: mpData.countType,
 									noNum: type === 'inMatch'
 								})}

@@ -13,7 +13,7 @@
 		MatchPointsData.map(({ label, countType }) => {
 			const base = gpResult.mPts[label];
 			const entry =
-				countType == CountType.RANKED_WITH_VOTE
+				countType == CountType.RANKED_WITH_VOTE && base.vote[n] !== null
 					? ['vote', 'rank', 'voteDiff']
 					: ['count', 'rank', null];
 			// console.log(gpResult.group, label, n, gpResult.mPts[label][entry][n]);
