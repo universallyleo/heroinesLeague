@@ -189,6 +189,88 @@
 					"info": "MC: 響羽リズ"
 				}
 			}
+		},
+		{
+			"date": "2025-07-17",
+			"venue": "Ebisu Garden Hall",
+			"tweet": "https://x.com/heroines_idol/status/2072289171914596769",
+			"rules": ["https://x.com/heroines_idol/status/2072289171914596769"],
+			"rankToLP": [120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 5],
+			"timetable": [
+				{
+					"group": "herokenOsaka",
+					"time": ["1500", "1525"],
+					"tokuten": ["1535", "1635"]
+				},
+				{
+					"group": "heroken",
+					"time": ["1525", "1550"],
+					"tokuten": ["1600", "1700"]
+				},
+				{
+					"group": "calres",
+					"time": ["1550", "1615"],
+					"tokuten": ["1625", "1725"]
+				},
+				{
+					"group": "pasclo",
+					"time": ["1615", "1640"],
+					"tokuten": ["1650", "1750"]
+				},
+				{
+					"group": "harukaecho",
+					"time": ["1640", "1705"],
+					"tokuten": ["1715", "1815"]
+				},
+				{
+					"group": "parasai",
+					"time": ["1710", "1735"],
+					"tokuten": ["1745", "1845"]
+				},
+				{
+					"group": "ladybaby",
+					"time": ["1735", "1800"],
+					"tokuten": ["1810", "1910"]
+				},
+				{
+					"group": "fullcourse",
+					"time": ["1800", "1825"],
+					"tokuten": ["1835", "1935"]
+				},
+				{
+					"group": "paradeeq",
+					"time": ["1825", "1850"],
+					"tokuten": ["1900", "2000"]
+				},
+				{
+					"group": "akishibu",
+					"time": ["1855", "1920"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "zuttomotto",
+					"time": ["1920", "1945"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "ponkotu",
+					"time": ["1945", "2010"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "nanakoro",
+					"time": ["2010", "2035"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"mPts": {
+				"FC": {
+					"rankToCount": [30, 25, 20, 15, 15, 10, 10, 5, 5, 5, 5, 5, 5]
+				},
+				"MC": {
+					"info": "MC: ?"
+				}
+			}
 		}
 	]
 }

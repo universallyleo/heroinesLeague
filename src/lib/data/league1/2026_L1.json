@@ -252,6 +252,87 @@
 					"tokuten": ["after", ""]
 				}
 			],
+			"shimeiNum": [931, 272, 137, 106, 81, 143, 265, 58, 152, 70, 52, 90],
+			"mPts": {
+				"FC": {
+					"rankToCount": [40, 30, 25, 20, 15, 15, 10, 10, 5, 5, 0, 0],
+					"rank": [1, 2, 7, 8, 3, 6, 4, 9, 5, 12, 11, 10]
+				},
+				"Abema": {
+					"rankToCount": [60, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0],
+					"rank": [1, 4, 5, 9, 6, 2, 8, 9, 3, 12, 11, 10]
+				}
+			},
+			"src": ["https://x.com/heroines_idol/status/2075872999811793051"]
+		},
+		{
+			"date": "2026-07-29",
+			"venue": "KT Zepp Yokohama",
+			"tweet": "https://x.com/heroines_idol/status/2067562979026207115",
+			"rules": ["https://x.com/heroines_idol/status/2067562979026207115"],
+			"rankToLP": [120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5],
+			"timetable": [
+				{
+					"group": "lastscene",
+					"time": ["1400", "1425"],
+					"tokuten": ["1435", "1535"]
+				},
+				{
+					"group": "tenran",
+					"time": ["1425", "1450"],
+					"tokuten": ["1500", "1600"]
+				},
+				{
+					"group": "chula",
+					"time": ["1450", "1515"],
+					"tokuten": ["1525", "1625"]
+				},
+				{
+					"group": "ill",
+					"time": ["1515", "1540"],
+					"tokuten": ["1550", "1650"]
+				},
+				{
+					"group": "dresscode",
+					"time": ["1545", "1610"],
+					"tokuten": ["1620", "1720"]
+				},
+				{
+					"group": "tenrin",
+					"time": ["1610", "1635"],
+					"tokuten": ["1645", "1745"]
+				},
+				{
+					"group": "megafon",
+					"time": ["1635", "1700"],
+					"tokuten": ["1710", "1810"]
+				},
+				{
+					"group": "ion",
+					"time": ["1700", "1725"],
+					"tokuten": ["1735", "1835"]
+				},
+				{
+					"group": "yoruami",
+					"time": ["1730", "1755"],
+					"tokuten": ["1805", "1905"]
+				},
+				{
+					"group": "nonfic",
+					"time": ["1755", "1825"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "adamth",
+					"time": ["1825", "1855"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "ilife",
+					"time": ["1900", "1930"],
+					"tokuten": ["after", ""]
+				}
+			],
 			"mPts": {
 				"FC": {
 					"rankToCount": [40, 30, 25, 20, 15, 15, 10, 10, 5, 5, 0, 0]
