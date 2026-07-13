@@ -1077,7 +1077,7 @@ const skipped = (ctx, value) => (ctx.p0.skip || ctx.p1.skip ? value : undefined)
 /**
  * @param  {GroupResultSeries[]} gpresultdata
  * @param  {string[]} labels
- * @param  {'accumPt'|'accumRank'|'totalRank'|'shimeiNum'|'shimeiPercent'|'fcRank'|'abemaVote'} series
+ * @param  {'accumPt'|'accumRank'|'totalRank'|'shimeiNum'|'shimeiPercent'|'fcRank'|'abemaRank'} series
  */
 export function seriesFromResult(gpresultdata, labels, series, shimeiTotal = []) {
 	return {
@@ -1092,6 +1092,9 @@ export function seriesFromResult(gpresultdata, labels, series, shimeiTotal = [])
 					break;
 				case 'fcRank':
 					data = gr.mPts?.FC.rank ?? null;
+					break;
+				case 'abemaRank':
+					data = gr.mPts?.Abema.rank ?? null;
 					break;
 				default:
 					data = gr[series];

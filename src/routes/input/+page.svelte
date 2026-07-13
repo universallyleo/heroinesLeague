@@ -6,12 +6,13 @@
 	let selectedSeriesIdx = $state(1);
 	let selectedSeasonIndex = $state(0);
 	let selectedMatchIndex = $state(0);
-	let includeAbema = $state(false);
+	let abemaInputMode = $state('');
 	let includeMC = $state(false);
 	let shimeiValues = $state([]);
 	let mcInfoValue = $state('');
 	let fcRankSelections = $state([]);
 	let abemaVoteValues = $state([]);
+	let abemaRankSelections = $state([]);
 	let mcScoreValues = $state([]);
 	let result = $state(null);
 
@@ -23,16 +24,19 @@
 	);
 	let selectedSeriesSeasons = $derived(seriesData.map(({ season }) => season) ?? []);
 	let selectedSeason = $derived(seriesData[selectedSeasonIndex] ?? null);
-	let matchList = $derived(selectedSeason?.extData?.matches ?? []);
+	let matchList = $derived((selectedSeason?.extData?.matches ?? []).toReversed());
 	let selectedMatch = $derived(matchList[selectedMatchIndex] ?? null);
 	let groups = $derived(selectedSeason?.extData?.groups ?? []);
 	let fcRankToCount = $derived(selectedMatch?.mPts?.FC?.rankToCount ?? []);
+	let abemaRankToCount = $derived(selectedMatch?.mPts?.Abema?.rankToCount ?? []);
+	let includeAbema = $derived(abemaInputMode !== '');
 
 	function resetInputs() {
 		shimeiValues = new Array(groups.length).fill('');
 		fcRankSelections = new Array(groups.length).fill('');
 		mcInfoValue = '';
 		abemaVoteValues = new Array(groups.length).fill('');
+		abemaRankSelections = new Array(groups.length).fill('');
 		mcScoreValues = new Array(groups.length).fill('');
 		result = null;
 	}
@@ -64,6 +68,11 @@
 		abemaVoteValues = [...abemaVoteValues];
 	}
 
+	function setAbemaInputMode(mode, event) {
+		abemaInputMode = event.target.checked ? mode : '';
+		result = null;
+	}
+
 	function setMcScoreValue(index, event) {
 		const nextValue = event.target.value.replace(/\D/g, '');
 		mcScoreValues[index] = nextValue;
@@ -88,7 +97,13 @@
 		}
 
 		if (includeAbema) {
-			mPts.Abema = { vote: abemaVoteValues.map((value) => Number(value)) };
+			mPts.Abema =
+				abemaInputMode === 'rank'
+					? {
+							rankToCount: abemaRankToCount,
+							rank: abemaRankSelections.map((value) => (value === '' ? null : Number(value)))
+						}
+					: { vote: abemaVoteValues.map((value) => Number(value)) };
 			hasMPts = true;
 		}
 
@@ -111,7 +126,12 @@
 			shimeiValues.every((value) => value !== '') &&
 			(fcRankToCount.length === 0 ||
 				(fcRankSelections.length === groups.length && fcRankSelections.every((v) => v !== ''))) &&
-			(!includeAbema || abemaVoteValues.length === groups.length) && // If Abema is included, ensure array length matches
+			(!includeAbema ||
+				(abemaInputMode === 'rank'
+					? abemaRankToCount.length > 0 &&
+						abemaRankSelections.length === groups.length &&
+						abemaRankSelections.every((v) => v !== '')
+					: abemaVoteValues.length === groups.length)) && // If Abema is included, ensure array length matches
 			(!includeMC || mcScoreValues.length === groups.length) // If MC is included, ensure array length matches
 	);
 
@@ -170,7 +190,22 @@
 
 		<div class="options-row">
 			<label>
-				<input type="checkbox" bind:checked={includeAbema} /> Include Abema Votes
+				<input
+					type="checkbox"
+					checked={abemaInputMode === 'vote'}
+					disabled={abemaInputMode === 'rank'}
+					onchange={(event) => setAbemaInputMode('vote', event)}
+				/>
+				Abema vote
+			</label>
+			<label>
+				<input
+					type="checkbox"
+					checked={abemaInputMode === 'rank'}
+					disabled={abemaInputMode === 'vote' || abemaRankToCount.length === 0}
+					onchange={(event) => setAbemaInputMode('rank', event)}
+				/>
+				Abema rank
 			</label>
 			<label>
 				<input type="checkbox" bind:checked={includeMC} /> Include MC Score
@@ -186,7 +221,7 @@
 						<th>FC rank points</th>
 					{/if}
 					{#if includeAbema}
-						<th>Abema votes</th>
+						<th>{abemaInputMode === 'rank' ? 'Abema rank' : 'Abema votes'}</th>
 					{/if}
 					{#if includeMC}
 						<th>
@@ -229,14 +264,23 @@
 						{/if}
 						{#if includeAbema}
 							<td>
-								<input
-									type="text"
-									inputmode="numeric"
-									pattern="[0-9]*"
-									value={abemaVoteValues[index]}
-									oninput={(event) => setAbemaVoteValue(index, event)}
-									placeholder="0"
-								/>
+								{#if abemaInputMode === 'rank'}
+									<select bind:value={abemaRankSelections[index]}>
+										<option value="" disabled selected hidden>Select rank</option>
+										{#each abemaRankToCount as count, idx (idx)}
+											<option value={idx + 1}>{count} ({idx + 1}位)</option>
+										{/each}
+									</select>
+								{:else}
+									<input
+										type="text"
+										inputmode="numeric"
+										pattern="[0-9]*"
+										value={abemaVoteValues[index]}
+										oninput={(event) => setAbemaVoteValue(index, event)}
+										placeholder="0"
+									/>
+								{/if}
 							</td>
 						{/if}
 						{#if includeMC}

@@ -37,7 +37,8 @@
 		totalRank: '戦順位',
 		shimeiNum: '入場指名数',
 		shimeiPercent: '入場指名数：総入場数（%）',
-		fcRank: 'FC投票順位'
+		fcRank: 'FC投票順位',
+		abemaRank: 'Abema投票順位'
 	};
 
 	// function getSeries(type) {
