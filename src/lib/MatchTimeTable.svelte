@@ -1,7 +1,7 @@
 <script>
 	import { getGroup, refineTT } from './processData';
 
-	let { timetable, tweet, guestIdx = [] } = $props();
+	let { timetable, guestIdx = [] } = $props();
 	let hasTT = $derived(timetable.length > 0);
 	let tt = $derived(refineTT(timetable, guestIdx));
 	// $inspect('TT:', tt);
@@ -30,10 +30,10 @@
 								{parseInt(itm.tokuten[0])} 分転換
 							</td>
 						{:else}
-							<td style:color={itm.type === 'guest' ? '#888' : ''}>
+							<td style:color={itm.type === 'guest' ? 'var(--color-text-muted)' : ''}>
 								{getGroup(itm.group).displayName}
 								{#if itm.type === 'guest'}
-									<span style="font-size:smaller; color:hsl(310, 81%, 81%);"> (ゲスト) </span>
+									<span style="font-size:smaller; color:var(--color-guest-label);"> (ゲスト) </span>
 								{/if}
 							</td>
 							<td>
@@ -51,9 +51,6 @@
 				{/each}
 			</tbody>
 		</table>
-		<div style="font-weight:normal;">
-			参照リンク: <a href={tweet}> ヒロインズツイート </a>
-		</div>
 	{:else}
 		未公開
 	{/if}
@@ -71,7 +68,7 @@
 	}
 
 	th {
-		border-bottom: black solid 1px;
+		border-bottom: var(--color-border-strong) solid 1px;
 	}
 
 	td {
@@ -85,6 +82,6 @@
 	}
 
 	tbody tr:nth-child(even) {
-		background-color: #f2f2f2;
+		background-color: var(--color-timetable-row-bg);
 	}
 </style>

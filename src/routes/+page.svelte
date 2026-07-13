@@ -2,6 +2,8 @@
 	import Accordion from '$lib/Accordion.svelte';
 	import AccordionItem from '$lib/AccordionItem.svelte';
 	import ProgressTable from '$lib/ProgressTable.svelte';
+	import { onMount } from 'svelte';
+	import { loadLocalState, saveLocalState } from '$lib/localState.js';
 
 	import { dataCollec } from '$lib/processData.js';
 
@@ -10,7 +12,26 @@
 
 	let leagueOneData = dataCollec({ season: 2026, league: 1 });
 	let leagueTwoData = dataCollec({ season: 2026, league: 2 });
+	let openAccordions = $state({
+		league1: true,
+		league2: true
+	});
+	let loaded = $state(false);
 	// $inspect(leagueData);
+
+	onMount(() => {
+		openAccordions = loadLocalState('heroines-league:main', openAccordions);
+		loaded = true;
+	});
+
+	$effect(() => {
+		if (loaded) {
+			saveLocalState('heroines-league:main', {
+				league1: openAccordions.league1,
+				league2: openAccordions.league2
+			});
+		}
+	});
 </script>
 
 <svelte:head>
@@ -30,19 +51,23 @@
 
 <svelte:window bind:innerWidth />
 
-{#snippet leagueAccord(lsData, open = false)}
-	<AccordionItem {open}>
+{#snippet leagueAccord(lsData, openKey)}
+	<AccordionItem bind:open={openAccordions[openKey]}>
 		{#snippet header()}
 			{lsData.title} 結果
 		{/snippet}
-		<ProgressTable leagueSeasonData={lsData} clamp={innerWidth < 600} />
+		<ProgressTable
+			leagueSeasonData={lsData}
+			clamp={innerWidth < 600}
+			storageKey={`heroines-league:main:${openKey}:table`}
+		/>
 	</AccordionItem>
 {/snippet}
 
 <section>
 	<Accordion>
-		{@render leagueAccord(leagueOneData, true)}
-		{@render leagueAccord(leagueTwoData, true)}
+		{@render leagueAccord(leagueOneData, 'league1')}
+		{@render leagueAccord(leagueTwoData, 'league2')}
 	</Accordion>
 </section>
 

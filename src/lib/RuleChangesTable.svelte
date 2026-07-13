@@ -47,14 +47,14 @@
 <style>
 	table {
 		border-collapse: collapse;
-		border: 1px solid red;
+		border: 1px solid var(--color-danger);
 	}
 	thead {
-		border-bottom: 1px solid black;
+		border-bottom: 1px solid var(--color-border-strong);
 	}
 	tr th:first-child,
 	tr td:first-child {
-		border-right: 1px solid black;
+		border-right: 1px solid var(--color-border-strong);
 	}
 
 	.twocol {

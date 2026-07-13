@@ -96,9 +96,9 @@
 		border-collapse: collapse;
 	}
 	table thead tr {
-		color: #888;
+		color: var(--color-text-muted);
 		font-size: smaller;
-		border-bottom: 1px solid #777;
+		border-bottom: 1px solid var(--color-text-subtle);
 	}
 	table td {
 		min-width: 2em;
@@ -106,7 +106,7 @@
 	}
 	table tr > td:first-child {
 		font-size: smaller;
-		color: #888;
-		border-right: 1px solid #777;
+		color: var(--color-text-muted);
+		border-right: 1px solid var(--color-text-subtle);
 	}
 </style>

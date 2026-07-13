@@ -74,12 +74,13 @@
 <style>
 	.container {
 		margin: 0;
-		border: 2px black solid;
+		border: 2px var(--color-border-strong) solid;
 		border-collapse: collapse;
 	}
 
 	button {
-		background: white;
+		background: var(--color-bg-primary);
+		color: var(--color-text);
 		width: 100%;
 		border-width: 0;
 		padding: 0.5em;
@@ -95,7 +96,7 @@
 	}
 
 	.content {
-		border: 1px solid hsl(0, 0%, 80%);
+		border: 1px solid var(--color-border-light);
 		margin-top: 0px;
 		padding-bottom: 1em;
 	}

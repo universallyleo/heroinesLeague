@@ -57,7 +57,7 @@
 				/>
 			{:else}
 				<div class="desc" style="display:flex; justify-content: space-between; width: 100%;">
-					<div>
+					<div style="margin-right: 2px;">
 						+{gpResult.getLPt[n]} pt
 					</div>
 					<div>
@@ -83,7 +83,7 @@
 {#snippet mainAndDiff(matchpt, accumpt, diffpt, withAddition, addClass = [])}
 	<div class={['mainData'].concat(addClass)}>
 		{#if withAddition}
-			<span style="font-weight:normal;font-size: .65em;color: #777;">
+			<span style="font-weight:normal;font-size: .65em;color: var(--color-text-subtle);">
 				(+{matchpt})
 			</span>
 		{/if}
@@ -99,7 +99,7 @@
 	.dataCell {
 		width: 100%;
 		display: grid;
-		gap: 2px;
+		gap: 0.2em;
 		grid-template-columns: auto 2.2em;
 		grid-template-areas:
 			'main diff'
@@ -113,7 +113,7 @@
 		/* padding-top: 0.2em; */
 		align-self: center;
 		padding: 0.3em 0;
-		background: rgb(214, 236, 248);
+		background: var(--color-data-cell-main-bg);
 	}
 
 	.assigned {
@@ -123,7 +123,7 @@
 	.mainDiff {
 		font-size: small;
 		grid-area: diff;
-		border: 1px solid #999;
+		border: 1px solid var(--color-border);
 	}
 
 	.subData {
@@ -143,7 +143,7 @@
 
 	.desc {
 		font-size: smaller;
-		color: #777;
+		color: var(--color-text-subtle);
 		width: fit-content;
 		/* background-color: bisque; */
 	}

@@ -1107,7 +1107,6 @@ export function seriesFromResult(gpresultdata, labels, series, shimeiTotal = [])
 				backgroundColor: `${palette[i]}`,
 				pointHitRadius: 20, // larger area for intersect detection
 				segment: {
-					borderColor: (ctx) => skipped(ctx, 'rgb(0,0,0,0.5)'),
 					borderDash: (ctx) => skipped(ctx, [6, 6])
 				},
 				spanGaps: true

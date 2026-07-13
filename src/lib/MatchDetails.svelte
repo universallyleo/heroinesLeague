@@ -31,54 +31,75 @@
 	);
 </script>
 
-{#if match.displayType === 'RESULT'}
-	<h2>結果</h2>
-	{leagueSeasonData.title}
-	{numberToKanji(matchID + 1)}戦目
-	<br />
-	<span style="font-size:small; color: #888;">
-		{match.date} @ {match.venue}
-		{#if match.shimeiTotal != null}
-			<br />
-			入場指名総数：
-			{shimeiStr}
+<div class="matchDetails">
+	{#if match.displayType === 'RESULT'}
+		<h2>結果</h2>
+		{leagueSeasonData.title}
+		{numberToKanji(matchID + 1)}戦目
+		<br />
+		<span style="font-size:small; color: var(--color-text-muted);">
+			{match.date} @ {match.venue}
+			{#if match.shimeiTotal != null}
+				<br />
+				入場指名総数：
+				{shimeiStr}
+			{/if}
+		</span>
+
+		<MatchTable
+			type="inMatch"
+			{clamp}
+			gpResults={leagueSeasonData.resByGp}
+			{matchID}
+			shimeiTotal={match?.shimeiTotal?.[0] ?? null}
+			hasResults={match.hasResults}
+			{mPtsInfo}
+		/>
+	{/if}
+
+	<Rules
+		hasFC={match.hasResults.FC}
+		hasAbema={match.hasResults.Abema}
+		rankToLP={match.rankToLP}
+		fcRankToCount={match?.mPts?.FC?.rankToCount ?? []}
+		abemaRankToCount={match?.mPts?.Abema?.rankToCount ?? []}
+		rules={match.rules}
+	/>
+
+	{#if match.displayType === 'RESULT' && match.guestResults.length > 0}
+		<h2>ゲスト</h2>
+		<MatchTable
+			type="guest"
+			{clamp}
+			gpResults={match.guestResults}
+			shimeiTotal={match?.shimeiTotal?.[1] ?? null}
+			hasResults={match.hasResults}
+		/>
+	{/if}
+
+	<h2>
+		{#if match.tweet}
+			<a class="headingLink" href={match.tweet} target="_blank" rel="noopener noreferrer">
+				タイムテーブル
+			</a>
+		{:else}
+			タイムテーブル
 		{/if}
-	</span>
-
-	<MatchTable
-		type="inMatch"
-		{clamp}
-		gpResults={leagueSeasonData.resByGp}
-		{matchID}
-		shimeiTotal={match?.shimeiTotal?.[0] ?? null}
-		hasResults={match.hasResults}
-		{mPtsInfo}
+	</h2>
+	<MatchTimeTable
+		timetable={match.displayType != 'NONE' ? match.timetable : []}
+		guestIdx={match.guestIdx}
 	/>
-{/if}
+</div>
 
-<Rules
-	hasFC={match.hasResults.FC}
-	hasAbema={match.hasResults.Abema}
-	rankToLP={match.rankToLP}
-	fcRankToCount={match?.mPts?.FC?.rankToCount ?? []}
-	abemaRankToCount={match?.mPts?.Abema?.rankToCount ?? []}
-	rules={match.rules}
-/>
+<style>
+	.matchDetails {
+		text-align: center;
+	}
 
-{#if match.displayType === 'RESULT' && match.guestResults.length > 0}
-	<h2>ゲスト</h2>
-	<MatchTable
-		type="guest"
-		{clamp}
-		gpResults={match.guestResults}
-		shimeiTotal={match?.shimeiTotal?.[1] ?? null}
-		hasResults={match.hasResults}
-	/>
-{/if}
-
-<h2>タイムテーブル</h2>
-<MatchTimeTable
-	timetable={match.displayType != 'NONE' ? match.timetable : []}
-	tweet={match.tweet}
-	guestIdx={match.guestIdx}
-/>
+	.headingLink {
+		color: inherit;
+		font-size: inherit;
+		font-weight: inherit;
+	}
+</style>

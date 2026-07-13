@@ -61,10 +61,10 @@
 </script>
 
 {#if !hasResults.hasShimei}
-	<div style="font-size: smaller; color: #888;">指名データなし</div>
+	<div style="font-size: smaller; color: var(--color-text-muted);">指名データなし</div>
 {/if}
 {#if hasResults.FC === 1}
-	<div style="font-size: smaller; color: #888;">FC得点データなし</div>
+	<div style="font-size: smaller; color: var(--color-text-muted);">FC得点データなし</div>
 {/if}
 
 {#snippet sortHeader(label, sortKey)}
@@ -250,7 +250,7 @@
 
 	.additional_info {
 		font-size: smaller;
-		color: #888;
+		color: var(--color-text-muted);
 		font-weight: normal;
 		text-align: right;
 		justify-self: end;
@@ -258,11 +258,11 @@
 	}
 
 	td:first-child {
-		border-left: 1px solid #ddd;
+		border-left: 1px solid var(--color-border-light);
 	}
 
 	td:last-child {
-		border-right: 1px solid #ddd;
+		border-right: 1px solid var(--color-border-light);
 	}
 
 	.simpTb {
@@ -276,18 +276,18 @@
 	}
 
 	.headingRow {
-		border-bottom: 1px solid #ddd;
-		background-color: white;
+		border-bottom: 1px solid var(--color-border-light);
+		background-color: var(--color-bg-primary);
 	}
 
 	.datacell {
-		border-right: 1px dashed #999;
-		border-bottom: 1px solid #ddd;
+		border-right: 1px dashed var(--color-border);
+		border-bottom: 1px solid var(--color-border-light);
 		text-align: right;
 	}
 
 	.totalCell {
-		border-left: 1px solid #888;
+		border-left: 1px solid var(--color-text-muted);
 	}
 
 	.rkDiffCell {
@@ -334,7 +334,7 @@
 	.rk {
 		grid-area: rk;
 		font-size: small;
-		color: #999;
+		color: var(--color-border);
 		align-self: start; /* Align rank to the top */
 		font-weight: bold;
 	}
@@ -342,18 +342,18 @@
 	.diff {
 		grid-area: diff;
 		font-size: small;
-		color: #999;
+		color: var(--color-border);
 		text-align: right;
 		justify-self: end;
 	}
 
 	.sticky {
-		background-color: white;
+		background-color: var(--color-bg-primary);
 		position: sticky;
 		z-index: 2;
 	}
 	.headingCell {
-		border: 1px solid #ddd;
+		border: 1px solid var(--color-border-light);
 		vertical-align: middle;
 	}
 

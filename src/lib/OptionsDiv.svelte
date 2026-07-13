@@ -13,7 +13,7 @@
 		width: fit-content;
 		/* margin: 0 auto; */
 		padding: 2px 6px;
-		border: 1px solid black;
+		border: 1px solid var(--color-border-strong);
 		display: flex;
 	}
 </style>

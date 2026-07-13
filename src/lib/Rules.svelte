@@ -17,7 +17,7 @@
 		データなし
 	{:else}
 		{#each rules as lk, j (j)}
-			[ <a href={lk}> {j + 1} </a> ] &nbsp;
+			[ <a href={lk} target="_blank" rel="noopener noreferrer"> {j + 1} </a> ] &nbsp;
 		{/each}
 	{/if}
 </div>
@@ -109,6 +109,6 @@
 
 	.simpTb th,
 	.simpTb td {
-		border: 1px solid #999;
+		border: 1px solid var(--color-border);
 	}
 </style>

@@ -63,11 +63,15 @@
 						1人につき1ptのみで、複数チケットでの入場不可。
 					</td>
 					<td>
-						{@render def('動員pt')} (<a href="https://pbs.twimg.com/media/Gw8LPQ5bkAAUxMM.jpg:orig"
-							>2025-07</a
+						{@render def('動員pt')} (<a
+							href="https://pbs.twimg.com/media/Gw8LPQ5bkAAUxMM.jpg:orig"
+							target="_blank"
+							rel="noopener noreferrer">2025-07</a
 						>より), <br />
 						{@render def('ライブpt')} (<a
-							href="https://pbs.twimg.com/media/Gw8LPQ5bkAAUxMM.jpg:orig">2025-11</a
+							href="https://pbs.twimg.com/media/Gw8LPQ5bkAAUxMM.jpg:orig"
+							target="_blank"
+							rel="noopener noreferrer">2025-11</a
 						>より)
 					</td>
 				</tr>
@@ -81,6 +85,8 @@
 						{@render def('FC pt')},<br />
 						{@render def('FC投票順位pt')} <br /> (<a
 							href="https://pbs.twimg.com/media/Gw8LPQ5bkAAUxMM.jpg:orig"
+							target="_blank"
+							rel="noopener noreferrer"
 						>
 							2025-07
 						</a>より)
@@ -108,6 +114,8 @@
 						{@render def('リーグポイント')}, <br />
 						{@render def('リーグpt')} <br /> (<a
 							href="https://pbs.twimg.com/media/Gw8LPQ5bkAAUxMM.jpg:orig"
+							target="_blank"
+							rel="noopener noreferrer"
 						>
 							2025-07
 						</a>より)
@@ -198,9 +206,16 @@
 				</span> &nbsp; x 0.7
 			</div>
 			&nbsp;<span class="confirmed"
-				>（ 2025-08で確認済み: <a href="https://x.com/heroines_idol/status/1955555152917930171"
-					>リーグ1</a
-				>, <a href="https://x.com/heroines_idol/status/1957373881947435427">リーグ2</a>）
+				>（ 2025-08で確認済み: <a
+					href="https://x.com/heroines_idol/status/1955555152917930171"
+					target="_blank"
+					rel="noopener noreferrer">リーグ1</a
+				>,
+				<a
+					href="https://x.com/heroines_idol/status/1957373881947435427"
+					target="_blank"
+					rel="noopener noreferrer">リーグ2</a
+				>）
 			</span> &nbsp;
 		</li>
 		<li>
@@ -251,7 +266,12 @@
 
 {#snippet confirmed(date, src, comment = '')}
 	&nbsp; <span class="confirmed"
-		>（ <a href={`https://x.com/heroines_idol/status/${src}`}>{date}で確認済み</a> &nbsp; {comment}）
+		>（ <a
+			href={`https://x.com/heroines_idol/status/${src}`}
+			target="_blank"
+			rel="noopener noreferrer">{date}で確認済み</a
+		>
+		&nbsp; {comment}）
 	</span> &nbsp;
 {/snippet}
 
@@ -261,14 +281,14 @@
 		border-collapse: collapse;
 	}
 	.termTable th {
-		border: black 1px solid;
+		border: var(--color-border-strong) 1px solid;
 		vertical-align: middle;
 	}
 	.termTable td {
 		overflow-wrap: break-word;
 		word-wrap: break-word;
 		white-space: normal;
-		border: 1px #999 solid;
+		border: 1px var(--color-border) solid;
 	}
 	.termTable td:first-child {
 		width: 7em;
@@ -286,13 +306,13 @@
 	}
 
 	.caution {
-		color: red;
+		color: var(--color-danger);
 		font-size: small;
 	}
 
 	.definition {
 		font-weight: bold;
-		color: darkorchid;
+		color: var(--color-rules-definition);
 	}
 
 	.fraction {
@@ -309,7 +329,7 @@
 	.fraction .bar {
 		width: 100%;
 		height: 2px;
-		background: black;
+		background: var(--color-border-strong);
 		margin: 0.1em 0;
 	}
 </style>

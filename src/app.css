@@ -5,28 +5,63 @@
 		Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
 		'Open Sans', 'Helvetica Neue', sans-serif;
 	--font-mono: 'Fira Mono', monospace;
+
+	--color-border-strong: black;
 	--color-border: #999;
-	--color-bg-0: rgb(202, 216, 228);
-	--color-bg-1: hsl(209, 36%, 86%);
-	--color-bg-2: hsl(224, 44%, 98%);
-	--color-theme-1: hsl(3, 96%, 75%);
-	--color-theme-2: #4075a6;
+	--color-border-soft: #aaa;
+	--color-border-light: #ddd;
+	--color-bg-primary: white;
+	--color-text-muted: #888;
+	--color-text-subtle: #777;
+	--color-theme-1: #fc8882;
 	--color-text: rgba(0, 0, 0, 0.7);
+	--color-danger: red;
+	--color-heading-divider: #444;
+	--color-pre-bg: rgba(255, 255, 255, 0.45);
+	--color-pre-shadow: rgb(255 255 255 / 25%);
+	--color-bg-2: #f8f9fc;
+	--color-data-cell-main-bg: rgb(214, 236, 248);
+	--color-timetable-row-bg: #f2f2f2;
+	--color-guest-label: #f6a7e9;
+	--color-rules-definition: #9932cc;
+	--color-rank-upper-bg: #ffff66;
+	--color-rank-lower-bg: #ffc0cb;
+
 	--column-width: 42rem;
 	--column-margin-top: 4rem;
+	color-scheme: light;
 	font-family: var(--font-body);
 	color: var(--color-text);
+}
+
+:root[data-theme='dark'] {
+	--color-border-strong: white;
+	--color-border: #666;
+	--color-border-soft: #555;
+	--color-border-light: #222;
+	--color-bg-primary: black;
+	--color-text-muted: #777;
+	--color-text-subtle: #888;
+	--color-theme-1: #03777d;
+	--color-text: rgba(255, 255, 255, 0.7);
+	--color-danger: #00ffff;
+	--color-heading-divider: #bbb;
+	--color-pre-bg: rgba(0, 0, 0, 0.45);
+	--color-pre-shadow: rgb(0 0 0 / 25%);
+	--color-bg-2: #070603;
+	--color-data-cell-main-bg: #134186;
+	--color-timetable-row-bg: #0d0d0d;
+	--color-guest-label: #095816;
+	--color-rules-definition: #66cd33;
+	--color-rank-upper-bg: #837a01;
+	--color-rank-lower-bg: #003f34;
+	color-scheme: dark;
 }
 
 body {
 	min-height: 100vh;
 	margin: 0;
-	/* background-attachment: fixed;
-	background-color: var(--color-bg-1);
-	background-size: 100vw 100vh;
-	background-image:
-		radial-gradient(50% 50% at 50% 50%, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 100%),
-		linear-gradient(180deg, var(--color-bg-0) 0%, var(--color-bg-1) 15%, var(--color-bg-2) 50%); */
+	background-color: var(--color-bg-primary);
 }
 
 h1,
@@ -48,6 +83,18 @@ a:hover {
 	text-decoration: underline;
 }
 
+a[target='_blank']::after {
+	content: '';
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: bottom;
+	width: 16px;
+	height: 16px;
+	vertical-align: -0.15em;
+	background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%238d8d8d' d='M18 19H6c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h5c.55 0 1-.45 1-1s-.45-1-1-1H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-6c0-.55-.45-1-1-1s-1 .45-1 1v5c0 .55-.45 1-1 1M14 4c0 .55.45 1 1 1h2.59l-9.13 9.13a.996.996 0 1 0 1.41 1.41L19 6.41V9c0 .55.45 1 1 1s1-.45 1-1V4c0-.55-.45-1-1-1h-5c-.55 0-1 .45-1 1'/></svg>");
+}
+
 h1 {
 	font-size: 2rem;
 	text-align: center;
@@ -66,7 +113,7 @@ h2::after {
 	height: 1px;
 	display: block;
 	content: '';
-	background-color: #444;
+	background-color: var(--color-heading-divider);
 }
 h2::before {
 	margin-right: 0.5em;
@@ -79,9 +126,9 @@ h2::after {
 pre {
 	font-size: 16px;
 	font-family: var(--font-mono);
-	background-color: rgba(255, 255, 255, 0.45);
+	background-color: var(--color-pre-bg);
 	border-radius: 3px;
-	box-shadow: 2px 2px 6px rgb(255 255 255 / 25%);
+	box-shadow: 2px 2px 6px var(--color-pre-shadow);
 	padding: 0.5em;
 	overflow-x: auto;
 	color: var(--color-text);

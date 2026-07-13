@@ -21,6 +21,7 @@
 
 	const tooltipLine = {
 		id: 'tooltipLine',
+		color: undefined,
 		beforeDraw: (chart) => {
 			if (chart.tooltip._active && chart.tooltip._active.length) {
 				const ctx = chart.ctx;
@@ -31,7 +32,7 @@
 				ctx.moveTo(activePoint.element.x, chart.chartArea.top);
 				ctx.lineTo(activePoint.element.x, chart.chartArea.bottom);
 				ctx.lineWidth = 2;
-				ctx.strokeStyle = 'black';
+				ctx.strokeStyle = tooltipLine.color;
 				ctx.stroke();
 				ctx.restore();
 			}
@@ -86,7 +87,7 @@
 						return context.dataset.backgroundColor;
 					},
 					borderRadius: 6,
-					color: 'white',
+					color: undefined,
 					font: {
 						weight: 'bold'
 					},
@@ -109,12 +110,40 @@
 
 	let thechart;
 
+	const cssColor = (name) =>
+		getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+	function applyChartTheme() {
+		const gridColor = cssColor('--color-border-soft');
+		const axisColor = cssColor('--color-border');
+		const textColor = cssColor('--color-text');
+
+		tooltipLine.color = cssColor('--color-border-strong');
+		config.options.plugins.datalabels.color = cssColor('--color-bg-primary');
+		config.options.scales.x.grid = { color: gridColor };
+		config.options.scales.y.grid = { color: gridColor };
+		config.options.scales.x.border = { color: axisColor };
+		config.options.scales.y.border = { color: axisColor };
+		config.options.scales.x.ticks = { color: textColor };
+		config.options.scales.y.ticks = { color: textColor };
+
+		if (thechart?.update) thechart.update();
+	}
+
 	onMount(() => {
 		// make plugins usable
 		Chart.register(ChartDataLabels);
 		const ctx = thechart.getContext('2d');
+		applyChartTheme();
 		// @ts-ignore
 		thechart = new Chart(ctx, config); //initialise
+
+		const themeObserver = new MutationObserver(applyChartTheme);
+		themeObserver.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ['data-theme']
+		});
+		return () => themeObserver.disconnect();
 	});
 
 	$effect(() => {
@@ -124,6 +153,7 @@
 		config.options.plugins.title.text = title;
 		config.options.scales.y.reverse = revertY;
 		config.options.scales.y.suggestedMax = maxData + (maxData < 15 ? 1 : 5);
+		applyChartTheme();
 		if (revertY) {
 			config.options.scales.y.suggestedMin = 0;
 		}
@@ -146,6 +176,6 @@
 <style>
 	.canvasDiv {
 		width: 100%;
-		border: 1px solid #aaa;
+		border: 1px solid var(--color-border-soft);
 	}
 </style>

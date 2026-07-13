@@ -8,7 +8,7 @@
 <div class="subDataRow" style={addStyle}>
 	<div class="desc">{label}</div>
 	<div class="desc">{rkStr}</div>
-	<div class="subpt" style:border-right={border ? '1px solid #777' : ''}>
+	<div class="subpt" style:border-right={border ? '1px solid var(--color-text-subtle)' : ''}>
 		{@html padNum(pt, pad)}
 	</div>
 	{#if diff}
@@ -33,7 +33,7 @@
 
 	.desc {
 		font-size: smaller;
-		color: #777;
+		color: var(--color-text-subtle);
 		width: fit-content;
 	}
 

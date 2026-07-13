@@ -8,8 +8,10 @@
 	import RankNumber from './RankNumber.svelte';
 	import MatchDetails from './MatchDetails.svelte';
 	import Modal from './Modal.svelte';
+	import { onMount } from 'svelte';
+	import { loadLocalState, saveLocalState } from './localState.js';
 
-	let { leagueSeasonData, clamp } = $props();
+	let { leagueSeasonData, clamp, storageKey = null } = $props();
 	// $inspect('clamp', clamp);
 	let progressData = $derived(
 		seriesFromResult(leagueSeasonData.resByGp, matchDates(leagueSeasonData.extData), 'accumPt')
@@ -18,20 +20,34 @@
 	let opts = $state({
 		detailTable: true
 	});
+	let loaded = $state(false);
 	// eslint-disable-next-line no-unused-vars
 	let openMatchesDetails = $state(leagueSeasonData.summary.map((_) => false)); // binding would not work reactively if using $derived
 	// c.f. https://github.com/sveltejs/svelte/issues/12320
 	let headingRowData = $derived(leagueSeasonData.summary);
+	let logoWidth = $derived(opts.detailTable ? (clamp ? '40' : '60') : clamp ? '24' : '32');
 	// $inspect('headingRow', headingRowData);
 	let tbElt;
+
+	onMount(() => {
+		if (storageKey) opts = loadLocalState(storageKey, opts);
+		loaded = true;
+	});
+
+	$effect(() => {
+		if (loaded && storageKey) saveLocalState(storageKey, { detailTable: opts.detailTable });
+	});
 
 	function openMatchDetails(i) {
 		openMatchesDetails[i] = true;
 	}
 
 	function savePNG(node, name) {
+		const backgroundColor = getComputedStyle(document.documentElement)
+			.getPropertyValue('--color-bg-primary')
+			.trim();
 		toPng(node, {
-			backgroundColor: '#ffffff'
+			backgroundColor
 		})
 			.then((dataURL) => {
 				const img = new Image();
@@ -98,7 +114,7 @@
 					<th class="sticky"></th>
 					{#each leagueSeasonData.extData.matches as match, i (i)}
 						<th
-							style="font-weight:normal; font-size:.9em; border-top: dashed 1px #999; vertical-align:middle;"
+							style="font-weight:normal; font-size:.9em; border-top: dashed 1px var(--color-border); vertical-align:middle;"
 						>
 							<!-- <div style="display:block; vertical-align:center;"> -->
 							<button class="plainBtn" onclick={() => openMatchDetails(i)}>
@@ -115,7 +131,7 @@
 				<th class="sticky" style="font-weight: normal; font-size:.7em;">（全戦合計指名数）</th>
 				{#each headingRowData as match (match)}
 					<th
-						style="font-weight: normal; font-size:.7em; border-top: dashed 1px #999; padding-top:.2em; "
+						style="font-weight: normal; font-size:.7em; border-top: dashed 1px var(--color-border); padding-top:.2em; "
 					>
 						{#if match.shimeiTotal}
 							合計指名数: {match.shimeiTotal[0]}
@@ -141,7 +157,7 @@
 					>
 						<img
 							src={`${base}/gpLogo/${gp.group}.jpg`}
-							width={clamp ? '40' : '60'}
+							width={logoWidth}
 							alt={getGroup(gp.group).displayName}
 						/>
 						<br />
@@ -194,9 +210,9 @@
 	}
 	.headingCell {
 		background: var(--color-bg-2);
-		border-right: 1px solid black;
-		border-top: 1px solid #ddd;
-		border-bottom: 1px solid #ddd;
+		border-right: 1px solid var(--color-border-strong);
+		border-top: 1px solid var(--color-border-light);
+		border-bottom: 1px solid var(--color-border-light);
 	}
 	@media (min-width: 350px) {
 		.headingCell {
@@ -205,12 +221,12 @@
 		}
 	}
 	tbody > tr {
-		border-top: 1px solid #ddd;
-		border-bottom: 1px solid #ddd;
+		border-top: 1px solid var(--color-border-light);
+		border-bottom: 1px solid var(--color-border-light);
 	}
 	.headingRow {
 		padding-bottom: 0;
-		background-color: white;
+		background-color: var(--color-bg-primary);
 	}
 
 	.cdInfo {
@@ -247,18 +263,18 @@
 	}
 
 	.upperGp {
-		background-color: hsl(60, 100%, 70%);
+		background-color: var(--color-rank-upper-bg);
 	}
 	.midGp {
-		background-color: white;
+		background-color: var(--color-bg-primary);
 	}
 	.lowerGp {
-		background-color: pink;
+		background-color: var(--color-rank-lower-bg);
 	}
 
 	.additionalInfo {
 		font-weight: normal;
 		font-size: smaller;
-		color: #777;
+		color: var(--color-text-subtle);
 	}
 </style>

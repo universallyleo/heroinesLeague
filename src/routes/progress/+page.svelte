@@ -7,6 +7,8 @@
 		seriesFromResult
 	} from '$lib/processData.js';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
+	import { onMount } from 'svelte';
+	import { loadLocalState, saveLocalState } from '$lib/localState.js';
 
 	const selectableSeasons = [2026, 2025];
 	const selectableLeagues = {
@@ -15,6 +17,7 @@
 	};
 	let season = $state(2026);
 	let league = $state(LeagueType.TWO);
+	let loaded = $state(false);
 	let selectedData = $derived(dataCollec({ season: season, league: league }));
 	// $inspect('selectedData: ', selectedData);
 
@@ -40,6 +43,25 @@
 		fcRank: 'FC投票順位',
 		abemaRank: 'Abema投票順位'
 	};
+
+	onMount(() => {
+		const savedState = loadLocalState('heroines-league:progress', {
+			season,
+			league,
+			progressType
+		});
+		if (selectableSeasons.includes(savedState.season)) season = savedState.season;
+		if (selectableLeagues[season]?.includes(savedState.league)) league = savedState.league;
+		if (savedState.progressType in labels) progressType = savedState.progressType;
+		loaded = true;
+	});
+
+	$effect(() => {
+		if (!selectableLeagues[season]?.includes(league)) {
+			league = selectableLeagues[season][0];
+		}
+		if (loaded) saveLocalState('heroines-league:progress', { season, league, progressType });
+	});
 
 	// function getSeries(type) {
 	// 	let dates = ;

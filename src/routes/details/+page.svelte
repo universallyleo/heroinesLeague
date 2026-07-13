@@ -3,6 +3,7 @@
 	import { dataCollec, lastFinishedMatchID, leaguesOfSeason } from '$lib/processData.js';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
+	import { loadLocalState, saveLocalState } from '$lib/localState.js';
 
 	let innerWidth = $state(typeof window !== 'undefined' ? window.innerWidth : 1024); // Default to a common desktop width for SSR
 	let clamp = $derived(innerWidth < 600);
@@ -18,7 +19,19 @@
 	let availableLeagues = $derived(leaguesOfSeason[season] || []);
 
 	// Initialize leagueSeasonData with the initial data.
-	let leagueSeasonData = $state(dataCollec({ season: allSeasons[0], league: 1 }));
+	const initialLeagueSeasonData = dataCollec({ season: allSeasons[0], league: 1 });
+	let leagueSeasonData = $state(initialLeagueSeasonData);
+	let matchID = $state(defaultMatchID(initialLeagueSeasonData));
+	let loaded = $state(false);
+
+	function defaultMatchID(lsd) {
+		const lastFinished = lastFinishedMatchID(lsd.extData.matches);
+		return lastFinished >= 0 ? lastFinished : 0;
+	}
+
+	function isValidMatchID(lsd, id) {
+		return Number.isInteger(id) && id >= 0 && id < lsd.summary.length;
+	}
 
 	$effect(() => {
 		const lsd = dataCollec({ season: season, league: league });
@@ -31,34 +44,51 @@
 		// Otherwise, it retains its previous value.
 		if (lsd !== null) {
 			leagueSeasonData = lsd;
+			if (!isValidMatchID(lsd, matchID)) {
+				matchID = defaultMatchID(lsd);
+			}
 		}
 	});
-
-	// matchID should also handle the case where leagueSeasonData might be null,
-	// especially if dataCollec returns null initially and no valid data has been set yet.
-	let matchID = $derived(
-		leagueSeasonData ? lastFinishedMatchID(leagueSeasonData.extData.matches) : null
-	);
 
 	// $inspect(leagueSeasonData);
 	//$inspect(leagueSeasonData.extData.matches[match]);
 
 	onMount(() => {
-		console.log(page.url.searchParams);
+		const savedState = loadLocalState('heroines-league:details', { season, league, matchID });
+		let nextSeason = allSeasons.includes(savedState.season) ? savedState.season : season;
+		let nextLeague = (leaguesOfSeason[nextSeason] || []).some((l) => l.league === savedState.league)
+			? savedState.league
+			: league;
+		let nextData = dataCollec({ season: nextSeason, league: nextLeague }) ?? leagueSeasonData;
+
+		season = nextSeason;
+		league = nextLeague;
+		leagueSeasonData = nextData;
+		matchID = isValidMatchID(nextData, savedState.matchID)
+			? savedState.matchID
+			: defaultMatchID(nextData);
+
 		let rawmatchID = page.url.searchParams.get('match');
 		if (rawmatchID != null) {
 			let strs = rawmatchID.match(/S(\d+)L(\d+)M(\d+)/);
-			console.log(strs);
 			if (strs) {
-				// !! TODO !! handle specific match
-				// const sIdx = parseInt(strs[1]);
-				// const sortedSeasons = [...allSeasons].sort((a, b) => a - b);
-				// if (sortedSeasons[sIdx - 1]) season = sortedSeasons[sIdx - 1];
-				// season = parseInt(strs[1]);
-				// league = parseInt(strs[2]);
-				leagueSeasonData = dataCollec({ season: parseInt(strs[1]), league: parseInt(strs[2]) });
+				nextSeason = parseInt(strs[1]);
+				nextLeague = parseInt(strs[2]);
+				const nextMatchID = parseInt(strs[3]);
+				nextData = dataCollec({ season: nextSeason, league: nextLeague }) ?? leagueSeasonData;
+
+				season = nextSeason;
+				league = nextLeague;
+				leagueSeasonData = nextData;
+				matchID = isValidMatchID(nextData, nextMatchID) ? nextMatchID : defaultMatchID(nextData);
 			}
 		}
+
+		loaded = true;
+	});
+
+	$effect(() => {
+		if (loaded) saveLocalState('heroines-league:details', { season, league, matchID });
 	});
 </script>
 
