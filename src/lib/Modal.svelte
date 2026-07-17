@@ -44,13 +44,21 @@
 		background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 	}
 
+	:global(:root[data-theme='dark']) .modal {
+		background-color: rgba(255, 255, 255, 0.35);
+	}
+
 	/* Modal Content/Box */
 	.modal-content {
 		position: relative;
-		background-color: #fefefe;
+		background-color: var(--color-bg-primary);
+		color: var(--color-text);
 		margin: 5% auto; /* 5% from the top and centered */
 		padding: 0.5em 4em;
-		border: 1px solid #888;
+		border: 1px solid var(--color-border);
+		box-shadow:
+			0 0 0 1px var(--color-border-light),
+			0 1rem 3rem rgba(0, 0, 0, 0.45);
 		width: fit-content;
 	}
 
@@ -63,6 +71,7 @@
 		border: 1px solid #aaa;
 		/* box-shadow: rgba(255, 255, 255, 0.7) 0 1px 0 0 inset; */
 		box-sizing: border-box;
+		color: black;
 		cursor: pointer;
 		font-size: 1.2em;
 		margin: 0;
