@@ -1,6 +1,12 @@
 <script>
 	import { base } from '$app/paths';
-	import { matchDates, getGroup, seriesFromResult, groupDisplayShort } from '$lib/processData.js';
+	import {
+		matchDates,
+		getGroup,
+		seriesFromResult,
+		groupDisplayShort,
+		lastFinishedMatchID
+	} from '$lib/processData.js';
 	import { toPng } from 'html-to-image';
 	import ProgressGraph from '$lib/ProgressGraph.svelte';
 	import DataCell from './DataCell.svelte';
@@ -26,8 +32,9 @@
 	// c.f. https://github.com/sveltejs/svelte/issues/12320
 	let headingRowData = $derived(leagueSeasonData.summary);
 	let logoWidth = $derived(opts.detailTable ? (clamp ? '40' : '60') : clamp ? '24' : '32');
+	let latestResultMatchID = $derived(lastFinishedMatchID(leagueSeasonData.extData.matches));
 	// $inspect('headingRow', headingRowData);
-	let tbElt;
+	let captureElt;
 
 	onMount(() => {
 		if (storageKey) opts = loadLocalState(storageKey, opts);
@@ -64,19 +71,8 @@
 	}
 </script>
 
-<!-- #region HTML
--->
-<div style="display: flex; flex-direction:row; justify-content: space-evenly; margin-top:.5em;">
-	<OptionsDiv bind:opts />
-	<div>
-		<button onclick={() => savePNG(tbElt, `League${leagueSeasonData.league}Result.png`)}>
-			画像ダウンロード
-		</button>
-	</div>
-</div>
-
-<article class="tableContainer">
-	<table class="table-bordered" bind:this={tbElt}>
+{#snippet summaryTable(showMatchModals = true)}
+	<table class="table-bordered">
 		<caption>
 			{leagueSeasonData.title} 結果
 		</caption>
@@ -92,8 +88,9 @@
 								{match.shortdate}
 							</button>
 						</div>
-						<Modal bind:open={openMatchesDetails[i]}>
-							<!-- <MatchDetails
+						{#if showMatchModals}
+							<Modal bind:open={openMatchesDetails[i]}>
+								<!-- <MatchDetails
 								{clamp}
 								leagueTitle={leagueData.title}
 								rawMatch={leagueData.extData.matches[i]}
@@ -102,8 +99,9 @@
 								{match}
 								guestResults={leagueData.extData.matches[i]?.guestResults ?? []}
 							/> -->
-							<MatchDetails {clamp} {leagueSeasonData} matchID={i} />
-						</Modal>
+								<MatchDetails {clamp} {leagueSeasonData} matchID={i} />
+							</Modal>
+						{/if}
 					</th>
 				{/each}
 			</tr>
@@ -134,7 +132,7 @@
 						style="font-weight: normal; font-size:.7em; border-top: dashed 1px var(--color-border); padding-top:.2em; "
 					>
 						{#if match.shimeiTotal}
-							合計指名数: {match.shimeiTotal[0]}
+							合計指名: {match.shimeiTotal[0]}
 						{/if}
 					</th>
 				{/each}
@@ -174,7 +172,34 @@
 			{/each}
 		</tbody>
 	</table>
+{/snippet}
+
+<!-- #region HTML
+-->
+<div style="display: flex; flex-direction:row; justify-content: space-evenly; margin-top:.5em;">
+	<OptionsDiv bind:opts />
+	<div>
+		<button onclick={() => savePNG(captureElt, `League${leagueSeasonData.league}Result.png`)}>
+			画像ダウンロード
+		</button>
+	</div>
+</div>
+
+<article class="tableContainer">
+	{@render summaryTable(true)}
 </article>
+
+<div class="captureOnly" aria-hidden="true">
+	<div class="captureLayout" bind:this={captureElt}>
+		{@render summaryTable(false)}
+
+		{#if latestResultMatchID >= 0}
+			<div class="captureMatchDetails">
+				<MatchDetails {clamp} {leagueSeasonData} matchID={latestResultMatchID} resultOnly />
+			</div>
+		{/if}
+	</div>
+</div>
 
 <div class="graphContainer">
 	<ProgressGraph title="累計ポイント" {progressData} />
@@ -191,6 +216,28 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 		overflow-x: scroll;
+	}
+
+	.captureOnly {
+		position: fixed;
+		top: 0;
+		left: -100000px;
+		width: max-content;
+		pointer-events: none;
+	}
+
+	.captureLayout {
+		width: fit-content;
+		display: flex;
+		align-items: flex-start;
+		gap: 1.5em;
+		background: var(--color-bg-primary);
+		color: var(--color-text);
+	}
+
+	.captureMatchDetails {
+		flex: 0 0 auto;
+		min-width: max-content;
 	}
 
 	.table-bordered {

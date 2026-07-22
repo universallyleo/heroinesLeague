@@ -3,9 +3,12 @@
 	import { leagueOne, leagueTwo } from '$lib/processData.js';
 	import { levelAllArrayEntries, ShortJPDate } from '$lib/util.js';
 
-	const extractAndLevel = (raw, key) =>
+	const getByPath = (obj, path) =>
+		(Array.isArray(path) ? path : path.split('.')).reduce((value, key) => value?.[key], obj);
+
+	const extractAndLevel = (raw, path) =>
 		levelAllArrayEntries(
-			raw.matches.map((m) => m[key] ?? []),
+			raw.matches.map((m) => getByPath(m, path) ?? []),
 			-1
 		);
 
@@ -14,8 +17,8 @@
 		extractAndLevel(leagueTwo[0], 'rankToLP')
 	]);
 	let fcRankToCountCollec = $derived([
-		extractAndLevel(leagueOne[0], 'fcRankToCount'),
-		extractAndLevel(leagueTwo[0], 'fcRankToCount')
+		extractAndLevel(leagueOne[0], 'mPts.FC.rankToCount'),
+		extractAndLevel(leagueTwo[0], 'mPts.FC.rankToCount')
 	]);
 
 	let dates = $derived([
@@ -29,7 +32,11 @@
 	// $inspect(rankToLPCollec[0]);
 </script>
 
-<RuleChangesTable array={rankToLPCollec} title="「戦順位 → ポイント」の変化" headings={dates} />
+<RuleChangesTable
+	array={rankToLPCollec}
+	title="「戦順位 → リーグポイント」の変化"
+	headings={dates}
+/>
 
 <RuleChangesTable
 	array={fcRankToCountCollec}
@@ -248,6 +255,14 @@
 			</s>
 			<br />
 			※ よって、iLife! が2025年度の決勝リーグに不参加となり、5位のAdamsLilth が参加することになる。
+		</li>
+		<li>
+			新規参戦グループ（ラストシーン、Pastel Closet、フルコース、ハルカエコー）の追加に伴い、
+			これらの新規参戦グループ、入れ替え戦の下位4グループ、およびリーグ2の残りのグループが{@render def(
+				'昇格戦'
+			)}に出場する。
+			<br />
+			➡ 昇格戦の上位2グループがリーグ1に昇格する。
 		</li>
 		<!-- <li>殿堂入りグループは今後リーグ戦免除する {@render cautionText()}</li> -->
 	</ul>

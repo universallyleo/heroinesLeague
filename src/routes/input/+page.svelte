@@ -15,6 +15,9 @@
 	let abemaRankSelections = $state([]);
 	let mcScoreValues = $state([]);
 	let result = $state(null);
+	let displayGroupOrder = $state([]);
+	let draggedGroupIndex = $state(null);
+	let dragOverGroupIndex = $state(null);
 
 	let seriesData = $derived(
 		Object.values(dataCollection)
@@ -30,6 +33,14 @@
 	let fcRankToCount = $derived(selectedMatch?.mPts?.FC?.rankToCount ?? []);
 	let abemaRankToCount = $derived(selectedMatch?.mPts?.Abema?.rankToCount ?? []);
 	let includeAbema = $derived(abemaInputMode !== '');
+	let displayRows = $derived(
+		(displayGroupOrder.length === groups.length
+			? displayGroupOrder
+			: groups.map((_, index) => index)
+		)
+			.filter((originalIndex) => groups[originalIndex] !== undefined)
+			.map((originalIndex) => ({ group: groups[originalIndex], originalIndex }))
+	);
 
 	function resetInputs() {
 		shimeiValues = new Array(groups.length).fill('');
@@ -38,6 +49,9 @@
 		abemaVoteValues = new Array(groups.length).fill('');
 		abemaRankSelections = new Array(groups.length).fill('');
 		mcScoreValues = new Array(groups.length).fill('');
+		displayGroupOrder = groups.map((_, index) => index);
+		draggedGroupIndex = null;
+		dragOverGroupIndex = null;
 		result = null;
 	}
 
@@ -77,6 +91,48 @@
 		const nextValue = event.target.value.replace(/\D/g, '');
 		mcScoreValues[index] = nextValue;
 		mcScoreValues = [...mcScoreValues];
+	}
+
+	function handleGroupDragStart(originalIndex, event) {
+		draggedGroupIndex = originalIndex;
+		event.dataTransfer.effectAllowed = 'move';
+		event.dataTransfer.setData('text/plain', String(originalIndex));
+	}
+
+	function handleGroupDragOver(originalIndex, event) {
+		event.preventDefault();
+		dragOverGroupIndex = originalIndex;
+		event.dataTransfer.dropEffect = 'move';
+	}
+
+	function handleGroupDrop(originalIndex, event) {
+		event.preventDefault();
+
+		if (draggedGroupIndex === null || draggedGroupIndex === originalIndex) {
+			dragOverGroupIndex = null;
+			return;
+		}
+
+		const nextOrder = displayRows.map((row) => row.originalIndex);
+		const fromIndex = nextOrder.indexOf(draggedGroupIndex);
+		const toIndex = nextOrder.indexOf(originalIndex);
+
+		if (fromIndex === -1 || toIndex === -1) {
+			draggedGroupIndex = null;
+			dragOverGroupIndex = null;
+			return;
+		}
+
+		const [movedGroupIndex] = nextOrder.splice(fromIndex, 1);
+		nextOrder.splice(toIndex, 0, movedGroupIndex);
+		displayGroupOrder = nextOrder;
+		draggedGroupIndex = null;
+		dragOverGroupIndex = null;
+	}
+
+	function handleGroupDragEnd() {
+		draggedGroupIndex = null;
+		dragOverGroupIndex = null;
 	}
 
 	function submitForm() {
@@ -239,25 +295,36 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each groups as group, index (group)}
-					<tr>
+				{#each displayRows as { group, originalIndex } (originalIndex)}
+					<tr
+						draggable="true"
+						class:dragging={draggedGroupIndex === originalIndex}
+						class:drag-over={dragOverGroupIndex === originalIndex &&
+							draggedGroupIndex !== originalIndex}
+						aria-grabbed={draggedGroupIndex === originalIndex}
+						title="Drag to reorder display rows"
+						ondragstart={(event) => handleGroupDragStart(originalIndex, event)}
+						ondragover={(event) => handleGroupDragOver(originalIndex, event)}
+						ondrop={(event) => handleGroupDrop(originalIndex, event)}
+						ondragend={handleGroupDragEnd}
+					>
 						<th>{group}</th>
 						<td>
 							<input
 								type="text"
 								inputmode="numeric"
 								pattern="[0-9]*"
-								value={shimeiValues[index]}
-								oninput={(event) => setShimeiValue(index, event)}
+								value={shimeiValues[originalIndex]}
+								oninput={(event) => setShimeiValue(originalIndex, event)}
 								placeholder="0"
 							/>
 						</td>
 						{#if fcRankToCount.length > 0}
 							<td>
-								<select bind:value={fcRankSelections[index]}>
+								<select bind:value={fcRankSelections[originalIndex]}>
 									<option value="" disabled selected hidden>Select rank</option>
 									{#each fcRankToCount as count, idx (idx)}
-										<option value={idx + 1}>{idx + 1}位 ({count}pt)</option>
+										<option value={idx + 1}>{count} ({idx + 1}位)</option>
 									{/each}
 								</select>
 							</td>
@@ -265,7 +332,7 @@
 						{#if includeAbema}
 							<td>
 								{#if abemaInputMode === 'rank'}
-									<select bind:value={abemaRankSelections[index]}>
+									<select bind:value={abemaRankSelections[originalIndex]}>
 										<option value="" disabled selected hidden>Select rank</option>
 										{#each abemaRankToCount as count, idx (idx)}
 											<option value={idx + 1}>{count} ({idx + 1}位)</option>
@@ -276,8 +343,8 @@
 										type="text"
 										inputmode="numeric"
 										pattern="[0-9]*"
-										value={abemaVoteValues[index]}
-										oninput={(event) => setAbemaVoteValue(index, event)}
+										value={abemaVoteValues[originalIndex]}
+										oninput={(event) => setAbemaVoteValue(originalIndex, event)}
 										placeholder="0"
 									/>
 								{/if}
@@ -289,8 +356,8 @@
 									type="text"
 									inputmode="numeric"
 									pattern="[0-9]*"
-									value={mcScoreValues[index]}
-									oninput={(event) => setMcScoreValue(index, event)}
+									value={mcScoreValues[originalIndex]}
+									oninput={(event) => setMcScoreValue(originalIndex, event)}
 									placeholder="0"
 								/>
 							</td>
@@ -331,9 +398,25 @@
 	input[type='text'] {
 		width: 100%;
 		padding: 0.5rem;
-		border: 1px solid #ccc;
+		border: 1px solid var(--color-border-light);
 		border-radius: 6px;
 		font-size: 1rem;
+		background: var(--color-bg-primary);
+		color: var(--color-text);
+	}
+
+	select:focus,
+	input[type='text']:focus {
+		border-color: var(--color-border-strong);
+		outline: 1px solid var(--color-border-strong);
+	}
+
+	input[type='checkbox'] {
+		accent-color: var(--color-theme-1);
+	}
+
+	input::placeholder {
+		color: var(--color-text-muted);
 	}
 
 	.options-row {
@@ -354,7 +437,7 @@
 
 	.input-table th,
 	.input-table td {
-		border: 1px solid #ddd;
+		border: 1px solid var(--color-border-light);
 		padding: 0.75rem;
 		text-align: left;
 	}
@@ -369,28 +452,45 @@
 	}
 
 	.input-table th {
-		background: #f7f7f7;
+		background: var(--color-bg-2);
+	}
+
+	.input-table tbody tr {
+		cursor: move;
+	}
+
+	.input-table tbody tr.dragging {
+		opacity: 0.55;
+	}
+
+	.input-table tbody tr.drag-over th,
+	.input-table tbody tr.drag-over td {
+		border-top-color: var(--color-border-strong);
 	}
 
 	.primary {
 		margin-top: 1rem;
 		padding: 0.75rem 1.25rem;
-		border: none;
-		background: #2b6cb0;
-		color: white;
+		border: 1px solid var(--color-border-strong);
+		background: var(--color-theme-1);
+		color: var(--color-border-strong);
 		border-radius: 6px;
 		cursor: pointer;
 	}
 
 	.primary:disabled {
-		background: #a0aec0;
+		border-color: var(--color-border);
+		background: var(--color-bg-2);
+		color: var(--color-text-muted);
 		cursor: not-allowed;
+		opacity: 1;
 	}
 
 	.result-box {
 		margin-top: 1rem;
 		padding: 1rem;
-		background: #f3f4f6;
+		background: var(--color-bg-2);
+		color: var(--color-text);
 		border-radius: 8px;
 		font-family:
 			ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
@@ -398,7 +498,7 @@
 	}
 
 	.notice {
-		color: #555;
+		color: var(--color-text-muted);
 		font-size: 0.95rem;
 	}
 </style>

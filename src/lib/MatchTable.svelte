@@ -135,14 +135,14 @@
 		</tr>
 		{#if shimeiTotal != null && type != 'guest'}
 			<tr>
-				<th class="sticky headingRow additional_info" style="left:0;width:2em;"> 合計 </th>
+				<th class="sticky headingRow" style="left:0;width:2em;"> </th>
 				<th class="sticky headingRow" style="left:2em;"> </th>
-				<th class="headingRow additional_info" style="font-size:smaller">
-					<!-- <div class="rkDiffCell">
-						<div class="vote"> -->
-					{shimeiTotal}
-					<!-- </div>
-					</div> -->
+				<th class="headingRow additional_info">
+					<div class="shimeiTotalCell">
+						<!-- if we don't do a div, but apply style to th, then there will be weird border shifting... -->
+						<span>合計</span>
+						<span>{shimeiTotal}</span>
+					</div>
 				</th>
 
 				{#each MatchPointsData as mpData, i (mpData.label)}
@@ -255,6 +255,13 @@
 		text-align: right;
 		justify-self: end;
 		padding-right: 1em;
+	}
+
+	.shimeiTotalCell {
+		display: flex;
+		justify-content: space-between;
+		gap: 1em;
+		width: 100%;
 	}
 
 	td:first-child {
