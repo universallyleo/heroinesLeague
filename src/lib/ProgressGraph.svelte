@@ -5,7 +5,7 @@
 	import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 	//to be made export
-	let { progressData, title, revertY = false, suggestedHeight = 0 } = $props();
+	let { progressData, title, revertY = false, suggestedHeight = 0, enableYZoom = false } = $props();
 	// let maxlength = $derived(progressData ? progressData.datasets[0].data.length : 0);
 	// let canvasWidth = $derived(Math.max(maxlength * 80, 1000));
 	let maxData = $derived(Math.max(...progressData.datasets.map(({ data }) => Math.max(...data))));
@@ -18,6 +18,9 @@
 
 	/****** Graph related setup ******/
 	let canvasContainer;
+	let canvas;
+	let yZoomInitialMax = 0;
+	let yZoomMinRange = 1;
 
 	const tooltipLine = {
 		id: 'tooltipLine',
@@ -83,6 +86,16 @@
 					padding: 5
 				},
 				datalabels: {
+					display: (context) => {
+						const point = context.chart.getDatasetMeta(context.datasetIndex).data[
+							context.dataIndex
+						];
+						if (!point) return false;
+						return (
+							point.y >= context.chart.chartArea.top && point.y <= context.chart.chartArea.bottom
+						);
+					},
+					clip: true,
 					backgroundColor: function (context) {
 						return context.dataset.backgroundColor;
 					},
@@ -110,6 +123,19 @@
 
 	let thechart;
 
+	function handleWheel(event) {
+		if (!enableYZoom || !thechart || event.deltaY === 0) return;
+
+		event.preventDefault();
+		const zoomFactor = event.deltaY < 0 ? 0.9 : 1 / 0.9;
+		const currentMax = thechart.scales.y.max;
+		const nextMax = Math.min(yZoomInitialMax, Math.max(yZoomMinRange, currentMax * zoomFactor));
+
+		config.options.scales.y.min = 0;
+		config.options.scales.y.max = nextMax;
+		thechart.update('none');
+	}
+
 	const cssColor = (name) =>
 		getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
@@ -133,17 +159,23 @@
 	onMount(() => {
 		// make plugins usable
 		Chart.register(ChartDataLabels);
-		const ctx = thechart.getContext('2d');
+		const ctx = canvas.getContext('2d');
 		applyChartTheme();
 		// @ts-ignore
 		thechart = new Chart(ctx, config); //initialise
+		yZoomInitialMax = thechart.scales.y.max;
+		yZoomMinRange = Math.max(1, yZoomInitialMax / 3);
+		canvas.addEventListener('wheel', handleWheel, { passive: false });
 
 		const themeObserver = new MutationObserver(applyChartTheme);
 		themeObserver.observe(document.documentElement, {
 			attributes: true,
 			attributeFilter: ['data-theme']
 		});
-		return () => themeObserver.disconnect();
+		return () => {
+			canvas.removeEventListener('wheel', handleWheel);
+			themeObserver.disconnect();
+		};
 	});
 
 	$effect(() => {
@@ -152,7 +184,11 @@
 		config.data = progressData;
 		config.options.plugins.title.text = title;
 		config.options.scales.y.reverse = revertY;
-		config.options.scales.y.suggestedMax = maxData + (maxData < 15 ? 1 : 5);
+		yZoomInitialMax = maxData + (maxData < 15 ? 1 : 5);
+		yZoomMinRange = Math.max(1, yZoomInitialMax / 3);
+		config.options.scales.y.suggestedMax = yZoomInitialMax;
+		config.options.scales.y.min = undefined;
+		config.options.scales.y.max = undefined;
 		applyChartTheme();
 		if (revertY) {
 			config.options.scales.y.suggestedMin = 0;
@@ -160,6 +196,8 @@
 
 		if (!thechart) return;
 		thechart.update();
+		yZoomInitialMax = thechart.scales.y.max;
+		yZoomMinRange = Math.max(1, yZoomInitialMax / 3);
 	});
 
 	onDestroy(() => {
@@ -170,7 +208,7 @@
 
 <!-- <div bind:this={canvasContainer} style="width:100%; height:30vh; border: 1px red solid;"> -->
 <div bind:this={canvasContainer} class="canvasDiv" style:height={`${canvasHeight}px`}>
-	<canvas bind:this={thechart}> </canvas>
+	<canvas bind:this={canvas}> </canvas>
 </div>
 
 <style>

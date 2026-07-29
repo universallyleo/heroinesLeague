@@ -109,6 +109,7 @@
 		title={labels[progressType] + '推移'}
 		{progressData}
 		{revertY}
+		enableYZoom={!revertY}
 		suggestedHeight={progressType == 'shimeiPercent' ? 800 : 0}
 	/>
 </div>
