@@ -32,7 +32,7 @@
 		)
 	);
 	// $inspect(progressType === 'shimeiPercent' ? progressData : null);
-	let revertY = $derived(['accumRank', 'totalRank', 'fcRank'].includes(progressType));
+	let revertY = $derived(['accumRank', 'totalRank', 'fcRank', 'abemaRank'].includes(progressType));
 
 	let labels = {
 		accumPt: 'リーグポイント',

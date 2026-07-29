@@ -271,6 +271,85 @@
 				}
 			},
 			"src": ["https://x.com/mi5z8i/status/2078084200746659969"]
+		},
+		{
+			"date": "2025-08-20",
+			"venue": "Osaka BIGCAT",
+			"tweet": "https://x.com/parasai_info/status/2081720598846480461",
+			"rules": ["https://x.com/parasai_info/status/2081720598846480461"],
+			"rankToLP": [120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 5],
+			"timetable": [
+				{
+					"group": "herokenOsaka",
+					"time": ["1230", "1255"],
+					"tokuten": ["1305", "1405"]
+				},
+				{
+					"group": "heroken",
+					"time": ["1255", "1320"],
+					"tokuten": ["1330", "1430"]
+				},
+				{
+					"group": "calres",
+					"time": ["1320", "1345"],
+					"tokuten": ["1355", "1455"]
+				},
+				{
+					"group": "harukaecho",
+					"time": ["1345", "1410"],
+					"tokuten": ["1420", "1520"]
+				},
+				{
+					"group": "paradeeq",
+					"time": ["1410", "1435"],
+					"tokuten": ["1445", "1545"]
+				},
+				{
+					"group": "ladybaby",
+					"time": ["1440", "1505"],
+					"tokuten": ["1515", "1615"]
+				},
+				{
+					"group": "fullcourse",
+					"time": ["1505", "1530"],
+					"tokuten": ["1540", "1640"]
+				},
+				{
+					"group": "parasai",
+					"time": ["1530", "1555"],
+					"tokuten": ["1605", "1705"]
+				},
+				{
+					"group": "pasclo",
+					"time": ["1555", "1620"],
+					"tokuten": ["1630", "1730"]
+				},
+				{
+					"group": "ponkotu",
+					"time": ["1625", "1650"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "zuttomotto",
+					"time": ["1650", "1715"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "akishibu",
+					"time": ["1715", "1740"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "nanakoro",
+					"time": ["1740", "1805"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"mPts": {
+				"FC": {
+					"rankToCount": [30, 25, 20, 15, 15, 10, 10, 5, 5, 5, 5, 5, 5]
+				}
+			}
 		}
 	]
 }
