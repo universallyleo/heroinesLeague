@@ -345,6 +345,81 @@
 				}
 			},
 			"src": ["https://x.com/ks_ecophysi/status/2082417854834761730?s=20"]
+		},
+		{
+			"date": "2026-07-29",
+			"venue": "COMTEC PORTBASE",
+			"tweet": "https://x.com/heroines_idol/status/2090409575971434627",
+			"rules": ["https://x.com/heroines_idol/status/2090409575971434627"],
+			"rankToLP": [120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5],
+			"timetable": [
+				{
+					"group": "lastscene",
+					"time": ["1300", "1325"],
+					"tokuten": ["1335", "1435"]
+				},
+				{
+					"group": "chula",
+					"time": ["1325", "1350"],
+					"tokuten": ["1400", "1500"]
+				},
+				{
+					"group": "ill",
+					"time": ["1350", "1415"],
+					"tokuten": ["1425", "1525"]
+				},
+				{
+					"group": "tenran",
+					"time": ["1415", "1440"],
+					"tokuten": ["1450", "1550"]
+				},
+				{
+					"group": "dresscode",
+					"time": ["1445", "1510"],
+					"tokuten": ["1520", "1620"]
+				},
+				{
+					"group": "megafon",
+					"time": ["1510", "1535"],
+					"tokuten": ["1545", "1645"]
+				},
+				{
+					"group": "yoruami",
+					"time": ["1535", "1600"],
+					"tokuten": ["1610", "1710"]
+				},
+				{
+					"group": "ion",
+					"time": ["1600", "1625"],
+					"tokuten": ["1625", "1725"]
+				},
+				{
+					"group": "tenrin",
+					"time": ["1630", "1655"],
+					"tokuten": ["1655", "1755"]
+				},
+				{
+					"group": "admth",
+					"time": ["1655", "1725"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "nonfic",
+					"time": ["725", "1755"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "ilife",
+					"time": ["1830", "1900"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"shimeiNum": [610, 235, 126, 87, 216, 131, 195, 55, 180, 71, 58, 75],
+			"mPts": {
+				"FC": {
+					"rankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5, 0, 0]
+				}
+			}
 		}
 	]
 }
