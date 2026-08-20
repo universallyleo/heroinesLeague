@@ -347,7 +347,7 @@
 			"src": ["https://x.com/ks_ecophysi/status/2082417854834761730?s=20"]
 		},
 		{
-			"date": "2026-07-29",
+			"date": "2026-09-22",
 			"venue": "COMTEC PORTBASE",
 			"tweet": "https://x.com/heroines_idol/status/2090409575971434627",
 			"rules": ["https://x.com/heroines_idol/status/2090409575971434627"],
@@ -414,7 +414,6 @@
 					"tokuten": ["after", ""]
 				}
 			],
-			"shimeiNum": [610, 235, 126, 87, 216, 131, 195, 55, 180, 71, 58, 75],
 			"mPts": {
 				"FC": {
 					"rankToCount": [35, 30, 25, 20, 15, 10, 10, 5, 5, 5, 0, 0]
