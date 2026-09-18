@@ -353,6 +353,104 @@
 					"rank": [1, 4, 6, 8, 2, 6, 3, 8, 8, 8, 4, 8, 8]
 				}
 			}
+		},
+		{
+			"date": "2025-09-17",
+			"venue": "Ebisu Garden Hall",
+			"tweet": "https://x.com/heroines_idol/status/2100192985367683171",
+			"rules": ["https://x.com/heroines_idol/status/2100192985367683171"],
+			"rankToLP": [120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 5, 5],
+			"guests": ["umekomachi", "nowstorage"],
+			"guestIdx": [0, 1],
+			"timetable": [
+				{
+					"group": "umekomachi",
+					"time": ["1400", "1415"],
+					"tokuten": ["1425", "1525"]
+				},
+				{
+					"group": "nowstorage",
+					"time": ["1415", "1430"],
+					"tokuten": ["1440", "1540"]
+				},
+				{
+					"group": "parasai",
+					"time": ["1430", "1455"],
+					"tokuten": ["1505", "1605"]
+				},
+				{
+					"group": "calres",
+					"time": ["1455", "1520"],
+					"tokuten": ["1530", "1630"]
+				},
+				{
+					"group": "fullcourse",
+					"time": ["1520", "1545"],
+					"tokuten": ["1555", "1655"]
+				},
+				{
+					"group": "harukaecho",
+					"time": ["1545", "1610"],
+					"tokuten": ["1620", "1720"]
+				},
+				{
+					"group": "herokenOsaka",
+					"time": ["1610", "1635"],
+					"tokuten": ["1645", "1745"]
+				},
+				{
+					"group": "ladybaby",
+					"time": ["1640", "1705"],
+					"tokuten": ["1715", "1815"]
+				},
+				{
+					"group": "heroken",
+					"time": ["1705", "1730"],
+					"tokuten": ["1740", "1840"]
+				},
+				{
+					"group": "ponkotu",
+					"time": ["1735", "1755"],
+					"tokuten": ["1805", "1905"]
+				},
+				{
+					"group": "zuttomotto",
+					"time": ["1755", "1820"],
+					"tokuten": ["1830", "1930"]
+				},
+				{
+					"group": "akishibu",
+					"time": ["1825", "1850"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "paradeeq",
+					"time": ["1850", "1915"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "pasclo",
+					"time": ["1915", "1940"],
+					"tokuten": ["after", ""]
+				},
+				{
+					"group": "nanakoro",
+					"time": ["1940", "2005"],
+					"tokuten": ["after", ""]
+				}
+			],
+			"shimeiNum": [91, 271, 46, 45, 72, 58, 343, 53, 81, 46, 78, 70, 17],
+			"mPts": {
+				"FC": {
+					"rankToCount": [30, 25, 20, 15, 15, 10, 10, 5, 5, 5, 5, 5, 5],
+					"rank": [1, 4, 6, 8, 4, 6, 2, 8, 8, 8, 3, 8, 8]
+				}
+			},
+			"src": [
+				"https://x.com/k2ChkWdv7TvoSX6/status/2100731974390550678",
+				"https://x.com/terawave009/status/2100752274696130615",
+				"https://x.com/takao_1007_hs/status/2100544700902187450"
+			]
 		}
 	]
 }
